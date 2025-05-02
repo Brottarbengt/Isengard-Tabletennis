@@ -3,7 +3,7 @@ Welcome to Team Isengards Tabletennis school-project!
 
 Trello-board  
 
-[Here](https://trello.com/b/ZAZXhoa2/angby-pingis-isengard)  
+[Trello](https://trello.com/b/ZAZXhoa2/angby-pingis-isengard)  
 
 ---
 
