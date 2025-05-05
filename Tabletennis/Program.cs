@@ -2,6 +2,7 @@ using DataAccessLayer.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Tabletennis
 {
     public class Program
