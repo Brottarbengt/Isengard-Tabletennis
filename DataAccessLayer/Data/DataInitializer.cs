@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Tabletennis.Data;
+
 
 // Kom ihåg att uppdatera till DIN namespace
-namespace RazorIdentityNewProject.Data;
+namespace DataAccessLayer.Data;
 
 public class DataInitializer
 {

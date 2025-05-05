@@ -1,4 +1,4 @@
-﻿namespace Tabletennis.Data
+﻿namespace DataAccessLayer.Models
 {
     public class Player
     {

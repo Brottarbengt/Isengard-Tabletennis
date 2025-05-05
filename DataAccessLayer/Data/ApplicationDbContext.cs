@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tabletennis.Data;
+namespace DataAccessLayer.Data;
 
 public class ApplicationDbContext : IdentityDbContext
 {
@@ -12,4 +13,5 @@ public class ApplicationDbContext : IdentityDbContext
     }
 
     public DbSet<Player> Players { get; set; } = null!;
+       
 }

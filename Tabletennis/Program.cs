@@ -1,7 +1,6 @@
+using DataAccessLayer.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using RazorIdentityNewProject.Data;
-using Tabletennis.Data;
 
 namespace Tabletennis
 {
