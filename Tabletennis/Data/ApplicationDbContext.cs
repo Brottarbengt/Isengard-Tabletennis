@@ -8,5 +8,8 @@ public class ApplicationDbContext : IdentityDbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
+
     }
+
+    public DbSet<Player> Players { get; set; } = null!;
 }

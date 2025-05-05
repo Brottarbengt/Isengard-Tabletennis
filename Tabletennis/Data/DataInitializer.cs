@@ -15,6 +15,7 @@ public class DataInitializer
         _dbContext = dbContext;
         _userManager = userManager;
     }
+
     public void SeedData()
     {
         _dbContext.Database.Migrate();
@@ -26,15 +27,15 @@ public class DataInitializer
     // Här finns möjlighet att uppdatera dina användares loginuppgifter
     private void SeedUsers()
     {
-        //AddUserIfNotExists("richard.chalk@systementor.se", "Hejsan123#", new string[] { "Admin" });
-        //AddUserIfNotExists("richard.chalk@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
+        AddUserIfNotExists("richard.chalk@systementor.se", "Hejsan123#", new string[] { "Admin" });
+        AddUserIfNotExists("richard.chalk@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
     }
 
     // Här finns möjlighet att uppdatera dina användares roller
     private void SeedRoles()
     {
-        //AddRoleIfNotExisting("Admin");
-        //AddRoleIfNotExisting("Customer");
+        AddRoleIfNotExisting("Admin");
+        AddRoleIfNotExisting("Customer");
     }
 
     private void AddRoleIfNotExisting(string roleName)

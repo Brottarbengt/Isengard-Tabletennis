@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RazorIdentityNewProject.Data;
 using Tabletennis.Data;
 
 namespace Tabletennis
@@ -22,7 +23,14 @@ namespace Tabletennis
 
             builder.Services.AddRazorPages();
 
+            builder.Services.AddTransient<DataInitializer>();
+
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                scope.ServiceProvider.GetService<DataInitializer>().SeedData();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
