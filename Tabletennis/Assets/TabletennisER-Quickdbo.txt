@@ -1,0 +1,33 @@
+
+https://app.quickdatabasediagrams.com/#/
+
+Player
+-----
+PlayerId PK FK >- PlayerMatch.PlayerId
+FirstName
+LastName
+Email
+PhoneNumber 
+
+Match
+-----
+MatchId PK FK >- PlayerMatch.MatchId
+IsSingle bool
+MatchDate DateTime
+MatchWinner int # TeamNumber?
+
+Set
+-----
+SetId PK
+SetNumber
+Team1Score
+Team2Score
+MatchId FK >- Match.MatchId
+SetWinner int # TeamNumber?
+
+PlayerMatch
+-----
+PlayerMatchId PK
+PlayerId FK
+MatchId FK
+TeamNumber 
