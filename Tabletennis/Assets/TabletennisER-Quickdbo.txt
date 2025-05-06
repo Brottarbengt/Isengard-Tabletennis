@@ -8,6 +8,7 @@ FirstName
 LastName
 Email
 PhoneNumber 
+Birthday
 
 Match
 -----
