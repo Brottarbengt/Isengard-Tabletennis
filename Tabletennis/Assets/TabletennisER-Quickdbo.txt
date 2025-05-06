@@ -25,6 +25,7 @@ Team1Score
 Team2Score
 MatchId FK >- Match.MatchId
 SetWinner int # TeamNumber?
+IsDecidingSet bool
 
 
 PlayerMatch
