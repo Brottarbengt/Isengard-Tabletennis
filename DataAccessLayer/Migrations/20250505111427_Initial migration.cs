@@ -50,21 +50,21 @@ namespace DataAccessLayer.Migrations
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
-            //migrationBuilder.CreateTable(
-            //    name: "Players",
-            //    columns: table => new
-            //    {
-            //        PlayerId = table.Column<int>(type: "int", nullable: false)
-            //            .Annotation("SqlServer:Identity", "1, 1"),
-            //        FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-            //        LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-            //        Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-            //        PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_Players", x => x.PlayerId);
-            //    });
+            migrationBuilder.CreateTable(
+                name: "Players",
+                columns: table => new
+                {
+                    PlayerId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Players", x => x.PlayerId);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
