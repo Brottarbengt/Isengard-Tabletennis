@@ -16,5 +16,7 @@ namespace DataAccessLayer.Models
         public int WinnerId { get; set; }
         public bool IsDecidingSet { get; set; }
 
+        public virtual Match Match { get; set; }
+
     }
 }

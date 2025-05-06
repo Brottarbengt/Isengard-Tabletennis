@@ -13,5 +13,8 @@ namespace DataAccessLayer.Models
         public int MatchWinner { get; set; }
         public bool IsSingle { get; set; }
         public bool IsCompleted { get; set; }
+
+        public virtual ICollection<PlayerMatch> PlayerMatches { get; set; }
+        public virtual ICollection<Set> Sets { get; set; }
     }
 }
