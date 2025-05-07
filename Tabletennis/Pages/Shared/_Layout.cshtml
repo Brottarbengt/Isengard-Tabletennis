@@ -10,25 +10,48 @@
     <link rel="stylesheet" href="~/Tabletennis.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Tabletennis</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
+    <header class="top-header">
+        <div class="top-bar">
+            <div class="logo-section">
+                <img src="~/images/Logo.gif" alt="Logo" class="logo" />
+                <h1 class="site-title">ÄNGBY SPORTKLUBB</h1>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.youtube.com/channel/UCXhtPtV6_klWJF37c5MI0FA" class="youtube" target="_blank"><i class="bi bi-youtube"></i></a>
+                <a href="https://solidsport.com/angbysk"><img src="~/images/social-icon.png" alt="Stream" /></a>
+                <a href="https://www.instagram.com/angbysk" class="instagram" target="_blank"><i class="bi bi-instagram "></i></a>
+                <a href="https://www.facebook.com/angbysk" class="facebook" target="_blank"><i class="bi bi-facebook"></i></a>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <a href="#" class="active">START</a>
+            <div class="nav-item-group">
+                <span class="nav-separator"></span>
+                <a href="#">Match</a>
+            </div>
+            <div class="nav-item-group">
+                <span class="nav-separator"></span>
+                <a href="#">Match History</a>
+            </div>
+            <div class="nav-item-group">
+                <span class="nav-separator"></span>
+                <a href="/traning">För medlem: Träning</a>
+            </div>
+            <div class="nav-item-group">
+                <span class="nav-separator"></span>
+                <a href="/tavling">För medlem: Tävling</a>
+            </div>
+            <div class="nav-item-group">
+                <span class="nav-separator"></span>
+                <a href="/flytt">Flytt</a>
+            </div>
+            <div class="nav-item-group">
+                <span class="nav-separator"></span>
+                <a href="/event">Event</a>
+            </div>
+            <div class="nav-item-group">
+                <span class="nav-separator"></span>
+                <a href="/borja">Börja spela pingis</a>
             </div>
         </nav>
     </header>
