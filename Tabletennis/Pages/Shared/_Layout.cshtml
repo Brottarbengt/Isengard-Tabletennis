@@ -29,31 +29,14 @@
             <a href="/Index" class="active">START</a>
             <div class="nav-item-group">
                 <span class="nav-separator"></span>
-                <a href="/Matches/Match">Match</a>
+                <a asp-area="" asp-page="/Matches/Match">Match</a>
             </div>
             <div class="nav-item-group">
                 <span class="nav-separator"></span>
-                <a href="/Matches/MatchHistory">Match History</a>
+                <a asp-area="" asp-page="/Matches/MatchHistory">Match History</a>
             </div>
-            <div class="nav-item-group">
-                <span class="nav-separator"></span>
-                <a href="/traning">För medlem: Träning</a>
-            </div>
-            <div class="nav-item-group">
-                <span class="nav-separator"></span>
-                <a href="/tavling">För medlem: Tävling</a>
-            </div>
-            <div class="nav-item-group">
-                <span class="nav-separator"></span>
-                <a href="/flytt">Flytt</a>
-            </div>
-            <div class="nav-item-group">
-                <span class="nav-separator"></span>
-                <a href="/event">Event</a>
-            </div>
-            <div class="nav-item-group">
-                <span class="nav-separator"></span>
-                <a href="/borja">Börja spela pingis</a>
+            <div class="nav-item-group">                
+                <partial name="_LoginPartial" />
             </div>
         </nav>
     </header>
