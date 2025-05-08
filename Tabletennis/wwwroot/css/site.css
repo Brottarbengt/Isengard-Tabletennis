@@ -29,3 +29,184 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+/* HEADER CONTAINER */
+.top-header {
+    background-color: #45011f;
+    color: white;
+    font-family: 'Arial Black', sans-serif;
+    padding: 20px 0;
+}
+
+/* FLEX ROW */
+.top-bar {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* LOGO + TITLE */
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 60px; /* More gap between logo and title */
+}
+
+.logo {
+    height: 90px;
+}
+
+.site-title {
+    font-size: 66px;
+    margin: 0;
+    color: white;
+}
+.unstyled-link{
+    text-decoration: none;
+}
+  
+/* SOCIAL ICONS STACKED */
+.social-icons {
+    display: flex;
+    flex-direction: column; /* stack vertically */
+    gap: 10px;
+    align-items: flex-end;
+}
+.social-icons img {
+        height: 22px;
+        width: 22px;
+        filter: brightness(1.2);
+        transition: transform 0.2s ease-in-out;
+}
+.social-icons a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        font-size: 20px;
+        transition: transform 0.2s ease, background-color 0.3s ease;
+        text-decoration: none;
+
+}
+.social-icons a.youtube i {
+            color: #FF0000; /* YouTube Red */
+}
+.social-icons a.instagram i {
+            background: linear-gradient(45deg, #fdf497, #fd5949, #d6249f, #285AEB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text; /* fallback */
+            font-size: 22px;
+}
+.social-icons a.facebook i {
+            color: #1877F2; /* Facebook Blue */
+}
+.main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    background-color: #45011f;
+}
+
+/* First link - no separator before */
+.main-nav > a {
+        color: white !important;
+        text-decoration: none;
+        font-weight: 200;
+        font-size: 16px;
+        padding: 8px 14px;
+        transition: background-color 0.3s ease;
+        background-color: #c4553e;
+        margin-right: 0; /* avoid extra gap */
+}
+
+/* Group for links after "START" */
+.nav-item-group {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin-left: 0; /* prevent extra spacing */
+    transition: background-color 0.3s ease;
+}
+.nav-item-group:hover {
+        background-color: #d3d3d3;
+}
+.nav-item-group a {
+        color: white !important;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 8px 14px;
+}
+/* Regular hover */
+.main-nav a:hover {
+    background-color: #d3d3d3;
+    color: white;
+    cursor: pointer;
+}
+/* Separator between buttons */
+.nav-separator {
+    width: 1px;
+    height: 40px;
+    background-color: white;
+    margin: 0; /* remove spacing */
+}
+.header-divider {
+    height: 4px;
+    background-color: yellow;
+    width: 100%;
+}
+/* Index.cshtml page style */
+.carousel-caption {
+    margin-top: 60px;
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.carousel img {
+    max-height: 500px;
+    object-fit: cover;
+}
+/*Match.cshtml page style */
+.coming-soon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    margin-top: 60px;
+}
+
+.coming-soon-text {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #45011f; /* Club theme deep red */
+    animation: pulse 2s infinite;
+    text-shadow: 2px 2px 8px #ffcc00;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
