@@ -1,6 +1,8 @@
 using DataAccessLayer.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Services;
+using Services.Interfaces;
 
 
 namespace Tabletennis
@@ -20,6 +22,8 @@ namespace Tabletennis
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddTransient<IPlayerService, PlayerService>();
 
             builder.Services.AddRazorPages();
 

@@ -2,6 +2,7 @@
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using Humanizer;
+using Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    public class PlayerService
+    public class PlayerService : IPlayerService
     {
         public readonly ApplicationDbContext _dbContext;
         public PlayerService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        
+
         public async Task NewPlayer(PlayerCreateDTO newPlayer)
         {
             var player = new Player
