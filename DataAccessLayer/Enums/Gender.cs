@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Enums
 {
-    internal class Gender
+    public enum Gender
     {
+        Male,
+        Female
     }
 }
