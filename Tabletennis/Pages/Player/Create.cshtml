@@ -1,0 +1,27 @@
+﻿@page
+@model Tabletennis.Pages.Player.CreateModel
+@{
+}
+
+
+
+
+<form method="post">
+    <div>
+        <label asp-for="Player.FirstName"></label>
+        <input asp-for="Player.FirstName" />
+        <span asp-validation-for="Player.FirstName"></span>
+    </div>
+    <div>
+        <label asp-for="Player.LastName"></label>
+        <input asp-for="Player.LastName" />
+        <span asp-validation-for="Player.LastName"></span>
+    </div>
+    <div>
+        <label asp-for="Player.Email"></label>
+        <input asp-for="Player.Email" />
+        <span asp-validation-for="Player.Email"></span>
+    </div>
+
+    <button type="submit">Create Player</button>
+</form>
