@@ -12,7 +12,10 @@ namespace DataAccessLayer.DTOs
         public bool IsSingle { get; set; }
         public int BestOfSets { get; set; } // e.g., 3, 5, or 7
 
-        public string Player1Name { get; set; }
-        public string Player2Name { get; set; }
+        public string Player1FirstName { get; set; }
+        public string Player1LastName { get; set; }
+
+        public string Player2FirstName { get; set; }
+        public string Player2LastName { get; set; }
     }
 }
