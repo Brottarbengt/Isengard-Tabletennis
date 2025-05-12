@@ -8,19 +8,31 @@
 
 <form method="post">
     <div>
-        <label asp-for="Player.FirstName"></label>
-        <input asp-for="Player.FirstName" />
-        <span asp-validation-for="Player.FirstName"></span>
+        <label asp-for="NewPlayer.FirstName"></label>
+        <input asp-for="NewPlayer.FirstName" />
+        <span asp-validation-for="NewPlayer.FirstName"></span>
     </div>
     <div>
-        <label asp-for="Player.LastName"></label>
-        <input asp-for="Player.LastName" />
-        <span asp-validation-for="Player.LastName"></span>
+        <label asp-for="NewPlayer.LastName"></label>
+        <input asp-for="NewPlayer.LastName" />
+        <span asp-validation-for="NewPlayer.LastName"></span>
     </div>
     <div>
-        <label asp-for="Player.Email"></label>
-        <input asp-for="Player.Email" />
-        <span asp-validation-for="Player.Email"></span>
+        <label asp-for="NewPlayer.Email"></label>
+        <input asp-for="NewPlayer.Email" />
+        <span asp-validation-for="NewPlayer.Email"></span>
+    </div>
+
+
+    <div>
+        <label asp-for="NewPlayer.PhoneNumber"></label>
+        <input asp-for="NewPlayer.PhoneNumber" />
+        <span asp-validation-for="NewPlayer.PhoneNumber"></span>
+    </div>
+    <div>
+        <label asp-for="NewPlayer.FirstName"></label>
+        <input asp-for="NewPlayer.FirstName" />
+        <span asp-validation-for="NewPlayer.FirstName"></span>
     </div>
 
     <button type="submit">Create Player</button>

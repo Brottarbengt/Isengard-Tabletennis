@@ -25,6 +25,7 @@ namespace Tabletennis.ViewModels
         public Gender Gender { get; set; }
 
         [Required(ErrorMessage = "Birthday is required.")]
-        public DateOnly Birthday { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime Birthday { get; set; }
     }
 }
