@@ -18,11 +18,19 @@ namespace Tabletennis.ViewModels
         public int BestOfSets { get; set; }
 
         [Required]
-        [Display(Name = "Player 1 Name")]
-        public string Player1Name { get; set; }
+        [Display(Name = "Player 1  First Name")]
+        public string Player1FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Player 2 Name")]
-        public string Player2Name { get; set; }
+        [Display(Name = "Player 1 Last Name")]
+        public string Player1LastName { get; set; }
+
+        [Required]
+        [Display(Name = "Player 2  First Name")]
+        public string Player2FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Player 2 Last Name")]
+        public string Player2LastName { get; set; }
     }
 }
