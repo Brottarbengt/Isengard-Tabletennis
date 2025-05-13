@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Interfaces;
 using Tabletennis.ViewModels;
+using Mapster;
+using DataAccessLayer.DTOs;
 
 namespace Tabletennis.Pages.Player
 {
@@ -17,11 +19,41 @@ namespace Tabletennis.Pages.Player
             _playerService = playerService;
         }
 
+        [BindProperty]
         public PlayerCreateViewModel NewPlayer { get; set; }
         public List<SelectListItem> GenderOptions { get; set; }
 
 
         public void OnGet()
+        {
+            LoadGenderOptions();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+
+            if (!ModelState.IsValid)
+            {
+                LoadGenderOptions();
+                return Page();
+            }
+            
+            var newPlayer = NewPlayer.Adapt<PlayerCreateDTO>();
+            
+            var result = await _playerService.CreatePlayer(newPlayer);
+
+            if (result == Check.Failed)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong when creating the player.");
+                LoadGenderOptions();
+                return Page();
+            }
+
+            TempData["SuccessMessage"] = "Player was successfully created!";
+            return RedirectToPage("Index");
+        }
+
+        public void LoadGenderOptions()
         {
             GenderOptions = Enum.GetValues(typeof(Gender))
                 .Cast<Gender>()
@@ -33,18 +65,5 @@ namespace Tabletennis.Pages.Player
                 .ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                // Om valideringen misslyckas, visa formuläret igen med fel
-                
-                return Page();
-            }
-            //lägga till if check.success / check.failed ?
-            
-
-            return RedirectToPage("Index");
-        }
     }
 }

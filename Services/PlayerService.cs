@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
+using DataAccessLayer.Enums;
 
 namespace Services
 {
@@ -19,25 +21,25 @@ namespace Services
             _dbContext = dbContext;
         }
 
-        public async Task NewPlayer(PlayerCreateDTO newPlayer)
+        public async Task<Check> CreatePlayer(PlayerCreateDTO newPlayer)
         {
-
-
-            //lägga till mapping
-            //return check efter modelstate isvalid
-
-            var player = new Player
+            
+            if (newPlayer == null)
             {
-                FirstName = newPlayer.FirstName,
-                LastName = newPlayer.LastName,
-                Email = newPlayer.Email,
-                PhoneNumber = newPlayer.PhoneNumber,
-                Gender = newPlayer.Gender,
-                Birthday = newPlayer.Birthday
-            };
+                return Check.Failed;
+            }
+
+            var player = newPlayer.Adapt<Player>();
+
+            if (player == null)
+            {
+                return Check.Failed;
+            }
+
 
             _dbContext.Players.Add(player);
             await _dbContext.SaveChangesAsync();
+            return Check.Success;
         }
 
 
