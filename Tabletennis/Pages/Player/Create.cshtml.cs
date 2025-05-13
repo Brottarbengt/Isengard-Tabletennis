@@ -6,6 +6,7 @@ using Services.Interfaces;
 using Tabletennis.ViewModels;
 using Mapster;
 using DataAccessLayer.DTOs;
+using System;
 
 namespace Tabletennis.Pages.Player
 {
@@ -37,9 +38,11 @@ namespace Tabletennis.Pages.Player
                 LoadGenderOptions();
                 return Page();
             }
-            
+
+            TypeAdapterConfig<PlayerCreateViewModel, PlayerCreateDTO>.NewConfig()
+            .Map(dest => dest.Birthday, src => DateOnly.FromDateTime(src.Birthday));
+
             var newPlayer = NewPlayer.Adapt<PlayerCreateDTO>();
-            
             var result = await _playerService.CreatePlayer(newPlayer);
 
             if (result == Check.Failed)
