@@ -1,18 +1,20 @@
 ﻿using DataAccessLayer.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace DataAccessLayer.Models
+namespace DataAccessLayer.DTOs
 {
-    public class Player
+    public class PlayerCreateDTO
     {
-        public int PlayerId { get; set; }
         public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        public string LastName { get; set; } = String.Empty;
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public Gender Gender { get; set; }
         public DateOnly Birthday { get; set; }
-
-        public virtual ICollection<PlayerMatch> PlayerMatches { get; set; }
     }
 }
