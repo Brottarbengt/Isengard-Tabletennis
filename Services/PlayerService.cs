@@ -21,6 +21,11 @@ namespace Services
 
         public async Task NewPlayer(PlayerCreateDTO newPlayer)
         {
+
+
+            //lägga till mapping
+            //return check efter modelstate isvalid
+
             var player = new Player
             {
                 FirstName = newPlayer.FirstName,

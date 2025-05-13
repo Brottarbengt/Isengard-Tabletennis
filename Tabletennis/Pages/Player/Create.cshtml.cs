@@ -38,9 +38,10 @@ namespace Tabletennis.Pages.Player
             if (!ModelState.IsValid)
             {
                 // Om valideringen misslyckas, visa formuläret igen med fel
+                
                 return Page();
             }
-
+            //lägga till if check.success / check.failed ?
             
 
             return RedirectToPage("Index");
