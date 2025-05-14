@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.Enums;
+using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Services.Interfaces;
 using System;
@@ -20,6 +21,11 @@ namespace Services
             _dbContext = dbContext;
         }
 
-        
+        public void CreateSet(Set CurrentSet)
+        {
+            _dbContext.Sets.Add(CurrentSet);
+            _dbContext.SaveChanges();
+        }
+
     }
 }
