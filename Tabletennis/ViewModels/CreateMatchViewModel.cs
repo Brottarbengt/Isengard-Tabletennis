@@ -1,36 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tabletennis.ViewModels
 {
     public class CreateMatchViewModel
     {
-        [Required]
-        [Display(Name = "Match Date")]
-        public DateTime MatchDate { get; set; } = DateTime.Now;
+        public int Player1Id { get; set; }
+        public string Player1Name { get; set; } = string.Empty;
 
-        [Required]
-        [Display(Name = "Is Singles Match?")]
-        public bool IsSingle { get; set; }
+        public int Player2Id { get; set; }
+        public string Player2Name { get; set; } = string.Empty;
 
-        [Required]
-        [Range(3, 7)]
-        [Display(Name = "Best of (3, 5 or 7 sets)")]
-        public int BestOfSets { get; set; }
-
-        [Required]
-        [Display(Name = "Player 1  First Name")]
-        public string Player1FirstName { get; set; }
-
-        [Required]
-        [Display(Name = "Player 1 Last Name")]
-        public string Player1LastName { get; set; }
-
-        [Required]
-        [Display(Name = "Player 2  First Name")]
-        public string Player2FirstName { get; set; }
-
-        [Required]
-        [Display(Name = "Player 2 Last Name")]
-        public string Player2LastName { get; set; }
+        public int SelectedSetCount { get; set; }
+        public List<SelectListItem> SetOptions { get; set; } = new();
+        public List<SelectListItem> PlayerList { get; set; } = new();
     }
 }

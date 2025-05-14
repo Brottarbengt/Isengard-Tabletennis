@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore;
 using Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,57 +18,46 @@ namespace Services
         {
             _context = context;
         }
-        public async Task<int> CreateMatchAsync(CreateMatchDTO dto)
+        public async Task<List<PlayerCreateDTO>> GetAllPlayersAsync()
         {
-            //Create Player 1 
-            var player1 = new Player
+            return await _context.Players
+                .Select(p => new PlayerCreateDTO
+                {
+                    PlayerId = p.PlayerId,
+                    FullName = p.FirstName + " " + p.LastName
+                })
+                .ToListAsync();
+        }
+
+        public async Task<PlayerCreateDTO?> GetPlayerByIdAsync(int playerId)
+        {
+            var player = await _context.Players.FindAsync(playerId);
+            return player == null ? null : new PlayerCreateDTO
             {
-                FirstName = dto.Player1FirstName,
-                LastName = dto.Player1LastName,
-                Email = "", //Optional: populate later
-                PhoneNumber = "",
-                Birthday = new DateOnly(2000, 1, 1) //placeholder date
+                PlayerId = player.PlayerId,
+                FullName = player.FirstName + " " + player.LastName
             };
-            //Create Player 2 
-            var player2 = new Player
+        }
+
+        public async Task CreateMatchAsync(CreateMatchDTO match)
+        {
+            var newMatch = new Match
             {
-                FirstName = dto.Player2FirstName,
-                LastName = dto.Player2LastName,
-                Email = "",
-                PhoneNumber = "",
-                Birthday = new DateOnly(2000, 1, 1)
-            };
-            // Create Match 
-            var match = new Match
-            {
-                MatchDate = dto.MatchDate,
-                IsSingle = dto.IsSingle,
+                MatchDate = match.MatchDate,
+                IsSingle = true,
                 IsCompleted = false,
                 PlayerMatches = new List<PlayerMatch>
-                {
-                    new PlayerMatch {Player = player1, TeamNumber = 1},
-                    new PlayerMatch {Player = player2, TeamNumber = 2}
-                },
-                Sets = new List<Set>()
-            };
-            // Add placeholder sets (based on BestOfSets)
-            for (int i = 1; i <= dto.BestOfSets; i++)
             {
-                match.Sets.Add(new Set
-                {
-                    SetNumber = i,
-                    Team1Score = 0,
-                    Team2Score = 0,
-                    IsDecidingSet = false
-                    // WinnerId will be set after playing
-                });
+                new PlayerMatch { PlayerId = match.Player1Id, TeamNumber = 1 },
+                new PlayerMatch { PlayerId = match.Player2Id, TeamNumber = 2 }
+            },
+                Sets = Enumerable.Range(1, match.SetCount)
+                    .Select(i => new Set { SetNumber = i })
+                    .ToList()
+            };
 
-            }
-            // Save everything to database
-            _context.Matches.Add(match);
+            _context.Matches.Add(newMatch);
             await _context.SaveChangesAsync();
-
-            return match.MatchId;
         }
     }
 }

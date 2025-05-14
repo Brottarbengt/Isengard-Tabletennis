@@ -5,67 +5,123 @@
 }
 <div class="container mt-5">
     <!-- Adds margin top -->
-    <div class="card shadow">
+    <div class="card shadow-sm">
+        <div class="card-header text-white" style="background-color: #c4553e;">
+            <h4 class="mb-0">Create New Match</h4>
+        </div>
         <div class="card-body">
-            <h2 class="text-center mb-4">Create New Match</h2>
             <form method="post">
-                <div class="form-group">
-                    <label asp-for="MatchVM.Player1FirstName">Player 1 First Name</label>
-                    <input asp-for="MatchVM.Player1FirstName" class="form-control" />
-                    <span asp-validation-for="MatchVM.Player1FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="MatchVM.Player1LastName">Player 1 Last Name</label>
-                    <input asp-for="MatchVM.Player1LastName" class="form-control" />
-                    <span asp-validation-for="MatchVM.Player1LastName" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="MatchVM.Player2FirstName">Player 2 First Name</label>
-                    <input asp-for="MatchVM.Player2FirstName" class="form-control" />
-                    <span asp-validation-for="MatchVM.Player2FirstName" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="MatchVM.Player2LastName">Player 2 Last Name</label>
-                    <input asp-for="MatchVM.Player2LastName" class="form-control" />
-                    <span asp-validation-for="MatchVM.Player2LastName" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="MatchVM.BestOfSets" class="form-label">Best of Sets</label>
-                    <select asp-for="MatchVM.BestOfSets" class="form-select" asp-items="new SelectList(new[] { 3, 5, 7 })">
-                        <option value="">Select number of sets</option>
-                    </select>
-                    <span asp-validation-for="MatchVM.BestOfSets" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="MatchVM.MatchDate">Match Date</label>
-                    <input asp-for="MatchVM.MatchDate" type="datetime-local" class="form-control" />
-                    <span asp-validation-for="MatchVM.MatchDate" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label>Is Single Match?</label><br />
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" asp-for="MatchVM.IsSingle" value="true" />
-                        <label class="form-check-label">Yes</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Search Player</label>
+                        <select id="searchPlayer" class="form-control">
+                            <option value="">-- Select Player--</option>
+                            @foreach (var player in Model.MatchVM.PlayerList)
+                            {
+                                <option value="@player.Value">@player.Text</option>
+                            }
+                        </select>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" asp-for="MatchVM.IsSingle" value="false" />
-                        <label class="form-check-label">No</label>
+                    <div class="col-md-6">
+                        <label>&nbsp;</label>
+                        <a class="btn btn-secondary form-control" asp-page="/Player/Create">Register new player</a>
                     </div>
                 </div>
 
-                <div class="text-center mt-3">
-                    <button type="submit" class="btn text-white w-100" style="background-color: #c4553e;">
-                        Create Match
-                    </button>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label>Player 1</label>
+                        <input type="text" asp-for="MatchVM.Player1Name" id="Player1Name" class="form-control" readonly />
+                        <input type="hidden" asp-for="MatchVM.Player1Id" id="Player1Id" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Player 2</label>
+                        <input type="text" asp-for="MatchVM.Player2Name" id="Player2Name" class="form-control" readonly />
+                        <input type="hidden" asp-for="MatchVM.Player2Id" id="Player2Id" />
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label>Sets</label>
+                        <select asp-for="MatchVM.SelectedSetCount" asp-items="Model.MatchVM.SetOptions" class="form-control">
+                            <option value="">-- Select Set --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn text-white w-100" style="background-color: #c4553e;">
+                            Create Match
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <script>
+        let player1Selected = false;
+        let player2Selected = false;
+
+        $(function () {
+            $('#searchPlayer').on('change', function () {
+                const selectedId = $(this).val();
+                if (!selectedId) return;
+
+                // Prevent selecting the same player twice
+                if ($('#Player1Id').val() === selectedId || $('#Player2Id').val() === selectedId) {
+                    alert('This player is already selected.');
+                    $(this).val('');
+                    return;
+                }
+
+                if (!player1Selected) {
+                    fetchPlayer(selectedId, 'Player1');
+                    player1Selected = true;
+                } else if (!player2Selected) {
+                    fetchPlayer(selectedId, 'Player2');
+                    player2Selected = true;
+                } else {
+                    alert('Both players are already selected.');
+                    $(this).val('');
+                }
+            });
+
+            function fetchPlayer(playerId, target) {
+                $.get(`?handler=GetPlayer&id=${playerId}`, function (data) {
+                    if (data) {
+                        $(`#${target}Name`).val(data.fullName);
+                        $(`#${target}Id`).val(data.playerId);
+                        $('#searchPlayer').val(''); // Clear dropdown after selection
+                    }
+                });
+            }
+        });
+    </script>
 }
+@* @section Scripts {
+    <script>
+        $('#searchPlayer').on('change', function () {
+            var selectedId = $(this).val();
+            if (!selectedId) return;
+
+            // You can decide whether this selection is for Player 1 or 2
+            if (!$('#Player1Id').val()) {
+                fetchPlayer(selectedId, 'Player1');
+            } else {
+                fetchPlayer(selectedId, 'Player2');
+            }
+        });
+
+        function fetchPlayer(playerId, target) {
+            $.get(`?handler=GetPlayer&id=${playerId}`, function (data) {
+                if (data) {
+                    $(`#${target}Name`).val(data.fullName);
+                    $(`#${target}Id`).val(data.playerId);
+                }
+            });
+        }
+    </script>
+} *@
+

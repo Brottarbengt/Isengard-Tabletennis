@@ -8,14 +8,9 @@ namespace DataAccessLayer.DTOs
 {
     public class CreateMatchDTO
     {
+        public int Player1Id { get; set; }
+        public int Player2Id { get; set; }
+        public int SetCount { get; set; }
         public DateTime MatchDate { get; set; }
-        public bool IsSingle { get; set; }
-        public int BestOfSets { get; set; } // e.g., 3, 5, or 7
-
-        public string Player1FirstName { get; set; }
-        public string Player1LastName { get; set; }
-
-        public string Player2FirstName { get; set; }
-        public string Player2LastName { get; set; }
     }
 }
