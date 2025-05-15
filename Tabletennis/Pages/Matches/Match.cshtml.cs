@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Interfaces;
 using Tabletennis.ViewModels;
+using Mapster;
 
 namespace Tabletennis.Pages.Match
 {
@@ -33,16 +34,11 @@ namespace Tabletennis.Pages.Match
 
             if (!ModelState.IsValid)
             {
-                return Page(); // Now MatchVM is not reset — inputs are preserved
+                return Page();
             }
 
-            var match = new CreateMatchDTO
-            {
-                Player1Id = MatchVM.Player1Id,
-                Player2Id = MatchVM.Player2Id,
-                SetCount = MatchVM.SelectedSetCount,
-                MatchDate = DateTime.Now
-            };
+            var match = MatchVM.Adapt<CreateMatchDTO>();
+            match.MatchDate = DateTime.Now;
 
             await _matchService.CreateMatchAsync(match);
             TempData["SuccessMessage"] = "New Match was successfully created!";
