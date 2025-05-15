@@ -39,7 +39,7 @@ namespace Services
             };
         }
 
-        public async Task CreateMatchAsync(CreateMatchDTO match)
+        public async Task<int> CreateMatchAsync(CreateMatchDTO match)
         {
             var newMatch = new Match
             {
@@ -58,6 +58,7 @@ namespace Services
 
             _context.Matches.Add(newMatch);
             await _context.SaveChangesAsync();
+            return newMatch.MatchId;
         }
     }
 }

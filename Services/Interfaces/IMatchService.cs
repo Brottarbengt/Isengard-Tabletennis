@@ -11,6 +11,6 @@ namespace Services.Interfaces
     {
         Task<List<PlayerCreateDTO>> GetAllPlayersAsync();
         Task<PlayerCreateDTO?> GetPlayerByIdAsync(int playerId);
-        Task CreateMatchAsync(CreateMatchDTO match);
+        Task<int> CreateMatchAsync(CreateMatchDTO match);
     }
 }
