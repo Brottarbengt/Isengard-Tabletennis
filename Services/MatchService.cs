@@ -46,14 +46,16 @@ namespace Services
                 MatchDate = match.MatchDate,
                 IsSingle = true,
                 IsCompleted = false,
+                MatchType = match.MatchType,
                 PlayerMatches = new List<PlayerMatch>
+                
             {
                 new PlayerMatch { PlayerId = match.Player1Id, TeamNumber = 1 },
                 new PlayerMatch { PlayerId = match.Player2Id, TeamNumber = 2 }
             },
-                Sets = Enumerable.Range(1, match.SetCount)
-                    .Select(i => new Set { SetNumber = i })
-                    .ToList()
+                // Sets = Enumerable.Range(1, match.MatchType)
+                //     .Select(i => new Set { SetNumber = i })
+                //     .ToList()
             };
 
             _context.Matches.Add(newMatch);
