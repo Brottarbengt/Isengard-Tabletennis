@@ -9,8 +9,8 @@ namespace Services.Interfaces
 {
     public interface IMatchService
     {
-        Task<List<PlayerCreateDTO>> GetAllPlayersAsync();
-        Task<PlayerCreateDTO?> GetPlayerByIdAsync(int playerId);
-        Task<int> CreateMatchAsync(CreateMatchDTO match);
+        Task<List<PlayerDTO>> GetAllPlayersAsync();
+        Task<PlayerDTO?> GetPlayerByIdAsync(int playerId);
+        Task<int> CreateMatchAsync(MatchDTO match);
     }
 }

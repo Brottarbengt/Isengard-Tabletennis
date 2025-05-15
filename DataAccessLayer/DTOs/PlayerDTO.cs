@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.DTOs
 {
-    public class PlayerCreateDTO
+    public class PlayerDTO
     {
         public int PlayerId { get; set; }
         public string FirstName { get; set; } = string.Empty;

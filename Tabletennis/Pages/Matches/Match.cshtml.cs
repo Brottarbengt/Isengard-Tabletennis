@@ -37,7 +37,7 @@ namespace Tabletennis.Pages.Match
                 return Page();
             }
 
-            var match = MatchVM.Adapt<CreateMatchDTO>();
+            var match = MatchVM.Adapt<MatchDTO>();
             match.MatchDate = DateTime.Now;
 
             var matchId = await _matchService.CreateMatchAsync(match);

@@ -18,10 +18,10 @@ namespace Services
         {
             _context = context;
         }
-        public async Task<List<PlayerCreateDTO>> GetAllPlayersAsync()
+        public async Task<List<PlayerDTO>> GetAllPlayersAsync()
         {
             return await _context.Players
-                .Select(p => new PlayerCreateDTO
+                .Select(p => new PlayerDTO
                 {
                     PlayerId = p.PlayerId,
                     FullName = p.FirstName + " " + p.LastName
@@ -29,17 +29,17 @@ namespace Services
                 .ToListAsync();
         }
 
-        public async Task<PlayerCreateDTO?> GetPlayerByIdAsync(int playerId)
+        public async Task<PlayerDTO?> GetPlayerByIdAsync(int playerId)
         {
             var player = await _context.Players.FindAsync(playerId);
-            return player == null ? null : new PlayerCreateDTO
+            return player == null ? null : new PlayerDTO
             {
                 PlayerId = player.PlayerId,
                 FullName = player.FirstName + " " + player.LastName
             };
         }
 
-        public async Task<int> CreateMatchAsync(CreateMatchDTO match)
+        public async Task<int> CreateMatchAsync(MatchDTO match)
         {
             var newMatch = new Match
             {

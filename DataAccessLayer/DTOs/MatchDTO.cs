@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.DTOs
 {
-    public class CreateMatchDTO
+    public class MatchDTO
     {
         public int MatchId { get; set; }
         public int Player1Id { get; set; }
