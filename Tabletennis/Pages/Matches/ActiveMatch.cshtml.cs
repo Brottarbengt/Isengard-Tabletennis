@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Interfaces;
 using System.Reflection;
+using Tabletennis.ViewModels;
 
 namespace Tabletennis.Pages.Matches
 {
@@ -17,18 +18,12 @@ namespace Tabletennis.Pages.Matches
         {
             _setService = setService;
         }
-
-        public int MatchId { get; set; }
-        // TODO: Set MatchDate only once, protected?
-        public string Player1 { get; set; } = "Player 1";
-        public string Player2 { get; set; } = "Player 2";
-        public string SetWinner { get; set; } = string.Empty;
-        public DateTime MatchDate { get; set; }
-        public int NumberOfSets { get; set; }
+        
+        
         public int SetNumber { get; set; }
         public Set CurrentSet { get; set; }
 
-        //public DataAccessLayer.Models.Match CurrentMatch { get; set; } 
+        public ActiveMatchViewModel ActiveMatchVM { get; set; } = new();
 
         public void OnGet(int matchId)
         {
