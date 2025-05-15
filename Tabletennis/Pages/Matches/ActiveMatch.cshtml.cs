@@ -18,8 +18,8 @@ namespace Tabletennis.Pages.Matches
             _setService = setService;
         }
 
-
-        // TODO: Set MatcDate only once, protected?
+        public int MatchId { get; set; }
+        // TODO: Set MatchDate only once, protected?
         public string Player1 { get; set; } = "Player 1";
         public string Player2 { get; set; } = "Player 2";
         public string SetWinner { get; set; } = string.Empty;
@@ -30,24 +30,24 @@ namespace Tabletennis.Pages.Matches
 
         //public DataAccessLayer.Models.Match CurrentMatch { get; set; } 
 
-        public void OnGet()
+        public void OnGet(int matchId)
         {
             
             if (CurrentSet == null)
             {
                 SetNumber = 1;
-                StartNewSet(SetNumber);
+                StartNewSet(SetNumber, matchId);
             }
         }
 
-        private void StartNewSet(int setNumber)
+        private void StartNewSet(int setNumber, int matchId)
         {
-            // Rensa ModelState för att undvika att gamla värden återkommer
+            // Rensa ModelState fï¿½r att undvika att gamla vï¿½rden ï¿½terkommer
             ModelState.Clear();
 
-            // Skapa ett nytt set och lägg till det i databasen
+            // Skapa ett nytt set och lï¿½gg till det i databasen
             CurrentSet = new Set{
-                MatchId = 2, // TODO: Hämta matchId från databasen
+                MatchId = matchId, // TODO: Hï¿½mta matchId frï¿½n databasen
                 SetNumber = setNumber,
                 Team1Score = 0,
                 Team2Score = 0,
@@ -55,10 +55,10 @@ namespace Tabletennis.Pages.Matches
                 IsDecidingSet = false
             };
 
-            //TODO: Lägga till relevant Service 
+            //TODO: Lï¿½gga till relevant Service 
             _setService.CreateSet(CurrentSet);            
 
-            // Återställ Winner till null för nästa omgång
+            // ï¿½terstï¿½ll Winner till null fï¿½r nï¿½sta omgï¿½ng
             //Winner = null;
         }
 
@@ -68,7 +68,7 @@ namespace Tabletennis.Pages.Matches
             {
                 if (Math.Abs(player1Score - player2Score) >= 2)
                 {
-                    // Kontrollera vem som har flest poäng för att avgöra vinnaren
+                    // Kontrollera vem som har flest poï¿½ng fï¿½r att avgï¿½ra vinnaren
                     if (player1Score > player2Score)
                     {
                         return "Player1";

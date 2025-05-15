@@ -8,6 +8,7 @@ namespace DataAccessLayer.DTOs
 {
     public class CreateMatchDTO
     {
+        public int MatchId { get; set; }
         public int Player1Id { get; set; }
         public int Player2Id { get; set; }
         public int SetCount { get; set; }

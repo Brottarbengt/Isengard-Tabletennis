@@ -42,7 +42,7 @@ namespace Tabletennis.Pages.Match
 
             await _matchService.CreateMatchAsync(match);
             TempData["SuccessMessage"] = "New Match was successfully created!";
-            return RedirectToPage("/Player/Index");
+            return RedirectToPage("/Matches/ActiveMatch", new { id = match.MatchId });
         }
 
         public async Task<JsonResult> OnGetGetPlayer(int id)
