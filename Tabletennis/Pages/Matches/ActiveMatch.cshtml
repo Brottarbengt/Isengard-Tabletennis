@@ -6,6 +6,20 @@
 
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">@ViewData["Title"] @Model.MatchDate </h2>
-    <h3 class="text-center mb-4">Set: @Model.SetNumber / @Model.MatchType</h3>
+    <h2 class="text-center mb-4">@ViewData["Title"] @Model.ActiveMatchVM.MatchDate </h2>
+    <h3 class="text-center mb-4">Set: @Model.SetNumber / @Model.ActiveMatchVM.MatchType</h3>
+</div>
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Player 1: @Model.ActiveMatchVM.Player1</h4>
+                <h4>Score: @Model.ActiveMatchVM.Team1Score</h4>
+            </div>
+            <div class="col-md-6">
+                <h4>Player 2: @Model.ActiveMatchVM.Player2</h4>
+                <h4>Score: @Model.ActiveMatchVM.Team2Score</h4>
+            </div>
+        </div>
+    </div>
 </div>

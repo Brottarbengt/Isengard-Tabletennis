@@ -40,9 +40,11 @@ namespace Tabletennis.Pages.Match
             var match = MatchVM.Adapt<MatchDTO>();
             match.MatchDate = DateTime.Now;
 
+            var player1 = MatchVM.Player1Name;
+            var player2 = MatchVM.Player2Name;
             var matchId = await _matchService.CreateMatchAsync(match);
             TempData["SuccessMessage"] = "New Match was successfully created!";
-            return RedirectToPage("/Matches/ActiveMatch", new { matchId });
+            return RedirectToPage("/Matches/ActiveMatch", new { matchId, player1, player2 });
         }
 
         public async Task<JsonResult> OnGetGetPlayer(int id)

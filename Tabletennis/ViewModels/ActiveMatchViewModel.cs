@@ -12,6 +12,5 @@
         public int Team2Score { get; set; }
         public int SetNumber { get; set; }
 
-
     }
 }

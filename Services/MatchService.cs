@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Services.Interfaces;
 using System;
@@ -61,6 +62,16 @@ namespace Services
             _context.Matches.Add(newMatch);
             await _context.SaveChangesAsync();
             return newMatch.MatchId;
+        }
+
+        public async Task<ActiveMatchDTO?> GetMatchByIdAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Where(m => m.MatchId == matchId)
+                .ProjectToType<MatchDTO>() // Mapster magic here
+                .FirstOrDefaultAsync();
+
+            return match?.Adapt<ActiveMatchDTO>();
         }
     }
 }
