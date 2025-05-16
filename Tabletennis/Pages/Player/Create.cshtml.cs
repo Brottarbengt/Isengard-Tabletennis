@@ -53,7 +53,7 @@ namespace Tabletennis.Pages.Player
             }
 
             TempData["SuccessMessage"] = "Player was successfully created!";
-            return RedirectToPage("Index");
+            return Page();
         }
 
         public void LoadGenderOptions()
