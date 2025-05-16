@@ -14,15 +14,18 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Spelare 1: @Model.ActiveMatchVM.Player1</h4>
+                <h4>Vunna set: <span id="team1setsWon"></span></h4>
                 <h4>Poäng: <span id="team1Score">@Model.LiveScore.Team1Points</span></h4>
                 <button id="player1Button">Lägg till poäng</button>
             </div>
             <div class="col-md-6">
                 <h4>Spelare 2: @Model.ActiveMatchVM.Player2</h4>
+                <h4>Vunna set: <span id="team2setsWon"></span></h4>
                 <h4>Poäng: <span id="team2Score">@Model.LiveScore.Team2Points</span></h4>
                 <button id="player2Button">Lägg till poäng</button>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -65,4 +68,5 @@
             player2Button.addEventListener('click', () => addPoint(2));
         });
     </script>
+   
 }

@@ -31,7 +31,8 @@ namespace Tabletennis.Pages.Matches
 
         [BindProperty]
         public LiveScore LiveScore { get; set; }
-        public int SetNumber { get; set; }
+        [BindProperty]
+        public int SetNumber { get; set; }        
         public Set CurrentSet { get; set; }        
         public ActiveMatchViewModel ActiveMatchVM { get; set; } = new();
 
@@ -84,25 +85,39 @@ namespace Tabletennis.Pages.Matches
                 if (team == 1) score.Team1Points++;
                 else if (team == 2) score.Team2Points++;
 
-                if ((score.Team1Points >= 11 || score.Team2Points >= 11) && Math.Abs(score.Team1Points - score.Team2Points) >= 2)
-                {
-                    _setService.SaveSet(setId, score);
-                    score.Team1Points = 0;
-                    score.Team2Points = 0;
-                    score.CurrentSetNumber++;
-                }
-
-                return new JsonResult(new { 
+                
+               CheckEndOfSet(score, setId);
+                
+               return new JsonResult(new { 
                     team1Points = score.Team1Points, 
                     team2Points = score.Team2Points,
                     currentSetNumber = score.CurrentSetNumber
+
                 });
+
             }
             catch (Exception ex)
             {
                 return new JsonResult(new { error = ex.Message }) { StatusCode = 500 };
             }
         }
-                
+        
+        public void CheckEndOfSet(LiveScore score, int setId)
+        {
+            if ((score.Team1Points >= 11 || score.Team2Points >= 11) && Math.Abs(score.Team1Points - score.Team2Points) >= 2)
+            {
+
+                _setService.SaveSet(setId, score);
+                score.Team1Points = 0;
+                score.Team2Points = 0;
+                score.CurrentSetNumber++;
+                SetNumber = score.CurrentSetNumber;
+
+                StartNewSetAsync(score.CurrentSetNumber, ActiveMatchVM.MatchId).Wait();
+                return; 
+
+            }
+            return;
+        }
     }
 }
