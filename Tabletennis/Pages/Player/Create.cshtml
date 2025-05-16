@@ -61,46 +61,6 @@
 </div>
 
 
-
-@* <form method="post">
-    <div>
-        <label asp-for="NewPlayer.FirstName"></label>
-        <input asp-for="NewPlayer.FirstName" />
-        <span asp-validation-for="NewPlayer.FirstName" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="NewPlayer.LastName"></label>
-        <input asp-for="NewPlayer.LastName" />
-        <span asp-validation-for="NewPlayer.LastName" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="NewPlayer.Email"></label>
-        <input asp-for="NewPlayer.Email" />
-        <span asp-validation-for="NewPlayer.Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NewPlayer.Gender" class="control-label"></label>
-        <select asp-for="NewPlayer.Gender" class="form-control" asp-items="Model.GenderOptions">
-            <option value="">-- Select Gender --</option>
-        </select>
-        <span asp-validation-for="NewPlayer.Gender" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NewPlayer.Birthday" class="control-label"></label>
-        <input asp-for="NewPlayer.Birthday" class="form-control" type="date" />
-        <span asp-validation-for="NewPlayer.Birthday" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="NewPlayer.PhoneNumber"></label>
-        <input asp-for="NewPlayer.PhoneNumber" />
-        <span asp-validation-for="NewPlayer.PhoneNumber" class="text-danger"></span>
-    </div>
-
-    <button type="submit">Create Player</button>
-</form>
-
- *@
-
 @section Scripts {
     <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

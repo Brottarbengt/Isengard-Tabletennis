@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace DataAccessLayer.DTOs
 {
     public class SetDTO
-    {        
+    {
+        public int SetId { get; set; }
         public int MatchId { get; set; }
         public int SetNumber { get; set; }
         public int Team1Score { get; set; }

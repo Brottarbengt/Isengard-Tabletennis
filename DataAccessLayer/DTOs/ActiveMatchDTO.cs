@@ -13,6 +13,6 @@ namespace DataAccessLayer.DTOs
         public int Player2Id { get; set; }
         public int MatchType { get; set; }
         public DateTime MatchDate { get; set; }
-        List<SetDTO> Sets { get; set; } = new List<SetDTO>();
+        //List<SetDTO> Sets { get; set; } = new List<SetDTO>();
     }
 }
