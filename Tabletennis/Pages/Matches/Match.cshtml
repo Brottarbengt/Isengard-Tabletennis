@@ -4,7 +4,6 @@
     ViewData["Title"] = "Create Match";
 }
 <div class="container mt-5">
-    <!-- Adds margin top -->
     <div class="card shadow-sm">
         <div class="card-header text-white" style="background-color: #c4553e;">
             <h4 class="mb-0">Create New Match</h4>
@@ -14,8 +13,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Search Player</label>
-                        <select id="searchPlayer" class="form-control">
-                            <option value="">-- Select Player--</option>
+                        <select id="searchPlayer" class="form-control custom-select">
+                            <option value=""></option>
                             @foreach (var player in Model.MatchVM.PlayerList)
                             {
                                 <option value="@player.Value">@player.Text</option>
@@ -31,21 +30,31 @@
                 <div class="row mt-3">
                     <div class="col-md-6">
                         <label>Player 1</label>
-                        <input type="text" asp-for="MatchVM.Player1Name" id="Player1Name" class="form-control" readonly />
-                        <input type="hidden" asp-for="MatchVM.Player1Id" id="Player1Id" />
+                        <div class="input-group">
+                            <input type="text" asp-for="MatchVM.Player1Name" id="Player1Name" class="form-control" readonly />
+                            <input type="hidden" asp-for="MatchVM.Player1Id" id="Player1Id" />
+                            @* @* <button type="button" class="btn btn-custom-red" onclick="clearPlayer('Player1')" style=" background-color: #c4553e;color: white;" > *@
+                                <i class="fas fa-times"></i>
+                            </button *@>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <label>Player 2</label>
-                        <input type="text" asp-for="MatchVM.Player2Name" id="Player2Name" class="form-control" readonly />
-                        <input type="hidden" asp-for="MatchVM.Player2Id" id="Player2Id" />
+                        <div class="input-group">
+                            <input type="text" asp-for="MatchVM.Player2Name" id="Player2Name" class="form-control" readonly />
+                            <input type="hidden" asp-for="MatchVM.Player2Id" id="Player2Id" />
+                            @* <button type="button" class="btn btn-custom-red" onclick="clearPlayer('Player2')" style=" background-color: #c4553e;color: white;">
+                                <i class="fas fa-times"></i>
+                            </button> *@
+                        </div>
                     </div>
                 </div>
 
                 <div class="row mt-3">
                     <div class="col-md-6">
                         <label>Sets</label>
-                        <select asp-for="MatchVM.SelectedSetCount" asp-items="Model.MatchVM.SetOptions" class="form-control">
-                            <option value="">-- Select Set --</option>
+                        <select asp-for="MatchVM.SelectedSetCount" asp-items="Model.MatchVM.SetOptions" class="form-control custom-select">
+                            <option value="">Select Set </option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -60,68 +69,4 @@
     </div>
 </div>
 @section Scripts {
-    <script>
-        let player1Selected = false;
-        let player2Selected = false;
-
-        $(function () {
-            $('#searchPlayer').on('change', function () {
-                const selectedId = $(this).val();
-                if (!selectedId) return;
-
-                // Prevent selecting the same player twice
-                if ($('#Player1Id').val() === selectedId || $('#Player2Id').val() === selectedId) {
-                    alert('This player is already selected.');
-                    $(this).val('');
-                    return;
-                }
-
-                if (!player1Selected) {
-                    fetchPlayer(selectedId, 'Player1');
-                    player1Selected = true;
-                } else if (!player2Selected) {
-                    fetchPlayer(selectedId, 'Player2');
-                    player2Selected = true;
-                } else {
-                    alert('Both players are already selected.');
-                    $(this).val('');
-                }
-            });
-
-            function fetchPlayer(playerId, target) {
-                $.get(`?handler=GetPlayer&id=${playerId}`, function (data) {
-                    if (data) {
-                        $(`#${target}Name`).val(data.fullName);
-                        $(`#${target}Id`).val(data.playerId);
-                        $('#searchPlayer').val(''); // Clear dropdown after selection
-                    }
-                });
-            }
-        });
-    </script>
-}
-@* @section Scripts {
-    <script>
-        $('#searchPlayer').on('change', function () {
-            var selectedId = $(this).val();
-            if (!selectedId) return;
-
-            // You can decide whether this selection is for Player 1 or 2
-            if (!$('#Player1Id').val()) {
-                fetchPlayer(selectedId, 'Player1');
-            } else {
-                fetchPlayer(selectedId, 'Player2');
-            }
-        });
-
-        function fetchPlayer(playerId, target) {
-            $.get(`?handler=GetPlayer&id=${playerId}`, function (data) {
-                if (data) {
-                    $(`#${target}Name`).val(data.fullName);
-                    $(`#${target}Id`).val(data.playerId);
-                }
-            });
-        }
-    </script>
-} *@
-
+   
