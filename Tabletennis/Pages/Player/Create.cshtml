@@ -46,13 +46,25 @@
                 </div>
 
                 <div class="row mb-3">
+                    
                     <div class="col-md-6">
-                        <label asp-for="NewPlayer.Gender" class="form-label"></label>
-                        <select asp-for="NewPlayer.Gender" class="form-select" asp-items="Model.GenderOptions">
-                            <option value="">-- Select Gender --</option>
-                        </select>
-                        <span asp-validation-for="NewPlayer.Gender" class="text-danger"></span>
+                        <label class="form-label d-block">Gender</label>
+
+                        <input type="radio" class="btn-check" name="NewPlayer.Gender" id="genderMale" value="Male" autocomplete="off"
+                        @(Model.NewPlayer?.Gender == DataAccessLayer.Enums.Gender.Male ? "checked" : "") />
+                        <label class="btn-gender" for="genderMale">
+                            <i class="bi bi-gender-male"></i> Male
+                        </label>
+
+                        <input type="radio" class="btn-check" name="NewPlayer.Gender" id="genderFemale" value="Female" autocomplete="off"
+                        @(Model.NewPlayer?.Gender == DataAccessLayer.Enums.Gender.Female ? "checked" : "") />
+                        <label class="btn-gender" for="genderFemale">
+                            <i class="bi bi-gender-female"></i> Female
+                        </label>
+
+                        <span asp-validation-for="NewPlayer.Gender" class="text-danger d-block mt-1"></span>
                     </div>
+
                     <div class="col-md-6">
                         <label asp-for="NewPlayer.Birthday" class="form-label"></label>
                         <input asp-for="NewPlayer.Birthday" class="form-control" type="date" max="@Model.MaxDate" />
@@ -78,44 +90,7 @@
 
 
 
-@* <form method="post">
-    <div>
-        <label asp-for="NewPlayer.FirstName"></label>
-        <input asp-for="NewPlayer.FirstName" />
-        <span asp-validation-for="NewPlayer.FirstName" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="NewPlayer.LastName"></label>
-        <input asp-for="NewPlayer.LastName" />
-        <span asp-validation-for="NewPlayer.LastName" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="NewPlayer.Email"></label>
-        <input asp-for="NewPlayer.Email" />
-        <span asp-validation-for="NewPlayer.Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NewPlayer.Gender" class="control-label"></label>
-        <select asp-for="NewPlayer.Gender" class="form-control" asp-items="Model.GenderOptions">
-            <option value="">-- Select Gender --</option>
-        </select>
-        <span asp-validation-for="NewPlayer.Gender" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="NewPlayer.Birthday" class="control-label"></label>
-        <input asp-for="NewPlayer.Birthday" class="form-control" type="date" />
-        <span asp-validation-for="NewPlayer.Birthday" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="NewPlayer.PhoneNumber"></label>
-        <input asp-for="NewPlayer.PhoneNumber" />
-        <span asp-validation-for="NewPlayer.PhoneNumber" class="text-danger"></span>
-    </div>
 
-    <button type="submit">Create Player</button>
-</form>
-
- *@
 
 @section Scripts {
     <script src="~/lib/jquery-validation/jquery.validate.min.js"></script>

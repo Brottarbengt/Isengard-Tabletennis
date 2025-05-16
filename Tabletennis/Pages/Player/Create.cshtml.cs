@@ -29,7 +29,6 @@ namespace Tabletennis.Pages.Player
         public void OnGet()
         {
             SetMaxDate();
-            LoadGenderOptions();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -38,7 +37,6 @@ namespace Tabletennis.Pages.Player
             if (!ModelState.IsValid)
             {
                 SetMaxDate();
-                LoadGenderOptions();
                 return Page();
             }
 
@@ -51,7 +49,7 @@ namespace Tabletennis.Pages.Player
             if (result == Check.Failed)
             {
                 ModelState.AddModelError(string.Empty, "Something went wrong when creating the player.");
-                LoadGenderOptions();
+                SetMaxDate();
                 return Page();
             }
 
@@ -59,17 +57,7 @@ namespace Tabletennis.Pages.Player
             return Page();
         }
 
-        public void LoadGenderOptions()
-        {
-            GenderOptions = Enum.GetValues(typeof(Gender))
-                .Cast<Gender>()
-                .Select(g => new SelectListItem
-                {
-                    Value = g.ToString(),
-                    Text = g.ToString()
-                })
-                .ToList();
-        }
+        
 
         public void SetMaxDate()
         {
