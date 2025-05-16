@@ -69,4 +69,57 @@
     </div>
 </div>
 @section Scripts {
-   
+    <script>
+        let player1Selected = false;
+        let player2Selected = false;
+
+        $(function () {
+            $('#searchPlayer').select2({
+                placeholder: "Search and select player...",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#searchPlayer').on('change', function () {
+                const selectedId = $(this).val();
+                if (!selectedId) return;
+
+                // Prevent same player in both fields
+                if ($('#Player1Id').val() === selectedId || $('#Player2Id').val() === selectedId) {
+                    alert('This player is already selected.');
+                    $(this).val(null).trigger('change');
+                    return;
+                }
+
+                if (!player1Selected) {
+                    fetchPlayer(selectedId, 'Player1');
+                    player1Selected = true;
+                } else if (!player2Selected) {
+                    fetchPlayer(selectedId, 'Player2');
+                    player2Selected = true;
+                } else {
+                    alert('Both players are already selected.');
+                    $(this).val(null).trigger('change');
+                }
+            });
+        });
+
+        function fetchPlayer(playerId, target) {
+            $.get(`?handler=GetPlayer&id=${playerId}`, function (data) {
+                if (data) {
+                    $(`#${target}Name`).val(data.fullName);
+                    $(`#${target}Id`).val(data.playerId);
+                    $('#searchPlayer').val(null).trigger('change'); // Clear dropdown
+                }
+            });
+        }
+
+        function clearPlayer(target) {
+            $(`#${target}Name`).val('');
+            $(`#${target}Id`).val('');
+            if (target === 'Player1') player1Selected = false;
+            if (target === 'Player2') player2Selected = false;
+        }
+    </script>
+}
+
