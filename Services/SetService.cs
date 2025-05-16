@@ -29,17 +29,17 @@ namespace Services
             _dbContext.SaveChanges();
         }
 
-        public void SaveSet(int setId, LiveScore score, int player1Id, int player2Id)
+        public void SaveSet(int setId, LiveScore score)
         {
             int winnerId;
 
             if (score.Team1Points > score.Team2Points)
             {
-                winnerId = player1Id;
+                winnerId = 1;
             }
             else 
             {
-                winnerId = player2Id;
+                winnerId = 2;
             }
 
             var existingSet = _dbContext.Sets.Find(setId);

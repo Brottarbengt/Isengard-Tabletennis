@@ -26,22 +26,38 @@
     </div>
 </div>
 
+<form id="antiForgeryForm">
+    @Html.AntiForgeryToken()
+</form>
+
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        $(document).ready(function() {
             const player1Button = document.getElementById('player1Button');
             const player2Button = document.getElementById('player2Button');
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
             function addPoint(team) {
-                fetch(`/Match/AddPoint?setId=@Model.ActiveMatchVM.SetId&team=${team}`, {
-                    method: 'POST'
+                fetch(`/Matches/ActiveMatch?handler=AddPoint&setId=@Model.ActiveMatchVM.SetId&team=${team}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
+                    }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(score => {
                     document.getElementById("team1Score").innerText = score.team1Points;
                     document.getElementById("team2Score").innerText = score.team2Points;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
             }
 

@@ -12,7 +12,7 @@ namespace Services.Interfaces
     {
         void CreateSet(Set currentSet);
         
-        void SaveSet(int setId, LiveScore score, int player1Id, int player2Id);
+        void SaveSet(int setId, LiveScore score);
         //SetDTO? GetCurrentSetForMatch(int matchId);
     }
 }

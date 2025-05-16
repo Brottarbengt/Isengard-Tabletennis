@@ -74,22 +74,34 @@ namespace Tabletennis.Pages.Matches
             LiveScore = liveScores.GetValueOrDefault(setId) ?? new LiveScore { SetId = setId };
         }
 
+        [ValidateAntiForgeryToken]
         public JsonResult OnPostAddPoint(int setId, int team)
         {
-            var score = liveScores.GetOrAdd(setId, _ => new LiveScore { SetId = setId });
-
-            if (team == 1) score.Team1Points++;
-            else if (team == 2) score.Team2Points++;
-
-            if ((score.Team1Points >= 11 || score.Team2Points >= 11) && Math.Abs(score.Team1Points - score.Team2Points) >= 2)
+            try
             {
-                _setService.SaveSet(setId, score, ActiveMatchVM.Player1Id, ActiveMatchVM.Player2Id);
-                score.Team1Points = 0;
-                score.Team2Points = 0;
-                score.CurrentSetNumber++;
-            }
+                var score = liveScores.GetOrAdd(setId, _ => new LiveScore { SetId = setId });
 
-            return new JsonResult(score);
+                if (team == 1) score.Team1Points++;
+                else if (team == 2) score.Team2Points++;
+
+                if ((score.Team1Points >= 11 || score.Team2Points >= 11) && Math.Abs(score.Team1Points - score.Team2Points) >= 2)
+                {
+                    _setService.SaveSet(setId, score);
+                    score.Team1Points = 0;
+                    score.Team2Points = 0;
+                    score.CurrentSetNumber++;
+                }
+
+                return new JsonResult(new { 
+                    team1Points = score.Team1Points, 
+                    team2Points = score.Team2Points,
+                    currentSetNumber = score.CurrentSetNumber
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { error = ex.Message }) { StatusCode = 500 };
+            }
         }
                 
     }
