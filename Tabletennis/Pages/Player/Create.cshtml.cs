@@ -23,10 +23,12 @@ namespace Tabletennis.Pages.Player
         [BindProperty]
         public PlayerCreateViewModel NewPlayer { get; set; }
         public List<SelectListItem> GenderOptions { get; set; }
+        public string MaxDate { get; set; }
 
 
         public void OnGet()
         {
+            SetMaxDate();
             LoadGenderOptions();
         }
 
@@ -35,6 +37,7 @@ namespace Tabletennis.Pages.Player
 
             if (!ModelState.IsValid)
             {
+                SetMaxDate();
                 LoadGenderOptions();
                 return Page();
             }
@@ -66,6 +69,11 @@ namespace Tabletennis.Pages.Player
                     Text = g.ToString()
                 })
                 .ToList();
+        }
+
+        public void SetMaxDate()
+        {
+            MaxDate = DateTime.Today.ToString("yyyy-MM-dd");
         }
 
     }

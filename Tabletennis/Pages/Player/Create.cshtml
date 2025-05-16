@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-6">
                         <label asp-for="NewPlayer.Birthday" class="form-label"></label>
-                        <input asp-for="NewPlayer.Birthday" class="form-control" type="date" />
+                        <input asp-for="NewPlayer.Birthday" class="form-control" type="date" max="@Model.MaxDate" />
                         <span asp-validation-for="NewPlayer.Birthday" class="text-danger"></span>
                     </div>
                 </div>
