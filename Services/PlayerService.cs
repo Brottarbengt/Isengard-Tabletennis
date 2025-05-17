@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mapster;
 using DataAccessLayer.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
@@ -40,6 +41,12 @@ namespace Services
             _dbContext.Players.Add(player);
             await _dbContext.SaveChangesAsync();
             return Check.Success;
+        }
+
+        public async Task<PlayerSmallInfoDTO> GetAllSmallAsync()
+        {
+            var players = await _dbContext.Players.ToListAsync();
+            return players.Adapt<PlayerSmallInfoDTO>();
         }
 
 
