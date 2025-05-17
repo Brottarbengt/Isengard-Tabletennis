@@ -6,6 +6,6 @@ namespace Services.Interfaces
     public interface IPlayerService
     {
         Task<Check> CreatePlayer(PlayerCreateDTO newPlayer);
-        Task<PlayerSmallInfoDTO> GetAllSmall();
+        Task<List<PlayerSmallInfoDTO>> GetAllSmallAsync();
     }
 }

@@ -43,10 +43,10 @@ namespace Services
             return Check.Success;
         }
 
-        public async Task<PlayerSmallInfoDTO> GetAllSmallAsync()
+        public async Task<List<PlayerSmallInfoDTO>> GetAllSmallAsync()
         {
             var players = await _dbContext.Players.ToListAsync();
-            return players.Adapt<PlayerSmallInfoDTO>();
+            return players.Adapt<List<PlayerSmallInfoDTO>>();
         }
 
 
