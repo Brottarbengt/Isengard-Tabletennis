@@ -14,18 +14,17 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>Spelare 1: @Model.ActiveMatchVM.Player1</h4>
-                <h4>Vunna set: <span id="team1setsWon"></span></h4>
+                <h4>Vunna set: @Model.Team1SetsWon</h4>
                 <h4>Poäng: <span id="team1Score">@Model.LiveScore.Team1Points</span></h4>
                 <button id="player1Button">Lägg till poäng</button>
             </div>
             <div class="col-md-6">
                 <h4>Spelare 2: @Model.ActiveMatchVM.Player2</h4>
-                <h4>Vunna set: <span id="team2setsWon"></span></h4>
+                <h4>Vunna set: @Model.Team2SetsWon</h4>
                 <h4>Poäng: <span id="team2Score">@Model.LiveScore.Team2Points</span></h4>
                 <button id="player2Button">Lägg till poäng</button>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -40,8 +39,10 @@
             const player1Button = document.getElementById('player1Button');
             const player2Button = document.getElementById('player2Button');
             const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            let setId = @Model.ActiveMatchVM.SetId;
+            let matchId = @Model.ActiveMatchVM.MatchId;
 
-            function addPoint(team) {
+             function addPoint(team) {
                 fetch(`/Matches/ActiveMatch?handler=AddPoint&setId=@Model.ActiveMatchVM.SetId&team=${team}`, {
                     method: 'POST',
                     headers: {
@@ -49,24 +50,57 @@
                         'RequestVerificationToken': token
                     }
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(score => {
                     document.getElementById("team1Score").innerText = score.team1Points;
                     document.getElementById("team2Score").innerText = score.team2Points;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+
+                    if (score.endOfSet) {
+                        location.reload();
+                    }
                 });
             }
-
             player1Button.addEventListener('click', () => addPoint(1));
             player2Button.addEventListener('click', () => addPoint(2));
         });
     </script>
-   
 }
+
+
+@* @section Scripts { *@
+@*     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> *@
+@*     <script> *@
+@*         $(document).ready(function() { *@
+@*             const player1Button = document.getElementById('player1Button'); *@
+@*             const player2Button = document.getElementById('player2Button'); *@
+@*             const token = document.querySelector('input[name="__RequestVerificationToken"]').value; *@
+
+@*             function addPoint(team) { *@
+@*                 fetch(`/Matches/ActiveMatch?handler=AddPoint&setId=@Model.ActiveMatchVM.SetId&team=${team}`, { *@
+@*                     method: 'POST', *@
+@*                     headers: { *@
+@*                         'Content-Type': 'application/json', *@
+@*                         'RequestVerificationToken': token *@
+@*                     } *@
+@*                 }) *@
+@*                 .then(response => { *@
+@*                     if (!response.ok) { *@
+@*                         throw new Error('Network response was not ok'); *@
+@*                     } *@
+@*                     return response.json(); *@
+@*                 }) *@
+@*                 .then(score => { *@
+@*                     document.getElementById("team1Score").innerText = score.team1Points; *@
+@*                     document.getElementById("team2Score").innerText = score.team2Points; *@
+
+@*                 }) *@
+@*                 .catch(error => { *@
+@*                     console.error('Error:', error); *@
+@*                 }); *@
+@*             } *@
+
+@*             player1Button.addEventListener('click', () => addPoint(1)); *@
+@*             player2Button.addEventListener('click', () => addPoint(2)); *@
+@*         }); *@
+@*     </script> *@
+   

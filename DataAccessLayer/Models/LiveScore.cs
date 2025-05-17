@@ -8,8 +8,9 @@ namespace DataAccessLayer.Models
 {
     public class LiveScore
     {
+        public int MatchId { get; set; }
         public int SetId { get; set; }
-        public int CurrentSetNumber { get; set; } = 1;
+        public int CurrentSetNumber { get; set; }
         public int Team1Points { get; set; }
         public int Team2Points { get; set; }
     }

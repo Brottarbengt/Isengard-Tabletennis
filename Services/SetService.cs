@@ -22,6 +22,18 @@ namespace Services
         {
             _dbContext = dbContext;
         }
+        public Task<Set?> GetSetByMatchAndNumberAsync(int matchId, int setNumber)
+        {
+            return _dbContext.Sets
+                .Where(s => s.MatchId == matchId && s.SetNumber == setNumber)
+                .FirstOrDefaultAsync();
+        }
+        public Set GetSetById(int setId)
+        {
+            return _dbContext.Sets
+                .Where(s => s.SetId == setId)
+                .FirstOrDefault();
+        }
 
         public void CreateSet(Set CurrentSet)
         {
@@ -29,23 +41,12 @@ namespace Services
             _dbContext.SaveChanges();
         }
 
-        public void SaveSet(int setId, LiveScore score)
+        public void SaveSet(int setId, LiveScore score, int winnerId)
         {
-            int winnerId;
-
-            if (score.Team1Points > score.Team2Points)
-            {
-                winnerId = 1;
-            }
-            else 
-            {
-                winnerId = 2;
-            }
-
             var existingSet = _dbContext.Sets.Find(setId);
             if (existingSet != null)
             {
-                existingSet.WinnerId = winnerId;
+                existingSet.SetWinner = winnerId;
                 existingSet.Team1Score = score.Team1Points;
                 existingSet.Team2Score = score.Team2Points;
 

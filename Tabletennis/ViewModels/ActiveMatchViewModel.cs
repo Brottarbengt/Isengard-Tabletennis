@@ -8,7 +8,7 @@
         public int Player2Id { get; set; }
         public string Player1 { get; set; } = string.Empty;
         public string Player2 { get; set; } = string.Empty;
-        public string SetWinner { get; set; } = string.Empty;
+        public int SetWinner { get; set; }
         public DateTime MatchDate { get; set; }
         public int MatchType { get; set; }
         public int Team1Score { get; set; }
