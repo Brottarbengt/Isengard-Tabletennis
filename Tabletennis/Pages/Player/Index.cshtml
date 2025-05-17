@@ -27,14 +27,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var player in Model.Players) // Model.Players should be a List<PlayerDTO> or similar
+                        @foreach (var player in Model.Players)
                         {
                             <tr>
                                 <td>@player.PlayerId</td>
                                 <td>@player.FirstName</td>
                                 <td>@player.LastName</td>
                                 <td>
-                                    <a class="btn "></a>
+                                    <a class="btn btn-info" asp-page="to the editpage?">Edit</a>
                                 </td>
                             </tr>
                         }
