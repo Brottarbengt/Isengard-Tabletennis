@@ -22,17 +22,17 @@ namespace Services
         {
             _dbContext = dbContext;
         }
-        public Task<Set?> GetSetByMatchAndNumberAsync(int matchId, int setNumber)
+        public async Task<Set?> GetSetByMatchAndNumberAsync(int matchId, int setNumber)
         {
-            return _dbContext.Sets
-                .Where(s => s.MatchId == matchId && s.SetNumber == setNumber)
-                .FirstOrDefaultAsync();
+            return await _dbContext.Sets
+                .Include(s => s.Match)
+                .FirstOrDefaultAsync(s => s.MatchId == matchId && s.SetNumber == setNumber);
         }
         public Set GetSetById(int setId)
         {
             return _dbContext.Sets
-                .Where(s => s.SetId == setId)
-                .FirstOrDefault();
+                .Include(s => s.Match)
+                .FirstOrDefault(s => s.SetId == setId);
         }
 
         public void CreateSet(Set CurrentSet)

@@ -49,17 +49,18 @@ namespace Services
                 IsCompleted = false,
                 MatchType = match.MatchType,
                 PlayerMatches = new List<PlayerMatch>
-                
-            {
-                new PlayerMatch { PlayerId = match.Player1Id, TeamNumber = 1 },
-                new PlayerMatch { PlayerId = match.Player2Id, TeamNumber = 2 }
-            },
-                // Sets = Enumerable.Range(1, match.MatchType)
-                //     .Select(i => new Set { SetNumber = i })
-                //     .ToList()
+                    {
+                        new PlayerMatch { PlayerId = match.Player1Id, TeamNumber = 1 },
+                        new PlayerMatch { PlayerId = match.Player2Id, TeamNumber = 2 }
+                    }
             };
-
             _context.Matches.Add(newMatch);
+            await _context.SaveChangesAsync();
+
+            newMatch.Sets = Enumerable.Range(1, match.MatchType)
+                .Select(i => new Set { SetNumber = i, Match = newMatch })
+                .ToList();
+            
             await _context.SaveChangesAsync();
             return newMatch.MatchId;
         }

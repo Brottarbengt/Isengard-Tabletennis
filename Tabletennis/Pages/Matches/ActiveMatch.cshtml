@@ -40,7 +40,6 @@
             const player2Button = document.getElementById('player2Button');
             const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
             let setId = @Model.ActiveMatchVM.SetId;
-            let matchId = @Model.ActiveMatchVM.MatchId;
 
              function addPoint(team) {
                 fetch(`/Matches/ActiveMatch?handler=AddPoint&setId=@Model.ActiveMatchVM.SetId&team=${team}`, {
@@ -54,10 +53,6 @@
                 .then(score => {
                     document.getElementById("team1Score").innerText = score.team1Points;
                     document.getElementById("team2Score").innerText = score.team2Points;
-
-                    if (score.endOfSet) {
-                        location.reload();
-                    }
                 });
             }
             player1Button.addEventListener('click', () => addPoint(1));
