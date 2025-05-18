@@ -16,6 +16,9 @@ using Tabletennis.ViewModels;
 namespace Tabletennis.Pages.Matches
 {
     [BindProperties]
+
+    //TODO: Använda DB för active state eftersom sidan är stateless, spara och hämta varje ppoäng
+    //matchId överlever sidomladning i OnGet:en, hämtar efter varje poäng
     public class ActiveMatchModel : PageModel
 
     {
@@ -35,8 +38,13 @@ namespace Tabletennis.Pages.Matches
         public int Team1SetsWon { get; set; }
         public int Team2SetsWon { get; set; }
         public int CurrentSetId { get; set; }
-        public Set CurrentSet { get; set; }        
+        public Set CurrentSet { get; set; }
         public ActiveMatchViewModel ActiveMatchVM { get; set; } = new();
+
+        //TODO: Refactor OnGet to get data from DB using matchId
+        //TODO: Use DTOs
+        //TODO: Single source of truth!!! Needs refactoring
+
 
         public async Task OnGetAsync(int matchId, string player1, string player2, int player1Id, int player2Id, DateTime matchDate, int matchType)
         {
@@ -66,7 +74,8 @@ namespace Tabletennis.Pages.Matches
             }
 
             CurrentSetId = CurrentSet.SetId;
-            LiveScore = liveScores.GetValueOrDefault(CurrentSet.SetId) ?? new LiveScore { SetId = CurrentSet.SetId, CurrentSetNumber = CurrentSet.SetNumber, MatchId = CurrentSet.MatchId };
+            LiveScore = liveScores.GetValueOrDefault(CurrentSet.SetId) ?? new LiveScore 
+            { SetId = CurrentSet.SetId, CurrentSetNumber = CurrentSet.SetNumber, MatchId = CurrentSet.MatchId };
         }
 
         [ValidateAntiForgeryToken]
@@ -74,16 +83,15 @@ namespace Tabletennis.Pages.Matches
         {
             try
             {
-                if (CurrentSet == null || CurrentSet.SetId != setId)
-                {
-                    CurrentSet =  _setService.GetSetById(setId);
-                    if (CurrentSet == null)
-                        return new JsonResult(new { error = "Set not found." }) { StatusCode = 404 };
-                }
+               
+                CurrentSet =  _setService.GetSetById(setId);
+                if (CurrentSet == null)
+                    return new JsonResult(new { error = "Set not found." }) { StatusCode = 404 };                
 
-                var score = liveScores.GetOrAdd(setId, _ => new LiveScore { SetId = setId, CurrentSetNumber = CurrentSet.SetNumber, MatchId = CurrentSet.MatchId });
+                var score = liveScores.GetOrAdd(setId, _ => new LiveScore 
+                { SetId = setId, CurrentSetNumber = CurrentSet.SetNumber, MatchId = CurrentSet.MatchId });
 
-                if (team == 1) score.Team1Points++;
+                    if (team == 1) score.Team1Points++;
                 else if (team == 2) score.Team2Points++;
                 bool isEndOfSet = false;
                 int newSetId = 0;
@@ -111,7 +119,7 @@ namespace Tabletennis.Pages.Matches
                 {
                     team1Points = score.Team1Points,
                     team2Points = score.Team2Points,
-                    currentSetNumber = score.CurrentSetNumber,
+                    currentSetNumber = CurrentSet.SetNumber,
                     isEndOfSet,
                     newSetId
                 });

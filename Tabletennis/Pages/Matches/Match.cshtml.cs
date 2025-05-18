@@ -48,6 +48,7 @@ namespace Tabletennis.Pages.Match
             var player2Id = MatchVM.Player2Id;
             var matchId = await _matchService.CreateMatchAsync(match);
             TempData["SuccessMessage"] = "New Match was successfully created!";
+            //TODO: Skicka bara matchId för bättre säkerhet
             return RedirectToPage("/Matches/ActiveMatch", new { matchId, player1, player2, player1Id, player2Id, matchDate, matchType });
         }
 
