@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -20,20 +21,14 @@ public class DataInitializer
     {
         _dbContext.Database.Migrate();
         
-        SeedRoles();
-        SeedUsers();
+        //SeedRoles();
+        //SeedUsers();
     }
 
     private void SeedUsers()
     {
-        // Password constraints:
-        //  - Passwords must have at least one non alphanumeric character.
-        //  - Passwords must have at least one digit('0' - '9').
-        //  - Passwords must have at least one uppercase('A' - 'Z').
-        //  - The password must be at least 6 characters long
-
-        AddUserIfNotExists("admin@angby.com", "*Admin100", new string[] { "Admin" });
-        //AddUserIfNotExists("richard.chalk@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
+        AddUserIfNotExists("richard.chalk@systementor.se", "Hejsan123#", new string[] { "Admin" });
+        AddUserIfNotExists("richard.chalk@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
     }
 
     private void SeedRoles()
@@ -65,4 +60,7 @@ public class DataInitializer
         _userManager.CreateAsync(user, password).Wait();
         _userManager.AddToRolesAsync(user, roles).Wait();
     }
+            
 }
+
+
