@@ -27,7 +27,7 @@
         </div>
     </div>
 </div>
-
+<input type="hidden" id="setId" value="@Model.CurrentSetId" />
 <form id="antiForgeryForm">
     @Html.AntiForgeryToken()
 </form>
@@ -35,29 +35,39 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        $(document).ready(function() {
-            const player1Button = document.getElementById('player1Button');
-            const player2Button = document.getElementById('player2Button');
-            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-            let setId = @Model.ActiveMatchVM.SetId;
+        $('#player1Button, #player2Button').on('click', function () {
+            let setId = $('#setId').val();
+            let team = this.id === 'player1Button' ? 1 : 2;
+            let token = $('input[name="__RequestVerificationToken"]').val();
 
-             function addPoint(team) {
-                fetch(`/Matches/ActiveMatch?handler=AddPoint&setId=@Model.ActiveMatchVM.SetId&team=${team}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': token
+            $.ajax({
+                url: `/Matches/ActiveMatch?handler=AddPoint&setId=${setId}&team=${team}`,
+                method: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'RequestVerificationToken': token
+                },
+                success: function (response) {
+                    if (response.error) {
+                        alert(response.error); // Or show in a dedicated error div
+                        return;
                     }
-                })
-                .then(response => response.json())
-                .then(score => {
-                    document.getElementById("team1Score").innerText = score.team1Points;
-                    document.getElementById("team2Score").innerText = score.team2Points;
-                });
-            }
-            player1Button.addEventListener('click', () => addPoint(1));
-            player2Button.addEventListener('click', () => addPoint(2));
+                    $('#team1Score').text(response.team1Points);
+                    $('#team2Score').text(response.team2Points);
+
+                    // Optionally update set number, sets won, etc. if returned
+                    if (response.currentSetNumber !== undefined) {
+                        $('.current-set-number').text(response.currentSetNumber);
+                    }
+                    // Add more UI updates as needed
+                },
+                error: function (err) {
+                    alert("Error adding point. Please try again.");
+                    console.error("Error adding point:", err);
+                }
+            });
         });
+
     </script>
 }
 

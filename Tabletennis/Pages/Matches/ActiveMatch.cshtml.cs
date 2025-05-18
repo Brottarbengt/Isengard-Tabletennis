@@ -34,6 +34,7 @@ namespace Tabletennis.Pages.Matches
         public int SetNumber { get; set; }
         public int Team1SetsWon { get; set; }
         public int Team2SetsWon { get; set; }
+        public int CurrentSetId { get; set; }
         public Set CurrentSet { get; set; }        
         public ActiveMatchViewModel ActiveMatchVM { get; set; } = new();
 
@@ -56,15 +57,15 @@ namespace Tabletennis.Pages.Matches
             {
                 SetNumber = 1;
                 CurrentSet = await _setService.GetSetByMatchAndNumberAsync(matchId, SetNumber);
-                LiveScore = liveScores.GetValueOrDefault(CurrentSet.SetId) ?? new LiveScore { SetId = CurrentSet.SetId, CurrentSetNumber = CurrentSet.SetNumber, MatchId = CurrentSet.MatchId };
-                //await StartNewSetAsync(SetNumber, matchId);                
             }
             else
             {
-                CurrentSet.SetNumber++;
+                SetNumber = CurrentSet.SetNumber++;
                 CurrentSet = await _setService.GetSetByMatchAndNumberAsync(CurrentSet.MatchId, SetNumber);
-                LiveScore = liveScores.GetValueOrDefault(CurrentSet.SetId) ?? new LiveScore { SetId = CurrentSet.SetId, CurrentSetNumber = CurrentSet.SetNumber, MatchId = CurrentSet.MatchId };
             }
+
+            CurrentSetId = CurrentSet.SetId;
+            LiveScore = liveScores.GetValueOrDefault(CurrentSet.SetId) ?? new LiveScore { SetId = CurrentSet.SetId, CurrentSetNumber = CurrentSet.SetNumber, MatchId = CurrentSet.MatchId };
         }
 
         //[ValidateAntiForgeryToken]
@@ -110,7 +111,8 @@ namespace Tabletennis.Pages.Matches
                     }
 
                     _setService.SaveSet(setId, score, CurrentSet.SetWinner);
-                    await StartNewSetAsync(score.MatchId);
+                    CurrentSet = _setService.GetSetById(setId);
+                    await StartNewSetAsync(CurrentSet.MatchId);
                 }
 
                 return new JsonResult(new
