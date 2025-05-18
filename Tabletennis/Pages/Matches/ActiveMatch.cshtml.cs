@@ -45,7 +45,9 @@ namespace Tabletennis.Pages.Matches
         //TODO: Use DTOs
         //TODO: Single source of truth!!! Needs refactoring
 
-
+        // OnGet incoming survives page reload, build around getting all data from DB using matchId for Single source of truth
+        // saving to DB after each point. 
+        // Current design vulnarable to insertion attacks in page URL
         public async Task OnGetAsync(int matchId, string player1, string player2, int player1Id, int player2Id, DateTime matchDate, int matchType)
         {
             ActiveMatchVM.Player1 = player1;
