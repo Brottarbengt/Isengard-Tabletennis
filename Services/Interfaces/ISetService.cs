@@ -10,11 +10,12 @@ namespace Services.Interfaces
 {
     public interface ISetService
     {
-        Set GetSetById(int setId);
+        Set? GetSetById(int setId);
         void CreateSet(Set currentSet);
         Task<Set?> GetSetByMatchAndNumberAsync(int matchId, int setNumber);
-
-        void SaveSet(int setId, LiveScore score, int winnerId);
-        //SetDTO? GetCurrentSetForMatch(int matchId);
+        Task<Set?> GetCurrentSetAsync(int matchId);
+        Task<Set> CreateNewSetAsync(int matchId);
+        Task<bool> IsSetWonAsync(Set set);
+        Task UpdateSetAsync(Set set);
     }
 }

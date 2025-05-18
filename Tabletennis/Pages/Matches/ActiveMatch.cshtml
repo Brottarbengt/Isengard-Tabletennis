@@ -1,159 +1,73 @@
-@page
-@model Tabletennis.Pages.Matches.ActiveMatchModel
+@page "{matchId:int}"
+@model Tabletennis.Pages.Match.ActiveMatchModel
 @{
-    ViewData["Title"] = "Match";
+    ViewData["Title"] = "Active Match";
 }
 
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Active Match</h2>
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3>@Model.MatchVM.Player1Name</h3>
+                            <h5 class="text-muted">Vunna set: @Model.MatchVM.Team1WonSets</h5>
+                        </div>
+                        <div class="col-6 text-end">
+                            <h3>@Model.MatchVM.Player2Name</h3>
+                            <h5 class="text-muted">Vunna set: @Model.MatchVM.Team2WonSets</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-12 text-center">
+                            <h4>Set @Model.MatchVM.SetNumber of @Model.MatchVM.MatchType</h4>
+                            <p class="text-muted">Match Date: @Model.MatchVM.MatchDate.ToString("yyyy-MM-dd HH:mm")</p>
+                        </div>
+                    </div>
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">@ViewData["Title"] @Model.ActiveMatchVM.MatchDate </h2>
-    <h3 class="text-center mb-4">Set: <span id="activeSetNumber">@Model.CurrentSet.SetNumber</span> / @Model.ActiveMatchVM.MatchType</h3>
-</div>
-<div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h4>Spelare 1: @Model.ActiveMatchVM.Player1</h4>
-                <h4>Vunna set: @Model.Team1SetsWon</h4>
-                <h4>Po‰ng: <span id="team1Score">@Model.LiveScore.Team1Points</span></h4>
-                <button id="player1Button">L‰gg till po‰ng</button>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="false">
+                                    <button type="submit" class="btn btn-danger btn-lg me-2">-</button>
+                                </form>
+                                <h1 class="display-1 mx-4">@Model.MatchVM.Team1Score</h1>
+                                <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true">
+                                    <button type="submit" class="btn btn-success btn-lg ms-2">+</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="false">
+                                    <button type="submit" class="btn btn-danger btn-lg me-2">-</button>
+                                </form>
+                                <h1 class="display-1 mx-4">@Model.MatchVM.Team2Score</h1>
+                                <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="true">
+                                    <button type="submit" class="btn btn-success btn-lg ms-2">+</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <h4>Spelare 2: @Model.ActiveMatchVM.Player2</h4>
-                <h4>Vunna set: @Model.Team2SetsWon</h4>
-                <h4>Po‰ng: <span id="team2Score">@Model.LiveScore.Team2Points</span></h4>
-                <button id="player2Button">L‰gg till po‰ng</button>
+            <div class="row mt-3">
+                <div class="col-12 text-end">
+                    <a asp-page="/Matches/CreateMatch" class="btn btn-secondary btn-lg">
+                        <i class="fas fa-arrow-left"></i> Tillbaka
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<input id="setId" value="@Model.CurrentSetId" />
-<form id="antiForgeryForm">
-    @Html.AntiForgeryToken()
-</form>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-                document.querySelectorAll('#player1Button, #player2Button').forEach(function(button) {
-            button.addEventListener('click', function () {
-                let setId = document.getElementById('setId').value;
-                let team = this.id === 'player1Button' ? 1 : 2;
-                let token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-
-                fetch(`/Matches/ActiveMatch?handler=AddPoint&setId=${setId}&team=${team}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': token
-                    }
-                })
-                .then(response => response.json())
-                .then(response => {
-                    if (response.error) {
-                        alert(response.error);
-                        return;
-                    }
-                    document.getElementById('team1Score').innerText = response.team1Points;
-                    document.getElementById('team2Score').innerText = response.team2Points;
-
-                    if (response.isEndOfSet && response.newSetId) 
-                    {
-                        document.getElementById('setId').value = response.newSetId;
-                        document.getElementById('team1Score').innerText = 0;
-                        document.getElementById('team2Score').innerText = 0;
-                        document.getElementById('activeSetNumber').innerText = response.currentSetNumber;
-                    }
-
-                    // Optionally update set number, sets won, etc. if returned
-                    if (response.currentSetNumber !== undefined) {
-                        document.querySelectorAll('.current-set-number').forEach(function(el) {
-                            el.innerText = response.currentSetNumber;
-                        });
-                    }
-                    // Add more UI updates as needed
-                   
-                })
-                .catch(err => {
-                    alert("Error adding point. Please try again.");
-                    console.error("Error adding point:", err);
-                });
-            });
-        });
-
-
-
-        // $('#player1Button, #player2Button').on('click', function () {
-        //     let setId = $('#setId').val();
-        //     let team = this.id === 'player1Button' ? 1 : 2;
-        //     let token = $('input[name="__RequestVerificationToken"]').val();
-
-        //     $.ajax({
-        //         url: `/Matches/ActiveMatch?handler=AddPoint&setId=${setId}&team=${team}`,
-        //         method: 'POST',
-        //         contentType: 'application/json',
-        //         headers: {
-        //             'RequestVerificationToken': token
-        //         },
-        //         success: function (response) {
-        //             if (response.error) {
-        //                 alert(response.error); // Or show in a dedicated error div
-        //                 return;
-        //             }
-        //             $('#team1Score').text(response.team1Points);
-        //             $('#team2Score').text(response.team2Points);
-
-        //             // Optionally update set number, sets won, etc. if returned
-        //             if (response.currentSetNumber !== undefined) {
-        //                 $('.current-set-number').text(response.currentSetNumber);
-        //             }
-        //             // Add more UI updates as needed
-        //         },
-        //         error: function (err) {
-        //             alert("Error adding point. Please try again.");
-        //             console.error("Error adding point:", err);
-        //         }
-        //     });
-        // });
-
+        // L√§gg till eventuell JavaScript-kod h√§r om det beh√∂vs
     </script>
 }
-
-
-@* @section Scripts { *@
-@*     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> *@
-@*     <script> *@
-@*         $(document).ready(function() { *@
-@*             const player1Button = document.getElementById('player1Button'); *@
-@*             const player2Button = document.getElementById('player2Button'); *@
-@*             const token = document.querySelector('input[name="__RequestVerificationToken"]').value; *@
-
-@*             function addPoint(team) { *@
-@*                 fetch(`/Matches/ActiveMatch?handler=AddPoint&setId=@Model.ActiveMatchVM.SetId&team=${team}`, { *@
-@*                     method: 'POST', *@
-@*                     headers: { *@
-@*                         'Content-Type': 'application/json', *@
-@*                         'RequestVerificationToken': token *@
-@*                     } *@
-@*                 }) *@
-@*                 .then(response => { *@
-@*                     if (!response.ok) { *@
-@*                         throw new Error('Network response was not ok'); *@
-@*                     } *@
-@*                     return response.json(); *@
-@*                 }) *@
-@*                 .then(score => { *@
-@*                     document.getElementById("team1Score").innerText = score.team1Points; *@
-@*                     document.getElementById("team2Score").innerText = score.team2Points; *@
-
-@*                 }) *@
-@*                 .catch(error => { *@
-@*                     console.error('Error:', error); *@
-@*                 }); *@
-@*             } *@
-
-@*             player1Button.addEventListener('click', () => addPoint(1)); *@
-@*             player2Button.addEventListener('click', () => addPoint(2)); *@
-@*         }); *@
-@*     </script> *@
-
