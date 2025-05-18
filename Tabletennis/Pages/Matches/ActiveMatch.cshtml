@@ -7,7 +7,7 @@
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">@ViewData["Title"] @Model.ActiveMatchVM.MatchDate </h2>
-    <h3 class="text-center mb-4">Set: @Model.SetNumber / @Model.ActiveMatchVM.MatchType</h3>
+    <h3 class="text-center mb-4">Set: @Model.CurrentSet.SetNumber / @Model.ActiveMatchVM.MatchType</h3>
 </div>
 <div>
     <div class="container">
@@ -27,7 +27,7 @@
         </div>
     </div>
 </div>
-<input type="hidden" id="setId" value="@Model.CurrentSetId" />
+<input id="setId" value="@Model.CurrentSetId" />
 <form id="antiForgeryForm">
     @Html.AntiForgeryToken()
 </form>
@@ -35,38 +35,84 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
-        $('#player1Button, #player2Button').on('click', function () {
-            let setId = $('#setId').val();
-            let team = this.id === 'player1Button' ? 1 : 2;
-            let token = $('input[name="__RequestVerificationToken"]').val();
+                document.querySelectorAll('#player1Button, #player2Button').forEach(function(button) {
+            button.addEventListener('click', function () {
+                let setId = document.getElementById('setId').value;
+                let team = this.id === 'player1Button' ? 1 : 2;
+                let token = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
-            $.ajax({
-                url: `/Matches/ActiveMatch?handler=AddPoint&setId=${setId}&team=${team}`,
-                method: 'POST',
-                contentType: 'application/json',
-                headers: {
-                    'RequestVerificationToken': token
-                },
-                success: function (response) {
+                fetch(`/Matches/ActiveMatch?handler=AddPoint&setId=${setId}&team=${team}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
+                    }
+                })
+                .then(response => response.json())
+                .then(response => {
                     if (response.error) {
-                        alert(response.error); // Or show in a dedicated error div
+                        alert(response.error);
                         return;
                     }
-                    $('#team1Score').text(response.team1Points);
-                    $('#team2Score').text(response.team2Points);
+                    document.getElementById('team1Score').innerText = response.team1Points;
+                    document.getElementById('team2Score').innerText = response.team2Points;
+
+                    if (response.isEndOfSet && response.newSetId) 
+                    {
+                        document.getElementById('setId').value = response.newSetId;
+                        document.getElementById('team1Score').innerText = 0;
+                        document.getElementById('team2Score').innerText = 0;
+                    }
 
                     // Optionally update set number, sets won, etc. if returned
                     if (response.currentSetNumber !== undefined) {
-                        $('.current-set-number').text(response.currentSetNumber);
+                        document.querySelectorAll('.current-set-number').forEach(function(el) {
+                            el.innerText = response.currentSetNumber;
+                        });
                     }
                     // Add more UI updates as needed
-                },
-                error: function (err) {
+                })
+                .catch(err => {
                     alert("Error adding point. Please try again.");
                     console.error("Error adding point:", err);
-                }
+                });
             });
         });
+
+
+
+        // $('#player1Button, #player2Button').on('click', function () {
+        //     let setId = $('#setId').val();
+        //     let team = this.id === 'player1Button' ? 1 : 2;
+        //     let token = $('input[name="__RequestVerificationToken"]').val();
+
+        //     $.ajax({
+        //         url: `/Matches/ActiveMatch?handler=AddPoint&setId=${setId}&team=${team}`,
+        //         method: 'POST',
+        //         contentType: 'application/json',
+        //         headers: {
+        //             'RequestVerificationToken': token
+        //         },
+        //         success: function (response) {
+        //             if (response.error) {
+        //                 alert(response.error); // Or show in a dedicated error div
+        //                 return;
+        //             }
+        //             $('#team1Score').text(response.team1Points);
+        //             $('#team2Score').text(response.team2Points);
+
+        //             // Optionally update set number, sets won, etc. if returned
+        //             if (response.currentSetNumber !== undefined) {
+        //                 $('.current-set-number').text(response.currentSetNumber);
+        //             }
+        //             // Add more UI updates as needed
+        //         },
+        //         error: function (err) {
+        //             alert("Error adding point. Please try again.");
+        //             console.error("Error adding point:", err);
+        //         }
+        //     });
+        // });
 
     </script>
 }
@@ -108,4 +154,4 @@
 @*             player2Button.addEventListener('click', () => addPoint(2)); *@
 @*         }); *@
 @*     </script> *@
-   
+

@@ -60,25 +60,14 @@ namespace Tabletennis.Pages.Matches
             }
             else
             {
-                SetNumber = CurrentSet.SetNumber++;
-                CurrentSet = await _setService.GetSetByMatchAndNumberAsync(CurrentSet.MatchId, SetNumber);
+                CurrentSet.SetNumber++;
+                SetNumber = CurrentSet.SetNumber;
+                CurrentSet = await _setService.GetSetByMatchAndNumberAsync(CurrentSet.MatchId, CurrentSet.SetNumber);
             }
 
             CurrentSetId = CurrentSet.SetId;
             LiveScore = liveScores.GetValueOrDefault(CurrentSet.SetId) ?? new LiveScore { SetId = CurrentSet.SetId, CurrentSetNumber = CurrentSet.SetNumber, MatchId = CurrentSet.MatchId };
         }
-
-        //[ValidateAntiForgeryToken]
-        //public async Task<JsonResult> OnPostStartNewSet(int matchId)
-        //{
-        //    await StartNewSetAsync(matchId);
-        //    return new JsonResult(new
-        //    {
-        //        setNumber = CurrentSet.SetNumber,
-        //        team1Points = CurrentSet.Team1Score,
-        //        team2Points = CurrentSet.Team2Score
-        //    });
-        //}
 
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> OnPostAddPoint(int setId, int team)
@@ -96,7 +85,8 @@ namespace Tabletennis.Pages.Matches
 
                 if (team == 1) score.Team1Points++;
                 else if (team == 2) score.Team2Points++;
-
+                bool isEndOfSet = false;
+                int newSetId = 0;
                 if ((score.Team1Points >= 11 || score.Team2Points >= 11) && Math.Abs(score.Team1Points - score.Team2Points) >= 2)
                 {
                     if (score.Team1Points > score.Team2Points)
@@ -113,6 +103,8 @@ namespace Tabletennis.Pages.Matches
                     _setService.SaveSet(setId, score, CurrentSet.SetWinner);
                     CurrentSet = _setService.GetSetById(setId);
                     await StartNewSetAsync(CurrentSet.MatchId);
+                    isEndOfSet = true;
+                    newSetId = CurrentSet.SetId;
                 }
 
                 return new JsonResult(new
@@ -120,6 +112,8 @@ namespace Tabletennis.Pages.Matches
                     team1Points = score.Team1Points,
                     team2Points = score.Team2Points,
                     currentSetNumber = score.CurrentSetNumber,
+                    isEndOfSet,
+                    newSetId
                 });
             }
             catch (Exception ex)
