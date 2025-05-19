@@ -17,8 +17,11 @@ namespace Tabletennis.Pages.Matches
 {
     [BindProperties]
 
-    //TODO: Använda DB för active state eftersom sidan är stateless, spara och hämta varje ppoäng
-    //matchId överlever sidomladning i OnGet:en, hämtar efter varje poäng
+    // Använda DB för active state eftersom sidan är stateless, spara och hämta varje ppoäng    
+
+    // TODO: Refactor OnGet to get data from DB using matchId. Because: Single source of truth!!!
+    // matchId överlever sidomladning i OnGet:en, hämtar efter varje poäng
+    // TODO: Use DTOs
     public class ActiveMatchModel : PageModel
 
     {
@@ -41,10 +44,8 @@ namespace Tabletennis.Pages.Matches
         public Set CurrentSet { get; set; }
         public ActiveMatchViewModel ActiveMatchVM { get; set; } = new();
 
-        //TODO: Refactor OnGet to get data from DB using matchId
-        //TODO: Use DTOs
-        //TODO: Single source of truth!!! Needs refactoring
-
+        
+        
         // OnGet incoming survives page reload, build around getting all data from DB using matchId for Single source of truth
         // saving to DB after each point. 
         // Current design vulnarable to insertion attacks in page URL
