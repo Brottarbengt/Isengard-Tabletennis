@@ -37,9 +37,8 @@ namespace Tabletennis.Pages.Match
                 return NotFound();
             }
 
-            MatchVM = match.Adapt<ActiveMatchViewModel>();
+            MatchVM = match.Adapt<ActiveMatchViewModel>();            
             
-            // Hämta aktuell set om det finns
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet != null)
             {
@@ -56,12 +55,10 @@ namespace Tabletennis.Pages.Match
         {
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet == null)
-            {
-                // Skapa ny set om det inte finns någon
+            {                
                 currentSet = await _setService.CreateNewSetAsync(matchId);
             }
-
-            // Uppdatera poäng
+            
             if (teamNumber == 1)
             {
                 if (isIncrement || currentSet.Team1Score > 0)
@@ -76,8 +73,7 @@ namespace Tabletennis.Pages.Match
                     currentSet.Team2Score += isIncrement ? 1 : -1;
                 }
             }
-
-            // Kontrollera om set är vunnet
+            
             if (await _setService.IsSetWonAsync(currentSet))
             {
                 currentSet.SetWinner = currentSet.Team1Score > currentSet.Team2Score ? 1 : 2;
@@ -90,8 +86,7 @@ namespace Tabletennis.Pages.Match
                     TempData["SuccessMessage"] = "Match completed!";
                     return RedirectToPage("/Matches/CreateMatch");
                 }
-
-                // Skapa ny set om matchen inte är över
+                
                 await _setService.CreateNewSetAsync(matchId);
             }
             else
