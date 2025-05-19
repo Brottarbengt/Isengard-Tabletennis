@@ -57,22 +57,74 @@ namespace Services
             _context.Matches.Add(newMatch);
             await _context.SaveChangesAsync();
 
-            newMatch.Sets = Enumerable.Range(1, match.MatchType)
-                .Select(i => new Set { SetNumber = i, Match = newMatch })
-                .ToList();
-            
+            // Skapa första set direkt
+            var firstSet = new Set 
+            { 
+                MatchId = newMatch.MatchId,
+                SetNumber = 1,
+                Team1Score = 0,
+                Team2Score = 0,
+                SetWinner = 0
+            };
+            _context.Sets.Add(firstSet);
             await _context.SaveChangesAsync();
+            
             return newMatch.MatchId;
         }
 
-        public async Task<ActiveMatchDTO?> GetMatchByIdAsync(int matchId)
+        public async Task<MatchDTO?> GetMatchByIdAsync(int matchId)
         {
             var match = await _context.Matches
-                .Where(m => m.MatchId == matchId)
-                .ProjectToType<MatchDTO>() // Mapster magic here
-                .FirstOrDefaultAsync();
+                .Include(m => m.PlayerMatches)
+                    .ThenInclude(pm => pm.Player)
+                .Include(m => m.Sets)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
 
-            return match?.Adapt<ActiveMatchDTO>();
+            if (match == null) return null;
+
+            var player1 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 1)?.Player;
+            var player2 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 2)?.Player;
+
+            var team1WonSets = match.Sets.Count(s => s.SetWinner == 1);
+            var team2WonSets = match.Sets.Count(s => s.SetWinner == 2);
+
+            return new MatchDTO
+            {
+                MatchId = match.MatchId,
+                Player1Id = player1?.PlayerId ?? 0,
+                Player2Id = player2?.PlayerId ?? 0,
+                Player1Name = player1 != null ? $"{player1.FirstName} {player1.LastName}" : string.Empty,
+                Player2Name = player2 != null ? $"{player2.FirstName} {player2.LastName}" : string.Empty,
+                MatchType = match.MatchType,
+                MatchDate = match.MatchDate,
+                Team1WonSets = team1WonSets,
+                Team2WonSets = team2WonSets
+            };
+        }
+
+        public async Task<bool> IsMatchWonAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.Sets)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null) return false;
+
+            var team1WonSets = match.Sets.Count(s => s.SetWinner == 1);
+            var team2WonSets = match.Sets.Count(s => s.SetWinner == 2);
+            var requiredSets = (match.MatchType / 2) + 1;
+
+            return team1WonSets >= requiredSets || team2WonSets >= requiredSets;
+        }
+
+        public async Task CompleteMatchAsync(int matchId)
+        {
+            var match = await _context.Matches.FindAsync(matchId);
+            if (match != null)
+            {
+                match.IsCompleted = true;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -39,17 +39,12 @@ namespace Tabletennis.Pages.Match
 
             var match = MatchVM.Adapt<MatchDTO>();
             match.MatchDate = DateTime.Now;
-
-            var matchType = MatchVM.MatchType;
-            var matchDate = match.MatchDate ;
-            var player1 = MatchVM.Player1Name;
-            var player2 = MatchVM.Player2Name;
-            var player1Id = MatchVM.Player1Id;
-            var player2Id = MatchVM.Player2Id;
+            match.MatchType = MatchVM.SelectedSetCount;
+            
             var matchId = await _matchService.CreateMatchAsync(match);
             TempData["SuccessMessage"] = "New Match was successfully created!";
-            //TODO: Skicka bara matchId för bättre säkerhet
-            return RedirectToPage("/Matches/ActiveMatch", new { matchId, player1, player2, player1Id, player2Id, matchDate, matchType });
+            //TODO: Skicka bara matchId fï¿½r bï¿½ttre sï¿½kerhet
+            return RedirectToPage("/Matches/ActiveMatch", new {matchId});
         }
 
         public async Task<JsonResult> OnGetGetPlayer(int id)
@@ -70,9 +65,9 @@ namespace Tabletennis.Pages.Match
         {
             return new List<SelectListItem>
             {
-              new SelectListItem { Text = "3", Value = "3" },
-              new SelectListItem { Text = "5", Value = "5" },
-              new SelectListItem { Text = "7", Value = "7" }
+                new SelectListItem { Text = "3 Sets", Value = "3" },
+                new SelectListItem { Text = "5 Sets", Value = "5" },
+                new SelectListItem { Text = "7 Sets", Value = "7" }
             };
         }
     }

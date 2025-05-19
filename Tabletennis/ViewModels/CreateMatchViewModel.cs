@@ -11,7 +11,8 @@ namespace Tabletennis.ViewModels
         public int Player2Id { get; set; }
         public string Player2Name { get; set; } = string.Empty;
 
-        public int MatchType { get; set; }
+        [Required(ErrorMessage = "Please select number of sets")]
+        public int SelectedSetCount { get; set; }
         public List<SelectListItem> SetOptions { get; set; } = new();
         public List<SelectListItem> PlayerList { get; set; } = new();
     }
