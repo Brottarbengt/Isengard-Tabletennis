@@ -15,6 +15,10 @@ using Tabletennis.ViewModels;
 
 namespace Tabletennis.Pages.Match
 {
+    //TODO: Refactor to clean out unplayed sets when match is completed
+    //TODO: Add logic to set IsDecidingSet on save
+    //TODO: Show serve owner
+    //TODO: Button reveal on match complete
     public class ActiveMatchModel : PageModel
     {
         private readonly IMatchService _matchService;
