@@ -23,11 +23,12 @@ namespace Tabletennis.Pages.Player
         [BindProperty]
         public PlayerCreateViewModel NewPlayer { get; set; }
         public List<SelectListItem> GenderOptions { get; set; }
+        public string MaxDate { get; set; }
 
 
         public void OnGet()
         {
-            LoadGenderOptions();
+            SetMaxDate();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -35,7 +36,7 @@ namespace Tabletennis.Pages.Player
 
             if (!ModelState.IsValid)
             {
-                LoadGenderOptions();
+                SetMaxDate();
                 return Page();
             }
 
@@ -48,24 +49,19 @@ namespace Tabletennis.Pages.Player
             if (result == Check.Failed)
             {
                 ModelState.AddModelError(string.Empty, "Something went wrong when creating the player.");
-                LoadGenderOptions();
+                SetMaxDate();
                 return Page();
             }
 
             TempData["SuccessMessage"] = "Player was successfully created!";
-            return RedirectToPage("Index");
+            return Page();
         }
 
-        public void LoadGenderOptions()
+        
+
+        public void SetMaxDate()
         {
-            GenderOptions = Enum.GetValues(typeof(Gender))
-                .Cast<Gender>()
-                .Select(g => new SelectListItem
-                {
-                    Value = g.ToString(),
-                    Text = g.ToString()
-                })
-                .ToList();
+            MaxDate = DateTime.Today.ToString("yyyy-MM-dd");
         }
 
     }

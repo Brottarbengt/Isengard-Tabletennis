@@ -2,6 +2,16 @@
 @model Tabletennis.Pages.Player.CreateModel
 @{
 }
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+
+
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-header text-white" style="background-color: #c4553e;">
@@ -36,21 +46,39 @@
                 </div>
 
                 <div class="row mb-3">
+                    
                     <div class="col-md-6">
-                        <label asp-for="NewPlayer.Gender" class="form-label"></label>
-                        <select asp-for="NewPlayer.Gender" class="form-select" asp-items="Model.GenderOptions">
-                            <option value="">-- Select Gender --</option>
-                        </select>
-                        <span asp-validation-for="NewPlayer.Gender" class="text-danger"></span>
+                        <label class="form-label d-block">Gender</label>
+
+                        <input type="radio" class="btn-check" name="NewPlayer.Gender" id="genderMale" value="Male" autocomplete="off"
+                        @(Model.NewPlayer?.Gender == DataAccessLayer.Enums.Gender.Male ? "checked" : "") />
+                        <label class="btn-gender" for="genderMale">
+                            <i class="bi bi-gender-male"></i> Male
+                        </label>
+
+                        <input type="radio" class="btn-check" name="NewPlayer.Gender" id="genderFemale" value="Female" autocomplete="off"
+                        @(Model.NewPlayer?.Gender == DataAccessLayer.Enums.Gender.Female ? "checked" : "") />
+                        <label class="btn-gender" for="genderFemale">
+                            <i class="bi bi-gender-female"></i> Female
+                        </label>
+
+                        <span asp-validation-for="NewPlayer.Gender" class="text-danger d-block mt-1"></span>
                     </div>
+
                     <div class="col-md-6">
                         <label asp-for="NewPlayer.Birthday" class="form-label"></label>
-                        <input asp-for="NewPlayer.Birthday" class="form-control" type="date" />
+                        <input asp-for="NewPlayer.Birthday" class="form-control" type="date" max="@Model.MaxDate" />
                         <span asp-validation-for="NewPlayer.Birthday" class="text-danger"></span>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-center mt-4">
+                    <a asp-page="../Matches/Match" class="btn text-white px-5 py-2 me-2" style="background-color: #c4553e; font-size: 1.25rem;">
+                        Back To New Match
+                    </a>
+                    <a asp-page="../Index" class="btn text-white px-5 py-2 me-2" style="background-color: #c4553e; font-size: 1.25rem;">
+                        Back
+                    </a>
                     <button type="submit" class="btn text-white px-5 py-2" style="background-color: #c4553e; font-size: 1.25rem;">
                         Create Player
                     </button>
