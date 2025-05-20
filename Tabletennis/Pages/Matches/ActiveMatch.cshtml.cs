@@ -57,6 +57,7 @@ namespace Tabletennis.Pages.Matches
             return Page();
         }
 
+        
         public async Task<IActionResult> OnPostUpdateScoreAsync(int matchId, int teamNumber, bool isIncrement)
         {
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
@@ -80,14 +81,13 @@ namespace Tabletennis.Pages.Matches
                 }
             }
 
-            CheckInfo(currentSet.Team1Score, currentSet.Team2Score, currentSet);
+            await CheckInfo(currentSet.Team1Score, currentSet.Team2Score, currentSet, matchId);
 
             if (await _setService.IsSetWonAsync(currentSet))
             {
                 currentSet.SetWinner = currentSet.Team1Score > currentSet.Team2Score ? 1 : 2;
                 await _setService.UpdateSetAsync(currentSet);
 
-                // Kontrollera om matchen är vunnen
                 if (await _matchService.IsMatchWonAsync(matchId))
                 {
                     await _matchService.CompleteMatchAsync(matchId);
@@ -105,31 +105,30 @@ namespace Tabletennis.Pages.Matches
             return RedirectToPage(new { matchId });
         }
 
-        public void CheckInfo(int team1score, int team2score, Set currentSet)
+        public async Task CheckInfo(int team1score, int team2score, Set currentSet, int matchId)
         {
-            int setsToWin = (ActiveMatchVM.MatchType / 2) + 1;
-            int team1SetsWon = ActiveMatchVM.Team1WonSets;
-            int team2SetsWon = ActiveMatchVM.Team2WonSets;
+            var match = await _matchService.GetMatchByIdAsync(matchId);
+            if (match == null) return;
+
+            int setsToWin = (match.MatchType / 2) + 1;
+            int team1SetsWon = await _setService.GetSetsWonByTeamAsync(matchId, 1);
+            int team2SetsWon = await _setService.GetSetsWonByTeamAsync(matchId, 2);
 
             if (team1score == team2score && team1score >= 10)
             {
                 currentSet.InfoMessage = "Deuce";
             }
-
-
-            //if (
-            //       (team1SetsWon == setsToWin - 1 && team1score > 9 && team1score > team2score) ||
-            //       (team2SetsWon == setsToWin - 1 && team2score > 9 && team2score > team1score)
-            //   )
-            //{
-            //    currentSet.InfoMessage = "Match Point";
-            //}
-
-            else if ((team1score > 9 || team2score > 9) && (team1score > team2score || team2score > team1score))
+            else if (
+                (team1SetsWon == setsToWin - 1 && team1score >= 10 && team1score > team2score) ||
+                (team2SetsWon == setsToWin - 1 && team2score >= 10 && team2score > team1score)
+            )
+            {
+                currentSet.InfoMessage = "Match Point"; 
+            }
+            else if ((team1score >= 10 || team2score >= 10) && Math.Abs(team1score - team2score) >= 1)
             {
                 currentSet.InfoMessage = "Set Point";
             }
-            
         }
     }
 }

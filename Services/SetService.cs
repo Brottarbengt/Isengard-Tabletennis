@@ -85,5 +85,12 @@ namespace Services
             _dbContext.Sets.Update(set);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<int> GetSetsWonByTeamAsync(int matchId, int teamNumber)
+        {
+            return await _dbContext.Sets
+                .Where(s => s.MatchId == matchId && s.SetWinner == teamNumber)
+                .CountAsync();
+        }
     }
 }

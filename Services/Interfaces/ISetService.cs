@@ -17,5 +17,6 @@ namespace Services.Interfaces
         Task<Set> CreateNewSetAsync(int matchId);
         Task<bool> IsSetWonAsync(Set set);
         Task UpdateSetAsync(Set set);
+        Task<int> GetSetsWonByTeamAsync(int matchId, int teamNumber);
     }
 }
