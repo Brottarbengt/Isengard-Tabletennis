@@ -6,29 +6,42 @@
 <div>
     <div class="row text-center mt-3">
         <div class="col-6">
-            <h2 class="playerText">Spelare1</h2>
+            <h2 class="player-text">@Model.Player1FirstName</h2>
         </div>
         <div class ="col-6">
-            <h2 class="playerText">Spelare2</h2>
+            <h2 class="player-text">@Model.Player2FirstName</h2>
         </div>
     </div>
     <div class="row text-center mt-3">
-        <div class="col-4">
-            <h2 class="playerPoints">10</h2>
+        <div class="col-4 justify-content-md-center">
+            <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true">
+                <button type="submit" class="btn btn-dark btn-lg full-width">
+                    <h2 class="player-points anta-regular">@Model.Team1Score</h2></button>
+            </form>            
         </div>
         <div class="col-4">
-            <div>
-                Set
+            <div class="row justify-content-around">
+                <div class="col-5 set-bg">
+                    <p class="anta-regular set-points">@Model.Team1WonSets</p>
+                </div>
+                <div class="col-5 set-bg">
+                    <p class="anta-regular set-points">@Model.Team2WonSets</p>
+                </div>
             </div>
             <div>
-                info
+                <p class="anta-regular point-info">Match point</p>
             </div>
         </div>
-        <div class="col-4">
-            <h2 class="playerPoints">11</h2>
+        <div class="col-4 justify-content-md-center">
+            <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="true">
+                <button type="submit" class="btn btn-dark btn-lg full-width">
+                    <h2 class="player-points anta-regular">@Model.Team2Score</h2>
+                </button>
+            </form>
+            
         </div>
     </div>
-    <div class="text-center mt-3">
+    <div class="text-center mt-2">
         <button type="button" class="btn btn-primary btn-lg ">Starta set</button>
     </div>
 </div>

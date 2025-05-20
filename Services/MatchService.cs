@@ -19,6 +19,8 @@ namespace Services
         {
             _context = context;
         }
+
+        //TODO: Map FullName in MapsterConfig
         public async Task<List<PlayerDTO>> GetAllPlayersAsync()
         {
             return await _context.Players
@@ -36,6 +38,7 @@ namespace Services
             return player == null ? null : new PlayerDTO
             {
                 PlayerId = player.PlayerId,
+                FirstName = player.FirstName,
                 FullName = player.FirstName + " " + player.LastName
             };
         }
@@ -94,7 +97,9 @@ namespace Services
                 Player1Id = player1?.PlayerId ?? 0,
                 Player2Id = player2?.PlayerId ?? 0,
                 Player1Name = player1 != null ? $"{player1.FirstName} {player1.LastName}" : string.Empty,
+                Player1FirstName = player1 != null ? player1.FirstName : string.Empty,
                 Player2Name = player2 != null ? $"{player2.FirstName} {player2.LastName}" : string.Empty,
+                Player2FirstName = player2 != null ? player2.FirstName : string.Empty,
                 MatchType = match.MatchType,
                 MatchDate = match.MatchDate,
                 Team1WonSets = team1WonSets,

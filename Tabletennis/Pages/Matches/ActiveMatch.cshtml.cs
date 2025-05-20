@@ -32,7 +32,7 @@ namespace Tabletennis.Pages.Match
         }
 
         [BindProperty]
-        public ActiveMatchViewModel MatchVM { get; set; } = new();
+        public ActiveMatchViewModel ActiveMatchVM { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int matchId)
         {
@@ -42,15 +42,15 @@ namespace Tabletennis.Pages.Match
                 return NotFound();
             }
 
-            MatchVM = match.Adapt<ActiveMatchViewModel>();            
+            ActiveMatchVM = match.Adapt<ActiveMatchViewModel>();            
             
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet != null)
             {
-                MatchVM.SetId = currentSet.SetId;
-                MatchVM.Team1Score = currentSet.Team1Score;
-                MatchVM.Team2Score = currentSet.Team2Score;
-                MatchVM.SetNumber = currentSet.SetNumber;
+                ActiveMatchVM.SetId = currentSet.SetId;
+                ActiveMatchVM.Team1Score = currentSet.Team1Score;
+                ActiveMatchVM.Team2Score = currentSet.Team2Score;
+                ActiveMatchVM.SetNumber = currentSet.SetNumber;
             }
 
             return Page();
