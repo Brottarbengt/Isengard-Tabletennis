@@ -1,0 +1,9 @@
+﻿
+.playerText {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 4rem;
+    text-transform: uppercase;
+}
+.playerPoints {
+    font-size: 16rem;
+}

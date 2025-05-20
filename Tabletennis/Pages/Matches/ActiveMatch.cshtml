@@ -5,65 +5,66 @@
 }
 
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h2 class="text-center mb-4">Active Match</h2>
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-6">
-                            <h3>@Model.MatchVM.Player1Name</h3>
-                            <h5 class="text-muted">Vunna set: @Model.MatchVM.Team1WonSets</h5>
-                        </div>
-                        <div class="col-6 text-end">
-                            <h3>@Model.MatchVM.Player2Name</h3>
-                            <h5 class="text-muted">Vunna set: @Model.MatchVM.Team2WonSets</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-12 text-center">
-                            <h4>Set @Model.MatchVM.SetNumber of @Model.MatchVM.MatchType</h4>
-                            <p class="text-muted">Match Date: @Model.MatchVM.MatchDate.ToString("yyyy-MM-dd HH:mm")</p>
-                        </div>
-                    </div>
+    <partial name="_ScoreBoard" model="Model.MatchVM" />
+    @* <div class="row"> *@
+    @*     <div class="col-12"> *@
+    @*         <h2 class="text-center mb-4">Active Match</h2> *@
+    @*         <div class="card"> *@
+    @*             <div class="card-header"> *@
+    @*                 <div class="row"> *@
+    @*                     <div class="col-6"> *@
+    @*                         <h3>@Model.MatchVM.Player1Name</h3> *@
+    @*                         <h5 class="text-muted">Vunna set: @Model.MatchVM.Team1WonSets</h5> *@
+    @*                     </div> *@
+    @*                     <div class="col-6 text-end"> *@
+    @*                         <h3>@Model.MatchVM.Player2Name</h3> *@
+    @*                         <h5 class="text-muted">Vunna set: @Model.MatchVM.Team2WonSets</h5> *@
+    @*                     </div> *@
+    @*                 </div> *@
+    @*             </div> *@
+    @*             <div class="card-body"> *@
+    @*                 <div class="row mb-4"> *@
+    @*                     <div class="col-12 text-center"> *@
+    @*                         <h4>Set @Model.MatchVM.SetNumber of @Model.MatchVM.MatchType</h4> *@
+    @*                         <p class="text-muted">Match Date: @Model.MatchVM.MatchDate.ToString("yyyy-MM-dd HH:mm")</p> *@
+    @*                     </div> *@
+    @*                 </div> *@
 
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="false">
-                                    <button type="submit" class="btn btn-danger btn-lg me-2">-</button>
-                                </form>
-                                <h1 class="display-1 mx-4">@Model.MatchVM.Team1Score</h1>
-                                <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true">
-                                    <button type="submit" class="btn btn-success btn-lg ms-2">+</button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="false">
-                                    <button type="submit" class="btn btn-danger btn-lg me-2">-</button>
-                                </form>
-                                <h1 class="display-1 mx-4">@Model.MatchVM.Team2Score</h1>
-                                <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="true">
-                                    <button type="submit" class="btn btn-success btn-lg ms-2">+</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12 text-end">
-                    <a asp-page="/Matches/CreateMatch" class="btn btn-secondary btn-lg">
-                        <i class="fas fa-arrow-left"></i> Tillbaka
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    @*                 <div class="row"> *@
+    @*                     <div class="col-6"> *@
+    @*                         <div class="d-flex justify-content-center align-items-center"> *@
+    @*                             <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="false"> *@
+    @*                                 <button type="submit" class="btn btn-danger btn-lg me-2">-</button> *@
+    @*                             </form> *@
+    @*                             <h1 class="display-1 mx-4">@Model.MatchVM.Team1Score</h1> *@
+    @*                             <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true"> *@
+    @*                                 <button type="submit" class="btn btn-success btn-lg ms-2">+</button> *@
+    @*                             </form> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                     <div class="col-6"> *@
+    @*                         <div class="d-flex justify-content-center align-items-center"> *@
+    @*                             <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="false"> *@
+    @*                                 <button type="submit" class="btn btn-danger btn-lg me-2">-</button> *@
+    @*                             </form> *@
+    @*                             <h1 class="display-1 mx-4">@Model.MatchVM.Team2Score</h1> *@
+    @*                             <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchVM.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="true"> *@
+    @*                                 <button type="submit" class="btn btn-success btn-lg ms-2">+</button> *@
+    @*                             </form> *@
+    @*                         </div> *@
+    @*                     </div> *@
+    @*                 </div> *@
+    @*             </div> *@
+    @*         </div> *@
+    @*         <div class="row mt-3"> *@
+    @*             <div class="col-12 text-end"> *@
+    @*                 <a asp-page="/Matches/CreateMatch" class="btn btn-secondary btn-lg"> *@
+    @*                     <i class="fas fa-arrow-left"></i> Tillbaka *@
+    @*                 </a> *@
+    @*             </div> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* </div> *@
 </div>
 
 @section Scripts {
