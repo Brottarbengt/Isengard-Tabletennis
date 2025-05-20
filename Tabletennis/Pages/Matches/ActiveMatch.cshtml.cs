@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Tabletennis.ViewModels;
 
-namespace Tabletennis.Pages.Match
+namespace Tabletennis.Pages.Matches
 {
     //TODO: Refactor to clean out unplayed sets when match is completed
     //TODO: Add logic to set IsDecidingSet on save
@@ -33,7 +33,7 @@ namespace Tabletennis.Pages.Match
 
         [BindProperty]
         public ActiveMatchViewModel ActiveMatchVM { get; set; } = new();
-
+       
         public async Task<IActionResult> OnGetAsync(int matchId)
         {
             var match = await _matchService.GetMatchByIdAsync(matchId);
@@ -51,6 +51,7 @@ namespace Tabletennis.Pages.Match
                 ActiveMatchVM.Team1Score = currentSet.Team1Score;
                 ActiveMatchVM.Team2Score = currentSet.Team2Score;
                 ActiveMatchVM.SetNumber = currentSet.SetNumber;
+                ActiveMatchVM.InfoMessage = currentSet.InfoMessage;
             }
 
             return Page();
@@ -78,7 +79,9 @@ namespace Tabletennis.Pages.Match
                     currentSet.Team2Score += isIncrement ? 1 : -1;
                 }
             }
-            
+
+            CheckInfo(currentSet.Team1Score, currentSet.Team2Score, currentSet);
+
             if (await _setService.IsSetWonAsync(currentSet))
             {
                 currentSet.SetWinner = currentSet.Team1Score > currentSet.Team2Score ? 1 : 2;
@@ -100,6 +103,33 @@ namespace Tabletennis.Pages.Match
             }
 
             return RedirectToPage(new { matchId });
+        }
+
+        public void CheckInfo(int team1score, int team2score, Set currentSet)
+        {
+            int setsToWin = (ActiveMatchVM.MatchType / 2) + 1;
+            int team1SetsWon = ActiveMatchVM.Team1WonSets;
+            int team2SetsWon = ActiveMatchVM.Team2WonSets;
+
+            if (team1score == team2score && team1score >= 10)
+            {
+                currentSet.InfoMessage = "Deuce";
+            }
+
+
+            //if (
+            //       (team1SetsWon == setsToWin - 1 && team1score > 9 && team1score > team2score) ||
+            //       (team2SetsWon == setsToWin - 1 && team2score > 9 && team2score > team1score)
+            //   )
+            //{
+            //    currentSet.InfoMessage = "Match Point";
+            //}
+
+            else if ((team1score > 9 || team2score > 9) && (team1score > team2score || team2score > team1score))
+            {
+                currentSet.InfoMessage = "Set Point";
+            }
+            
         }
     }
 }

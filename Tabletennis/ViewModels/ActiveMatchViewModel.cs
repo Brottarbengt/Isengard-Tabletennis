@@ -20,5 +20,6 @@
         public int MatchWinner { get; set; }
         public int Team1WonSets { get; set; }
         public int Team2WonSets { get; set; }
+        public string InfoMessage { get; set; } = string.Empty;
     }
 }

@@ -6,7 +6,7 @@ using Services.Interfaces;
 using Tabletennis.ViewModels;
 using Mapster;
 
-namespace Tabletennis.Pages.Match
+namespace Tabletennis.Pages.Matches
 {
     public class MatchModel : PageModel
     {
