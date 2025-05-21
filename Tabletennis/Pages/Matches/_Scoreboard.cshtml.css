@@ -33,3 +33,33 @@
     background-color: darkred;   
     border-radius: 10px;
 }
+   
+
+.button-wrapper {
+    display: grid;
+    position: relative;
+
+}
+.button-wrapper button {
+    grid-area: 1 / 1;
+    width: 100%; /* Keeps button full-width in Bootstrap column */
+}
+
+.serve-icon {
+    font-size: 4.5rem;
+    grid-area: 1 / 1;
+    pointer-events: none;
+    color: #fff;
+    z-index: 2;
+}
+.left-serve {
+    justify-self: start;
+    align-self: start;
+    margin-left: 0.6rem;
+}
+.right-serve {
+    justify-self: end;
+    align-self: start;
+    transform: scaleX(-1);
+    margin-right: 0.6rem;
+}

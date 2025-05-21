@@ -14,9 +14,18 @@
     </div>
     <div class="row text-center mt-3">
         <div class="col-4 justify-content-md-center">
-            <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true">
-                <button type="submit" class="btn btn-dark btn-lg full-width">
-                    <h2 class="player-points anta-regular">@Model.Team1Score</h2></button>
+            <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true">                
+                <div class="button-wrapper">
+                    <button type="submit" class="btn btn-dark btn-lg full-width">
+                        <h2 class="player-points anta-regular">@Model.Team1Score</h2>
+                    </button>
+
+                    @if (@Model.IsPlayer1Serve)
+                    {
+                        <span class="serve-icon left-serve"><i class="fa-solid fa-table-tennis-paddle-ball "></i></span>
+                    }
+
+                </div>
             </form>            
         </div>
         <div class="col-4">
@@ -33,13 +42,20 @@
                 <p class="anta-regular point-info">@Model.InfoMessage</p>
             </div> 
         </div>
-        <div class="col-4 justify-content-md-center">
+        <div class="col-4 justify-content-md-center">            
             <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="true">
-                <button type="submit" class="btn btn-dark btn-lg full-width">
+                <div class="button-wrapper">
+                <button type="submit" class="btn btn-dark btn-lg ">
                     <h2 class="player-points anta-regular">@Model.Team2Score</h2>
                 </button>
-            </form>
-            
+
+                @if (!@Model.IsPlayer1Serve)
+                {
+                    <span class="serve-icon right-serve"><i class="fa-solid fa-table-tennis-paddle-ball "></i></span>
+                }
+
+                </div>
+            </form>            
         </div>
     </div>
     <div class="text-center mt-2">

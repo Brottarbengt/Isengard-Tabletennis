@@ -115,7 +115,6 @@ namespace Tabletennis.Pages.Matches
         }
 
         
-
         public async Task CheckInfoAsync(int team1score, int team2score, SetInfo currentSetInfo, Set currentSet, int matchId)
         {
             var match = await _matchService.GetMatchByIdAsync(matchId);
