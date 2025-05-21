@@ -21,24 +21,38 @@ namespace Services
         public async Task<List<PlayerCreateDTO>> GetAllPlayersAsync()
         {
             return await _context.Players
-                .Select(p => new PlayerCreateDTO
-                {
-                    PlayerId = p.PlayerId,
-                    FullName = p.FirstName + " " + p.LastName
-                })
-                .ToListAsync();
+              .Select(player => new PlayerCreateDTO
+              {
+                 PlayerId = player.PlayerId,
+                 FirstName = player.FirstName,
+                 LastName = player.LastName,
+                 FullName = $"{player.FirstName} {player.LastName}",
+                 Birthday = player.Birthday, // 🟢 Required for BirthYear
+                 Email = player.Email,
+                 PhoneNumber = player.PhoneNumber,
+                 Gender = player.Gender
+              })
+               .ToListAsync();
         }
 
         public async Task<PlayerCreateDTO?> GetPlayerByIdAsync(int playerId)
         {
             var player = await _context.Players.FindAsync(playerId);
-            return player == null ? null : new PlayerCreateDTO
+            if (player == null)
+                return null;
+
+            return new PlayerCreateDTO
             {
                 PlayerId = player.PlayerId,
-                FullName = player.FirstName + " " + player.LastName
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                FullName = $"{player.FirstName} {player.LastName}",
+                Birthday = player.Birthday,
+                Email = player.Email,
+                PhoneNumber = player.PhoneNumber,
+                Gender = player.Gender
             };
         }
-
         public async Task CreateMatchAsync(CreateMatchDTO match)
         {
             var newMatch = new Match

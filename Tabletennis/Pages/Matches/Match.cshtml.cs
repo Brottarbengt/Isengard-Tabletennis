@@ -48,17 +48,43 @@ namespace Tabletennis.Pages.Match
         public async Task<JsonResult> OnGetGetPlayer(int id)
         {
             var player = await _matchService.GetPlayerByIdAsync(id);
-            return new JsonResult(player);
+
+            if (player == null)
+            {
+                return new JsonResult(new { error = "Player not found" });
+            }
+
+            // Optional debug
+            Console.WriteLine($"DEBUG: PlayerId={player.PlayerId}, FullName={player.FullName}, BirthYear={player.BirthYear}");
+
+            return new JsonResult(new
+            {
+                player.PlayerId,
+                player.FirstName,
+                player.LastName,
+                player.FullName,
+                player.Email,
+                player.PhoneNumber,
+                player.Gender,
+                Birthday = player.Birthday?.ToString("yyyy-MM-dd") ?? "N/A", // format safely
+                player.BirthYear
+            });
         }
 
         private async Task LoadPlayersAsync()
         {
             var players = await _matchService.GetAllPlayersAsync();
-            MatchVM.PlayerList = players
-                .Select(p => new SelectListItem(p.FullName, p.PlayerId.ToString()))
+
+               MatchVM.AllPlayers = players.ToList();
+               MatchVM.PlayerList = players
+                  .OrderBy(p => p.FullName)
+                .Select(p => new SelectListItem
+                {
+                    Value = p.PlayerId.ToString(),
+                    Text = $"{p.FullName} ({(p.BirthYear?.ToString() ?? "N/A")})"
+                })
                 .ToList();
         }
-
         private List<SelectListItem> GetSetOptions()
         {
             return new List<SelectListItem>
