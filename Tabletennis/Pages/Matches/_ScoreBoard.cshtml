@@ -45,20 +45,18 @@
         <div class="col-4 justify-content-md-center">            
             <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="true">
                 <div class="button-wrapper">
-                <button type="submit" class="btn btn-dark btn-lg ">
-                    <h2 class="player-points anta-regular">@Model.Team2Score</h2>
-                </button>
+                    <button type="submit" class="btn btn-dark btn-lg ">
+                        <h2 class="player-points anta-regular">@Model.Team2Score</h2>
+                    </button>
 
-                @if (!@Model.IsPlayer1Serve)
-                {
-                    <span class="serve-icon right-serve"><i class="fa-solid fa-table-tennis-paddle-ball "></i></span>
-                }
+                    @if (!@Model.IsPlayer1Serve)
+                    {
+                        <span class="serve-icon right-serve"><i class="fa-solid fa-table-tennis-paddle-ball "></i></span>
+                    }
 
                 </div>
             </form>            
         </div>
     </div>
-    <div class="text-center mt-2">
-        <button type="button" class="btn btn-primary btn-lg ">Starta set</button>
-    </div>
+    
 </div>

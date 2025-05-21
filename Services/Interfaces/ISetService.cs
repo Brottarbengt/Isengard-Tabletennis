@@ -19,5 +19,6 @@ namespace Services.Interfaces
         Task UpdateSetAsync(Set set);
         Task<int> GetSetsWonByTeamAsync(int matchId, int teamNumber);
         Task<SetInfo?> GetSetInfoBySetIdAsync(int setId);
+        Task<int> GetPreviousSetWinnerAsync(int setId);
     }
 }

@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="text-center mt-4">
+@if (Model.IsSetCompleted)
+{
+    if (Model.PreviousSetWinner == 1)
+    {
+        <p class="anta-regular">Vinnare av set: @(Model.SetNumber - 1)!</p>
+        <h2 class="player-text">@Model.Player1FirstName</h2>
+    }
+        else if (Model.PreviousSetWinner == 2)
+    {
+        <p class="anta-regular">Vinnare av set: @(Model.SetNumber - 1)!</p>
+        <h2 class="player-text">@Model.Player2FirstName</h2>
+    }
+}
+
+</div>
+
+<div class="text-center mt-5">
+    <form method="post" asp-page-handler="StartSet" asp-route-matchId="@Model.MatchId">
+        <button type="submit" class="btn btn-primary btn-lg">
+            
+                @if (Model.SetNumber == 1)
+                {
+                    <h2 class="anta-regular">Starta första set</h2>
+                }
+                else
+                {
+                    <h2 class="anta-regular">Starta nästa set</h2>
+                }         
+            
+        </button>
+    </form>
+</div>

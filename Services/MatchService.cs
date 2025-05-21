@@ -67,7 +67,8 @@ namespace Services
                 SetNumber = 1,
                 Team1Score = 0,
                 Team2Score = 0,
-                SetWinner = 0
+                SetWinner = 0,
+                IsSetCompleted = true
             };
             _context.Sets.Add(firstSet);            
             await _context.SaveChangesAsync();

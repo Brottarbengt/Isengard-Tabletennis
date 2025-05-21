@@ -71,7 +71,8 @@ namespace Services
                 SetNumber = newSetNumber,
                 Team1Score = 0,
                 Team2Score = 0,
-                SetWinner = 0
+                SetWinner = 0,
+                IsSetCompleted = true
             };
 
             _dbContext.Sets.Add(newSet);
@@ -117,6 +118,15 @@ namespace Services
             return await _dbContext.SetInfos
                 .Include(s => s.Set)
                 .FirstOrDefaultAsync(s => s.SetId == setId);
+        }
+
+        public async Task<int> GetPreviousSetWinnerAsync(int setId)
+        {
+            var previousSetId = setId - 1;
+            return await _dbContext.Sets
+                .Where(s => s.SetId == previousSetId)
+                .Select(s => s.SetWinner)
+                .FirstOrDefaultAsync();
         }
     }
 }

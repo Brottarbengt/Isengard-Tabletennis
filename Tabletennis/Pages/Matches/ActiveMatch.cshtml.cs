@@ -48,6 +48,7 @@ namespace Tabletennis.Pages.Matches
             if (currentSet != null)
             {
                 var currentSetInfo = await _setService.GetSetInfoBySetIdAsync(currentSet.SetId);
+                var previousSetWinner = await _setService.GetPreviousSetWinnerAsync(currentSet.SetId);
 
                 ActiveMatchVM.SetId = currentSet.SetId;
                 ActiveMatchVM.Team1Score = currentSet.Team1Score;
@@ -55,13 +56,34 @@ namespace Tabletennis.Pages.Matches
                 ActiveMatchVM.SetNumber = currentSet.SetNumber;
                 ActiveMatchVM.InfoMessage = currentSetInfo.InfoMessage;
                 ActiveMatchVM.IsPlayer1Serve = currentSetInfo.IsPlayer1Serve;
+                ActiveMatchVM.IsSetCompleted = currentSet.IsSetCompleted;
+                ActiveMatchVM.PreviousSetWinner = previousSetWinner;
+
 
             }
 
             return Page();
         }
 
-        
+
+        public async Task<IActionResult> OnPostStartSetAsync(int matchId)
+        {
+            var currentSet = await _setService.GetCurrentSetAsync(matchId);
+            if (currentSet == null)
+            {
+                // Om det inte finns något aktuellt set, skapa ett nytt
+                currentSet = await _setService.CreateNewSetAsync(matchId);
+            }
+            else
+            {
+                // Om det finns ett set, markera det som klart och skapa ett nytt
+                currentSet.IsSetCompleted = false;
+                await _setService.UpdateSetAsync(currentSet);
+            }
+            
+            return RedirectToPage(new { matchId });
+        }
+
         public async Task<IActionResult> OnPostUpdateScoreAsync(int matchId, int teamNumber, bool isIncrement)
         {
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
@@ -95,6 +117,7 @@ namespace Tabletennis.Pages.Matches
             if (await _setService.IsSetWonAsync(currentSet))
             {
                 currentSet.SetWinner = currentSet.Team1Score > currentSet.Team2Score ? 1 : 2;
+                currentSet.IsSetCompleted = true;
                 await _setService.UpdateSetAsync(currentSet);
 
                 if (await _matchService.IsMatchWonAsync(matchId))

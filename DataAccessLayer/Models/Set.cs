@@ -14,7 +14,7 @@ namespace DataAccessLayer.Models
         public int Team1Score { get; set; }
         public int Team2Score { get; set; }
         public int SetWinner { get; set; }
-        public bool IsDecidingSet { get; set; }       
+        public bool IsSetCompleted { get; set; }
         public virtual Match Match { get; set; }
         public virtual SetInfo SetInfo { get; set; }
 
