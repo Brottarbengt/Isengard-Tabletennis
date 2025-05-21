@@ -69,9 +69,22 @@ namespace Services
                 Team2Score = 0,
                 SetWinner = 0
             };
-            _context.Sets.Add(firstSet);
+            _context.Sets.Add(firstSet);            
             await _context.SaveChangesAsync();
-            
+
+            //TODO: Change player serve to incoming from CreateMatch page
+            // Skapa SetInfo för första set
+            var firstSetInfo = new SetInfo
+            {
+                SetId = firstSet.SetId,                 
+                InfoMessage = string.Empty,
+                IsPlayer1Serve = true,
+                IsPlayer1StartServer = true,
+                ServeCounter = 0
+            };
+            _context.SetInfos.Add(firstSetInfo);
+            await _context.SaveChangesAsync();
+
             return newMatch.MatchId;
         }
 

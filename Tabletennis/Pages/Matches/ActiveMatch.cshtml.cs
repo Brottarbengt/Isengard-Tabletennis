@@ -47,11 +47,15 @@ namespace Tabletennis.Pages.Matches
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet != null)
             {
+                var currentSetInfo = await _setService.GetSetInfoBySetIdAsync(currentSet.SetId);
+
                 ActiveMatchVM.SetId = currentSet.SetId;
                 ActiveMatchVM.Team1Score = currentSet.Team1Score;
                 ActiveMatchVM.Team2Score = currentSet.Team2Score;
                 ActiveMatchVM.SetNumber = currentSet.SetNumber;
-                ActiveMatchVM.InfoMessage = currentSet.InfoMessage;
+                ActiveMatchVM.InfoMessage = currentSetInfo.InfoMessage;
+                ActiveMatchVM.IsPlayer1Serve = currentSetInfo.IsPlayer1Serve;
+
             }
 
             return Page();
@@ -66,6 +70,9 @@ namespace Tabletennis.Pages.Matches
                 currentSet = await _setService.CreateNewSetAsync(matchId);
             }
             
+            var currentSetInfo = await _setService.GetSetInfoBySetIdAsync(currentSet.SetId);
+            
+
             if (teamNumber == 1)
             {
                 if (isIncrement || currentSet.Team1Score > 0)
@@ -81,7 +88,9 @@ namespace Tabletennis.Pages.Matches
                 }
             }
 
-            await CheckInfo(currentSet.Team1Score, currentSet.Team2Score, currentSet, matchId);
+            
+            await CheckInfoAsync(currentSet.Team1Score, currentSet.Team2Score, currentSetInfo,  currentSet, matchId);
+            SetServer(currentSetInfo);
 
             if (await _setService.IsSetWonAsync(currentSet))
             {
@@ -105,7 +114,9 @@ namespace Tabletennis.Pages.Matches
             return RedirectToPage(new { matchId });
         }
 
-        public async Task CheckInfo(int team1score, int team2score, Set currentSet, int matchId)
+        
+
+        public async Task CheckInfoAsync(int team1score, int team2score, SetInfo currentSetInfo, Set currentSet, int matchId)
         {
             var match = await _matchService.GetMatchByIdAsync(matchId);
             if (match == null) return;
@@ -114,21 +125,38 @@ namespace Tabletennis.Pages.Matches
             int team1SetsWon = await _setService.GetSetsWonByTeamAsync(matchId, 1);
             int team2SetsWon = await _setService.GetSetsWonByTeamAsync(matchId, 2);
 
+
             if (team1score == team2score && team1score >= 10)
             {
-                currentSet.InfoMessage = "Deuce";
+                currentSetInfo.InfoMessage = "Deuce";
             }
             else if (
                 (team1SetsWon == setsToWin - 1 && team1score >= 10 && team1score > team2score) ||
                 (team2SetsWon == setsToWin - 1 && team2score >= 10 && team2score > team1score)
             )
             {
-                currentSet.InfoMessage = "Match Point"; 
+                currentSetInfo.InfoMessage = "Match Point";
             }
             else if ((team1score >= 10 || team2score >= 10) && Math.Abs(team1score - team2score) >= 1)
             {
-                currentSet.InfoMessage = "Set Point";
+                currentSetInfo.InfoMessage = "Set Point";
             }
+        }
+
+        private void SetServer(SetInfo currentSetInfo)
+        {
+            currentSetInfo.ServeCounter++;
+            if (currentSetInfo.InfoMessage == "Deuce")
+            {
+                currentSetInfo.IsPlayer1Serve = !currentSetInfo.IsPlayer1Serve;
+                currentSetInfo.ServeCounter = 1;
+            }
+            else if (currentSetInfo.ServeCounter == 2)
+            {
+                currentSetInfo.IsPlayer1Serve = !currentSetInfo.IsPlayer1Serve;
+                currentSetInfo.ServeCounter = 0;
+            }
+
         }
     }
 }

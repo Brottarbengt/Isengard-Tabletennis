@@ -21,5 +21,6 @@
         public int Team1WonSets { get; set; }
         public int Team2WonSets { get; set; }
         public string InfoMessage { get; set; } = string.Empty;
+        public bool  IsPlayer1Serve { get; set; }
     }
 }

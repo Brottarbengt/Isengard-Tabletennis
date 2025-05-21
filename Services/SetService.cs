@@ -52,11 +52,18 @@ namespace Services
 
         public async Task<Set> CreateNewSetAsync(int matchId)
         {
+            bool setServer;
             var lastSet = await _dbContext.Sets
                 .Where(s => s.MatchId == matchId)
                 .OrderByDescending(s => s.SetNumber)
                 .FirstOrDefaultAsync();
+            var lastSetSetInfo = await _dbContext.SetInfos
+                .Where(s => s.SetId == lastSet.SetId)
+                .OrderByDescending(s => s.SetInfoId)
+                .FirstOrDefaultAsync();
 
+            setServer = lastSetSetInfo.IsPlayer1StartServer ? false : true;
+                        
             var newSetNumber = lastSet?.SetNumber + 1 ?? 1;
             var newSet = new Set
             {
@@ -68,6 +75,18 @@ namespace Services
             };
 
             _dbContext.Sets.Add(newSet);
+            await _dbContext.SaveChangesAsync();
+            
+            var newSetInfo = new SetInfo
+            {
+                SetId = newSet.SetId,
+                InfoMessage = string.Empty,
+                IsPlayer1Serve = setServer,
+                IsPlayer1StartServer = setServer,
+                ServeCounter = 0
+            };
+
+            _dbContext.SetInfos.Add(newSetInfo);            
             await _dbContext.SaveChangesAsync();
             return newSet;
         }
@@ -91,6 +110,13 @@ namespace Services
             return await _dbContext.Sets
                 .Where(s => s.MatchId == matchId && s.SetWinner == teamNumber)
                 .CountAsync();
+        }
+
+        public async Task<SetInfo?> GetSetInfoBySetIdAsync(int setId)
+        {
+            return await _dbContext.SetInfos
+                .Include(s => s.Set)
+                .FirstOrDefaultAsync(s => s.SetId == setId);
         }
     }
 }
