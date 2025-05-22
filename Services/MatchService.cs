@@ -22,7 +22,7 @@ namespace Services
         public async Task<List<PlayerDTO>> GetAllPlayersAsync()
         {
             return await _context.Players
-              .Select(player => new PlayerCreateDTO
+              .Select(player => new PlayerDTO
               {
                  PlayerId = player.PlayerId,
                  FirstName = player.FirstName,

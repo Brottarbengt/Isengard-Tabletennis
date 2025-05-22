@@ -19,6 +19,6 @@ namespace Tabletennis.ViewModels
         public List<SelectListItem> PlayerList { get; set; } = new();
 
         // Add full player list for extra info like birth year
-        public List<PlayerCreateDTO> AllPlayers { get; set; } = new();
+        public List<PlayerDTO> AllPlayers { get; set; } = new();
     }
 }
