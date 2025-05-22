@@ -22,12 +22,18 @@ namespace Services
         public async Task<List<PlayerDTO>> GetAllPlayersAsync()
         {
             return await _context.Players
-                .Select(p => new PlayerDTO
-                {
-                    PlayerId = p.PlayerId,
-                    FullName = p.FirstName + " " + p.LastName
-                })
-                .ToListAsync();
+              .Select(player => new PlayerCreateDTO
+              {
+                 PlayerId = player.PlayerId,
+                 FirstName = player.FirstName,
+                 LastName = player.LastName,
+                 FullName = $"{player.FirstName} {player.LastName}",
+                 Birthday = player.Birthday, // 🟢 Required for BirthYear
+                 Email = player.Email,
+                 PhoneNumber = player.PhoneNumber,
+                 Gender = player.Gender
+              })
+               .ToListAsync();
         }
 
         public async Task<PlayerDTO?> GetPlayerByIdAsync(int playerId)
@@ -36,7 +42,13 @@ namespace Services
             return player == null ? null : new PlayerDTO
             {
                 PlayerId = player.PlayerId,
-                FullName = player.FirstName + " " + player.LastName
+                FirstName = player.FirstName,
+                LastName = player.LastName,
+                FullName = $"{player.FirstName} {player.LastName}",
+                Birthday = player.Birthday,
+                Email = player.Email,
+                PhoneNumber = player.PhoneNumber,
+                Gender = player.Gender
             };
         }
 
