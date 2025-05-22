@@ -37,7 +37,7 @@
                                 <td>@player.FirstName</td>
                                 <td>@player.LastName</td>
                                 <td>
-                                    <a class="btn btn-info" asp-page="to the editpage?">Edit</a>
+                                    <a class="btn btn-info" asp-page="/Player/Update" asp-route-playerId="@player.PlayerId">Edit</a>
                                 </td>
                             </tr>
                         }

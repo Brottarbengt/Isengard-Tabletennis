@@ -7,5 +7,6 @@ namespace Services.Interfaces
     {
         Task<Check> CreatePlayer(PlayerCreateDTO newPlayer);
         Task<List<PlayerSmallInfoDTO>> GetAllSmallAsync();
+        Task<PlayerCreateDTO> GetOneAsync(int playerId);
     }
 }

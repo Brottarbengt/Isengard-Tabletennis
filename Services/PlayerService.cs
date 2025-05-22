@@ -49,6 +49,32 @@ namespace Services
             return players.Adapt<List<PlayerSmallInfoDTO>>();
         }
 
+        public async Task<PlayerCreateDTO> GetOneAsync(int playerId)
+        {
+            var playerDb = await _dbContext.Players.FindAsync(playerId);
+            var playerDTO = playerDb.Adapt<PlayerCreateDTO>();
+            return playerDTO;
+        }
+
+        public async Task<Check> Update(PlayerCreateDTO updatePlayer)
+        {
+            var playerToUpdate = await _dbContext.Players.FindAsync(updatePlayer.PlayerId);
+            if (playerToUpdate == null)
+                { return Check.Failed; }
+
+            playerToUpdate.FirstName = updatePlayer.FirstName;
+            playerToUpdate.LastName = updatePlayer.LastName;
+            playerToUpdate.Email = updatePlayer.Email;
+            playerToUpdate.PhoneNumber = updatePlayer.PhoneNumber;
+            playerToUpdate.Gender = updatePlayer.Gender;
+            playerToUpdate.Birthday = updatePlayer.Birthday;
+
+            await _dbContext.SaveChangesAsync();
+            return Check.Success;
+
+
+        }
+
 
     }
 }
