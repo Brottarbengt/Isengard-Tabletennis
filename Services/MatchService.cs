@@ -20,7 +20,6 @@ namespace Services
             _context = context;
         }
 
-        //TODO: Map FullName in MapsterConfig
         public async Task<List<PlayerDTO>> GetAllPlayersAsync()
         {
             return await _context.Players
@@ -73,7 +72,7 @@ namespace Services
             _context.Sets.Add(firstSet);            
             await _context.SaveChangesAsync();
 
-            //TODO: Change player serve to incoming from CreateMatch page
+            
             // Skapa SetInfo för första set
             var firstSetInfo = new SetInfo
             {

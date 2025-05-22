@@ -15,11 +15,10 @@ using Tabletennis.ViewModels;
 
 namespace Tabletennis.Pages.Matches
 {
-    //TODO: Refactor to clean out unplayed sets when match is completed
-    //TODO: Add logic to set IsDecidingSet on save
-    //TODO: Show serve owner
+    //TODO: Refactor to clean out unplayed sets when match is completed OR should unfinished sets be deleted on abort
     //TODO: Button reveal on match complete, presenting winner and links back to CreateMatches
     //TODO: Add prompt if press Tillbaka during match, if discard match?
+    //TODO: Need to reset team/player set winner on match complete, otherwise it will be shown with "Starta första set" in next match
     public class ActiveMatchModel : PageModel
     {
         private readonly IMatchService _matchService;
