@@ -17,6 +17,9 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <h5 class="card-title">Player List</h5>
+
+            <input type="text" placeholder="Sök Spelare..." id="playerSearch" class="form-control w-25" />
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -29,7 +32,7 @@
                     <tbody>
                         @foreach (var player in Model.Players)
                         {
-                            <tr>
+                            <tr class="player-item">
                                 <td>@player.PlayerId</td>
                                 <td>@player.FirstName</td>
                                 <td>@player.LastName</td>
@@ -44,3 +47,16 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts
+{
+    <script>
+            document.getElementById('playerSearch').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('.player-item').forEach(function(item) {
+                item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+}
