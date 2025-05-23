@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250522090808_UnknownErrorPreventingBuild")]
-    partial class UnknownErrorPreventingBuild
+    [Migration("20250523132916_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,6 +122,9 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetId"));
 
+                    b.Property<bool>("IsSetCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("MatchId")
                         .HasColumnType("int");
 
@@ -142,6 +145,38 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("MatchId");
 
                     b.ToTable("Sets");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.SetInfo", b =>
+                {
+                    b.Property<int>("SetInfoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetInfoId"));
+
+                    b.Property<string>("InfoMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPlayer1Serve")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPlayer1StartServer")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ServeCounter")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SetId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SetInfoId");
+
+                    b.HasIndex("SetId")
+                        .IsUnique();
+
+                    b.ToTable("SetInfos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -376,6 +411,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Match");
                 });
 
+            modelBuilder.Entity("DataAccessLayer.Models.SetInfo", b =>
+                {
+                    b.HasOne("DataAccessLayer.Models.Set", "Set")
+                        .WithOne("SetInfo")
+                        .HasForeignKey("DataAccessLayer.Models.SetInfo", "SetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Set");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -437,6 +483,12 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.Player", b =>
                 {
                     b.Navigation("PlayerMatches");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.Set", b =>
+                {
+                    b.Navigation("SetInfo")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
