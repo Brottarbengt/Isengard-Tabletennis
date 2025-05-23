@@ -4,6 +4,7 @@ using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250514094847_Updated Match model")]
+    partial class UpdatedMatchmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +42,10 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("MatchDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MatchType")
+                    b.Property<int>("MatchWinner")
                         .HasColumnType("int");
 
-                    b.Property<int>("MatchWinner")
+                    b.Property<int>("NumberOfSets")
                         .HasColumnType("int");
 
                     b.HasKey("MatchId");
@@ -58,7 +61,7 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlayerId"));
 
-                    b.Property<DateOnly?>("Birthday")
+                    b.Property<DateOnly>("Birthday")
                         .HasColumnType("date");
 
                     b.Property<string>("Email")
@@ -119,19 +122,22 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetId"));
 
+                    b.Property<bool>("IsDecidingSet")
+                        .HasColumnType("bit");
+
                     b.Property<int>("MatchId")
                         .HasColumnType("int");
 
                     b.Property<int>("SetNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("SetWinner")
-                        .HasColumnType("int");
-
                     b.Property<int>("Team1Score")
                         .HasColumnType("int");
 
                     b.Property<int>("Team2Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WinnerId")
                         .HasColumnType("int");
 
                     b.HasKey("SetId");

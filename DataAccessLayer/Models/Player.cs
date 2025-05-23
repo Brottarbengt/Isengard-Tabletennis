@@ -11,8 +11,8 @@ namespace DataAccessLayer.Models
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public Gender Gender { get; set; }
-        public DateOnly Birthday { get; set; }
+        public DateOnly? Birthday { get; set; }
 
-        public virtual ICollection<PlayerMatch> PlayerMatches { get; set; }
+        public ICollection<PlayerMatch> PlayerMatches { get; set; } = new List<PlayerMatch>();
     }
 }

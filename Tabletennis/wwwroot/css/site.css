@@ -220,7 +220,32 @@ body {
         opacity: 1;
     }
 }
+/* Create Match */
+.custom-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 36px;
+}
 
-.player-item{
 
+.btn-check:checked + .btn-gender {
+    background-color: #c4553e;
+    color: white;
+    border-color: #c4553e;
+}
+
+/* Standardläge – "inte vald" */
+.btn-gender {
+    border: 2px solid #c4553e;
+    color: #c4553e;
+    background-color: transparent;
+    font-size: 1rem;
+    padding: 0.3rem 1rem;
+    margin-right: 0.5rem;
+    border-radius: 0.4rem;
 }

@@ -37,35 +37,63 @@ namespace Tabletennis.Pages.Match
                 return Page();
             }
 
-            var match = MatchVM.Adapt<CreateMatchDTO>();
+            var match = MatchVM.Adapt<MatchDTO>();
             match.MatchDate = DateTime.Now;
-
-            await _matchService.CreateMatchAsync(match);
+            match.MatchType = MatchVM.SelectedSetCount;
+            
+            var matchId = await _matchService.CreateMatchAsync(match);
             TempData["SuccessMessage"] = "New Match was successfully created!";
-            return RedirectToPage("/Player/Index");
+            //TODO: Skicka bara matchId f�r b�ttre s�kerhet
+            return RedirectToPage("/Matches/ActiveMatch", new {matchId});
         }
 
         public async Task<JsonResult> OnGetGetPlayer(int id)
         {
             var player = await _matchService.GetPlayerByIdAsync(id);
-            return new JsonResult(player);
+
+            if (player == null)
+            {
+                return new JsonResult(new { error = "Player not found" });
+            }
+
+            // Optional debug
+            Console.WriteLine($"DEBUG: PlayerId={player.PlayerId}, FullName={player.FullName}, BirthYear={player.BirthYear}");
+
+            return new JsonResult(new
+            {
+                player.PlayerId,
+                player.FirstName,
+                player.LastName,
+                player.FullName,
+                player.Email,
+                player.PhoneNumber,
+                player.Gender,
+                Birthday = player.Birthday?.ToString("yyyy-MM-dd") ?? "N/A", // format safely
+                player.BirthYear
+            });
         }
 
         private async Task LoadPlayersAsync()
         {
             var players = await _matchService.GetAllPlayersAsync();
-            MatchVM.PlayerList = players
-                .Select(p => new SelectListItem(p.FullName, p.PlayerId.ToString()))
+
+               MatchVM.AllPlayers = players.ToList();
+               MatchVM.PlayerList = players
+                  .OrderBy(p => p.FullName)
+                .Select(p => new SelectListItem
+                {
+                    Value = p.PlayerId.ToString(),
+                    Text = $"{p.FullName} ({(p.BirthYear?.ToString() ?? "N/A")})"
+                })
                 .ToList();
         }
-
         private List<SelectListItem> GetSetOptions()
         {
             return new List<SelectListItem>
             {
-              new SelectListItem { Text = "3", Value = "3" },
-              new SelectListItem { Text = "5", Value = "5" },
-              new SelectListItem { Text = "7", Value = "7" }
+                new SelectListItem { Text = "3 Sets", Value = "3" },
+                new SelectListItem { Text = "5 Sets", Value = "5" },
+                new SelectListItem { Text = "7 Sets", Value = "7" }
             };
         }
     }

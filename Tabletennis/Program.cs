@@ -29,6 +29,7 @@ namespace Tabletennis
             builder.Services.AddRazorPages();
 
             builder.Services.AddTransient<DataInitializer>();
+            builder.Services.AddTransient<ISetService, SetService>();
 
             var app = builder.Build();
 

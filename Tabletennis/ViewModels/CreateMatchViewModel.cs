@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tabletennis.ViewModels
@@ -11,8 +13,12 @@ namespace Tabletennis.ViewModels
         public int Player2Id { get; set; }
         public string Player2Name { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Please select number of sets")]
         public int SelectedSetCount { get; set; }
         public List<SelectListItem> SetOptions { get; set; } = new();
         public List<SelectListItem> PlayerList { get; set; } = new();
+
+        // Add full player list for extra info like birth year
+        public List<PlayerDTO> AllPlayers { get; set; } = new();
     }
 }

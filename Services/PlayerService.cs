@@ -22,7 +22,7 @@ namespace Services
             _dbContext = dbContext;
         }
 
-        public async Task<Check> CreatePlayer(PlayerCreateDTO newPlayer)
+        public async Task<Check> CreatePlayer(PlayerDTO newPlayer)
         {
             
             if (newPlayer == null)

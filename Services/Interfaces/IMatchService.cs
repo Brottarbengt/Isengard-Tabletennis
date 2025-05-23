@@ -9,8 +9,12 @@ namespace Services.Interfaces
 {
     public interface IMatchService
     {
-        Task<List<PlayerCreateDTO>> GetAllPlayersAsync();
-        Task<PlayerCreateDTO?> GetPlayerByIdAsync(int playerId);
-        Task CreateMatchAsync(CreateMatchDTO match);
+        Task<List<PlayerDTO>> GetAllPlayersAsync();
+        Task<PlayerDTO?> GetPlayerByIdAsync(int playerId);
+        Task<int> CreateMatchAsync(MatchDTO match);
+        Task<MatchDTO?> GetMatchByIdAsync(int matchId);
+        Task<bool> IsMatchWonAsync(int matchId);
+        Task CompleteMatchAsync(int matchId);
+        //ActiveMatchDTO GetMatchById(int matchId);
     }
 }
