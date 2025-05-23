@@ -8,5 +8,6 @@ namespace Services.Interfaces
         Task<Check> CreatePlayer(PlayerDTO newPlayer);
         Task<List<PlayerSmallInfoDTO>> GetAllSmallAsync();
         Task<PlayerDTO> GetOneAsync(int playerId);
+        Task<Check> Update(PlayerDTO updatePlayer);
     }
 }

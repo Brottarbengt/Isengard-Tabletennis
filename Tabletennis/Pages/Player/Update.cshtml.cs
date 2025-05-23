@@ -18,11 +18,11 @@ namespace Tabletennis.Pages.Player
         {
             _playerService = playerService;
         }
-        [BindProperty]
+        
         public string FullName { get; set; }
         [BindProperty]
         public List<SelectListItem> GenderOptions { get; set; }
-        [BindProperty]
+        
         public string MaxDate { get; set; }
         [BindProperty]
         public PlayerCreateViewModel player {  get; set; }
@@ -30,21 +30,12 @@ namespace Tabletennis.Pages.Player
         public async Task OnGet(int playerId)
         {
 
-            ////lägga en samling ?
-            //TypeAdapterConfig<PlayerCreateViewModel, PlayerDTO>.NewConfig()
-            //    .Map(dest => dest.Birthday, src => DateOnly.FromDateTime(src.Birthday));
-
-            //TypeAdapterConfig<PlayerDTO, PlayerCreateViewModel>.NewConfig()
-            //    .Map(dest => dest.Birthday, src => src.Birthday.HasValue
-            //        ? src.Birthday.Value.ToDateTime(TimeOnly.MinValue)
-            //        : default);
-
             SetMaxDate();
             LoadGenderOptions();
 
             var playerDTO = await _playerService.GetOneAsync(playerId);
             player = playerDTO.Adapt<PlayerCreateViewModel>();
-            FullName = player.FirstName + player.LastName;
+            FullName = player.FirstName + " " + player.LastName;
         }
 
         public async Task<IActionResult> OnPost()
@@ -57,12 +48,16 @@ namespace Tabletennis.Pages.Player
             }
 
             var updatePlayer = player.Adapt<PlayerDTO>();
-            
+            var result = await _playerService.Update(updatePlayer);
 
+            if (result == Check.Failed)
+            {
+                SetMaxDate();
+                LoadGenderOptions();
+                return Page();
+            }
 
-            //kanske en tempdata, successully updaterad!
-            //kom ihåg modelstate
-            //och check.enums
+            TempData["SuccessMessage"] = "Spelaren uppdaterad!";
             return RedirectToPage("/player/Index");
         }
 
