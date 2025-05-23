@@ -16,5 +16,6 @@ public class ApplicationDbContext : IdentityDbContext
     public virtual DbSet<Match> Matches { get; set; } = null!;
     public virtual DbSet<Set> Sets { get; set; } = null!;
     public virtual DbSet<PlayerMatch> PlayerMatches { get; set; } = null!;
+    public virtual DbSet<SetInfo> SetInfos { get; set; }
 
 }

@@ -4,6 +4,7 @@ using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250521082345_Add DbSet SetInfo model")]
+    partial class AddDbSetSetInfomodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlayerId"));
 
-                    b.Property<DateOnly?>("Birthday")
+                    b.Property<DateOnly>("Birthday")
                         .HasColumnType("date");
 
                     b.Property<string>("Email")
@@ -119,7 +122,7 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetId"));
 
-                    b.Property<bool>("IsSetCompleted")
+                    b.Property<bool>("IsDecidingSet")
                         .HasColumnType("bit");
 
                     b.Property<int>("MatchId")
@@ -161,9 +164,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("IsPlayer1StartServer")
                         .HasColumnType("bit");
-
-                    b.Property<int>("ServeCounter")
-                        .HasColumnType("int");
 
                     b.Property<int>("SetId")
                         .HasColumnType("int");
