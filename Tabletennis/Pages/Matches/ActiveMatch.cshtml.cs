@@ -6,16 +6,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Interfaces;
-using System.Collections.Concurrent;
-using System.IO;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 using Tabletennis.ViewModels;
 
 namespace Tabletennis.Pages.Matches
 {
-    //TODO: Refactor to clean out unplayed sets when match is completed OR should unfinished sets be deleted on abort
+    //TODO: Refactor to clean out unplayed sets (and match?) on abort OR should they be kept for 
+    //      possibility to continue the match later?
+    //TODO: Add decrease button to decrease score and working logic with SetServe()
     //TODO: Button reveal on match complete, presenting winner and links back to CreateMatches
     //TODO: Add prompt if press Tillbaka during match, if discard match?
     //TODO: Need to reset team/player set winner on match complete, otherwise it will be shown with "Starta första set" in next match
@@ -47,8 +44,13 @@ namespace Tabletennis.Pages.Matches
             if (currentSet != null)
             {
                 var currentSetInfo = await _setService.GetSetInfoBySetIdAsync(currentSet.SetId);
-                var previousSetWinner = await _setService.GetPreviousSetWinnerAsync(currentSet.SetId);
-
+                
+                if (currentSet.SetNumber > 1)
+                {
+                    var previousSetWinner = await _setService.GetPreviousSetWinnerAsync(currentSet.SetId);
+                    ActiveMatchVM.PreviousSetWinner = previousSetWinner;
+                }
+                
                 ActiveMatchVM.SetId = currentSet.SetId;
                 ActiveMatchVM.Team1Score = currentSet.Team1Score;
                 ActiveMatchVM.Team2Score = currentSet.Team2Score;
@@ -56,8 +58,6 @@ namespace Tabletennis.Pages.Matches
                 ActiveMatchVM.InfoMessage = currentSetInfo.InfoMessage;
                 ActiveMatchVM.IsPlayer1Serve = currentSetInfo.IsPlayer1Serve;
                 ActiveMatchVM.IsSetCompleted = currentSet.IsSetCompleted;
-                ActiveMatchVM.PreviousSetWinner = previousSetWinner;
-
 
             }
 
@@ -69,13 +69,11 @@ namespace Tabletennis.Pages.Matches
         {
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet == null)
-            {
-                // Om det inte finns något aktuellt set, skapa ett nytt
+            {                
                 currentSet = await _setService.CreateNewSetAsync(matchId);
             }
             else
-            {
-                // Om det finns ett set, markera det som klart och skapa ett nytt
+            {                
                 currentSet.IsSetCompleted = false;
                 await _setService.UpdateSetAsync(currentSet);
             }
@@ -92,7 +90,6 @@ namespace Tabletennis.Pages.Matches
             }
             
             var currentSetInfo = await _setService.GetSetInfoBySetIdAsync(currentSet.SetId);
-            
 
             if (teamNumber == 1)
             {
@@ -111,8 +108,9 @@ namespace Tabletennis.Pages.Matches
 
             
             await CheckInfoAsync(currentSet.Team1Score, currentSet.Team2Score, currentSetInfo,  currentSet, matchId);
-            SetServer(currentSetInfo);
-
+            await _setService.UpdateSetInfoAsync(currentSetInfo);
+            SetServer(currentSetInfo, currentSet);            
+            
             if (await _setService.IsSetWonAsync(currentSet))
             {
                 currentSet.SetWinner = currentSet.Team1Score > currentSet.Team2Score ? 1 : 2;
@@ -136,7 +134,7 @@ namespace Tabletennis.Pages.Matches
             return RedirectToPage(new { matchId });
         }
 
-        
+
         public async Task CheckInfoAsync(int team1score, int team2score, SetInfo currentSetInfo, Set currentSet, int matchId)
         {
             var match = await _matchService.GetMatchByIdAsync(matchId);
@@ -146,15 +144,17 @@ namespace Tabletennis.Pages.Matches
             int team1SetsWon = await _setService.GetSetsWonByTeamAsync(matchId, 1);
             int team2SetsWon = await _setService.GetSetsWonByTeamAsync(matchId, 2);
 
-
             if (team1score == team2score && team1score >= 10)
             {
                 currentSetInfo.InfoMessage = "Deuce";
             }
-            else if (
-                (team1SetsWon == setsToWin - 1 && team1score >= 10 && team1score > team2score) ||
-                (team2SetsWon == setsToWin - 1 && team2score >= 10 && team2score > team1score)
-            )
+            else
+            {
+                currentSetInfo.InfoMessage = string.Empty;
+            }
+
+            if ((team1SetsWon == setsToWin - 1 && team1score >= 10 && team1score > team2score) ||
+                (team2SetsWon == setsToWin - 1 && team2score >= 10 && team2score > team1score))
             {
                 currentSetInfo.InfoMessage = "Match Point";
             }
@@ -164,20 +164,27 @@ namespace Tabletennis.Pages.Matches
             }
         }
 
-        private void SetServer(SetInfo currentSetInfo)
+        private void SetServer(SetInfo currentSetInfo, Set currentSet)
         {
-            currentSetInfo.ServeCounter++;
-            if (currentSetInfo.InfoMessage == "Deuce")
-            {
-                currentSetInfo.IsPlayer1Serve = !currentSetInfo.IsPlayer1Serve;
-                currentSetInfo.ServeCounter = 1;
-            }
-            else if (currentSetInfo.ServeCounter == 2)
-            {
-                currentSetInfo.IsPlayer1Serve = !currentSetInfo.IsPlayer1Serve;
-                currentSetInfo.ServeCounter = 0;
-            }
+            int totalPoints = currentSet.Team1Score + currentSet.Team2Score;
 
+            // Hantera deuce-situation (9-9 eller högre)
+            if (currentSet.Team1Score >= 9 && currentSet.Team2Score >= 9)
+            {
+                // Vid deuce byts serve varje poäng
+                // Använder totalPoints direkt för att beräkna serve
+                currentSetInfo.IsPlayer1Serve = currentSetInfo.IsPlayer1StartServer
+                    ? totalPoints % 2 == 0
+                    : totalPoints % 2 != 0;
+            }
+            else
+            {
+                // Normal servbyte varannan poäng
+                int serveTurn = totalPoints / 2;
+                currentSetInfo.IsPlayer1Serve = currentSetInfo.IsPlayer1StartServer
+                    ? serveTurn % 2 == 0
+                    : serveTurn % 2 != 0;
+            }
         }
     }
 }

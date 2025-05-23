@@ -128,5 +128,11 @@ namespace Services
                 .Select(s => s.SetWinner)
                 .FirstOrDefaultAsync();
         }
+
+        public Task UpdateSetInfoAsync(SetInfo setInfo)
+        {
+            _dbContext.SetInfos.Update(setInfo);
+            return _dbContext.SaveChangesAsync();
+        }
     }
 }

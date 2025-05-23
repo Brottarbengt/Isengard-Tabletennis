@@ -15,6 +15,5 @@ namespace DataAccessLayer.Models
         public int ServeCounter { get; set; }
         public int SetId { get; set; }
         public virtual Set Set { get; set; }
-        
     }
 }
