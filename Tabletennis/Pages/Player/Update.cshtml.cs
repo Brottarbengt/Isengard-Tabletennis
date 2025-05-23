@@ -25,7 +25,7 @@ namespace Tabletennis.Pages.Player
         
         public string MaxDate { get; set; }
         [BindProperty]
-        public PlayerCreateViewModel player {  get; set; }
+        public PlayerUpdateViewModel player {  get; set; }
 
         public async Task OnGet(int playerId)
         {
@@ -34,7 +34,7 @@ namespace Tabletennis.Pages.Player
             LoadGenderOptions();
 
             var playerDTO = await _playerService.GetOneAsync(playerId);
-            player = playerDTO.Adapt<PlayerCreateViewModel>();
+            player = playerDTO.Adapt<PlayerUpdateViewModel>();
             FullName = player.FirstName + " " + player.LastName;
         }
 
