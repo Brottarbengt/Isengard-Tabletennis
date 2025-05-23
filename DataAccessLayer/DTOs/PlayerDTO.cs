@@ -17,6 +17,7 @@ namespace DataAccessLayer.DTOs
         public string PhoneNumber { get; set; } = string.Empty;
         public Gender Gender { get; set; }
         public DateOnly? Birthday { get; set; }
+        public bool IsActive { get; set; }
 
         public string FullName { get; set; } = string.Empty;
         public int? BirthYear => Birthday.HasValue && Birthday != DateOnly.MinValue

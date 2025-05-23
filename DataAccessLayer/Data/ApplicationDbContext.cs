@@ -17,4 +17,17 @@ public class ApplicationDbContext : IdentityDbContext
     public virtual DbSet<Set> Sets { get; set; } = null!;
     public virtual DbSet<PlayerMatch> PlayerMatches { get; set; } = null!;
 
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Player>()
+            .Property(p => p.IsActive)
+            .HasDefaultValue(true);
+    }
+
+
+
 }
