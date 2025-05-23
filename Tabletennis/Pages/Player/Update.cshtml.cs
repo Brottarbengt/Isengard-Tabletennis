@@ -1,3 +1,4 @@
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,12 @@ namespace Tabletennis.Pages.Player
 
         public async Task OnGet(int playerId)
         {
+            TypeAdapterConfig<PlayerCreateViewModel, PlayerCreateDTO>.NewConfig()
+                .Map(dest => dest.Birthday, src => DateOnly.FromDateTime(src.Birthday));
+
+            TypeAdapterConfig<PlayerCreateDTO, PlayerCreateViewModel>.NewConfig()
+                .Map(dest => dest.Birthday, src => src.Birthday.ToDateTime(TimeOnly.MinValue));
+
             LoadGenderOptions();
             var playerDTO = await _playerService.GetOneAsync(playerId);
             player = playerDTO.Adapt<PlayerCreateViewModel>();
@@ -29,7 +36,8 @@ namespace Tabletennis.Pages.Player
 
         public async Task<IActionResult> OnPost()
         {
-
+            //kom ihåg modelstate
+            //och check.enums
             return RedirectToPage("/player/Index");
         }
 
