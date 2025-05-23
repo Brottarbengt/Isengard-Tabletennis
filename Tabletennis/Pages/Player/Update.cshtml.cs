@@ -25,13 +25,19 @@ namespace Tabletennis.Pages.Player
 
         public async Task OnGet(int playerId)
         {
-            TypeAdapterConfig<PlayerCreateViewModel, PlayerCreateDTO>.NewConfig()
+
+            //lägga en samling ?
+            TypeAdapterConfig<PlayerCreateViewModel, PlayerDTO>.NewConfig()
                 .Map(dest => dest.Birthday, src => DateOnly.FromDateTime(src.Birthday));
 
-            TypeAdapterConfig<PlayerCreateDTO, PlayerCreateViewModel>.NewConfig()
-                .Map(dest => dest.Birthday, src => src.Birthday.ToDateTime(TimeOnly.MinValue));
+            TypeAdapterConfig<PlayerDTO, PlayerCreateViewModel>.NewConfig()
+                .Map(dest => dest.Birthday, src => src.Birthday.HasValue
+                    ? src.Birthday.Value.ToDateTime(TimeOnly.MinValue)
+                    : default);
 
+            SetMaxDate();
             LoadGenderOptions();
+
             var playerDTO = await _playerService.GetOneAsync(playerId);
             player = playerDTO.Adapt<PlayerCreateViewModel>();
             FullName = player.FirstName + player.LastName;
@@ -39,6 +45,7 @@ namespace Tabletennis.Pages.Player
 
         public async Task<IActionResult> OnPost()
         {
+            //kanske en tempdata, successully updaterad!
             //kom ihåg modelstate
             //och check.enums
             return RedirectToPage("/player/Index");
@@ -58,6 +65,11 @@ namespace Tabletennis.Pages.Player
                     Text = g.ToString()
                 })
                 .ToList();
+        }
+
+        public void SetMaxDate()
+        {
+            MaxDate = DateTime.Today.ToString("yyyy-MM-dd");
         }
 
 
