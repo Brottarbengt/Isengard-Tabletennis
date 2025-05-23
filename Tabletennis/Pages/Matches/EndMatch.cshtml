@@ -1,0 +1,68 @@
+﻿
+@page
+@model Tabletennis.Pages.Matches.EndMatchModel
+@{
+    ViewData["Title"] = "Matchresultat";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header text-white" style="background-color: #c4553e;">
+            <h2 class="mb-0 anta-regular">Matchresultat</h2>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-5">
+                    <h3 class="anta-regular player-text">@Model.EndMatchVM.Player1Name</h3>
+                </div>
+                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                    <span class="vs-text anta-regular">VS</span>
+                </div>
+                <div class="col-md-5">
+                    <h3 class="anta-regular player-text">@Model.EndMatchVM.Player2Name</h3>
+                </div>
+            </div>
+            <hr />
+            <div class="row mt-4">
+                <div class="col-12">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th class="anta-regular">Set</th>
+                                <th class="anta-regular">@Model.EndMatchVM.Player1Name</th>
+                                <th class="anta-regular">@Model.EndMatchVM.Player2Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.EndMatchVM.Sets.Count; i++)
+                            {
+                                <tr>
+                                    <td class="anta-regular">@Model.EndMatchVM.Sets[i].SetNumber</td>
+                                    <td class="anta-regular @(Model.EndMatchVM.Sets[i].SetWinner == 1 ? "winner-text" : "")">
+                                        @Model.EndMatchVM.Sets[i].Team1Score
+                                    </td>
+                                    <td class="anta-regular @(Model.EndMatchVM.Sets[i].SetWinner == 2 ? "winner-text" : "")">
+                                        @Model.EndMatchVM.Sets[i].Team2Score
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-4 text-center">
+                <h2 class="anta-regular winner-text">
+                    Vinnare: @Model.EndMatchVM.WinnerName
+                </h2>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-6 text-center">
+                    <a class="btn btn-success btn-lg anta-regular" asp-page="/Matches/CreateMatch">Skapa ny match</a>
+                </div>
+                <div class="col-md-6 text-center">
+                    <a class="btn btn-secondary btn-lg anta-regular" asp-page="/Index">Start</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

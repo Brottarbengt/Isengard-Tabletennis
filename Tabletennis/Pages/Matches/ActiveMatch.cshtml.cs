@@ -120,8 +120,8 @@ namespace Tabletennis.Pages.Matches
                 if (await _matchService.IsMatchWonAsync(matchId))
                 {
 
-                    await _matchService.CompleteMatchAsync(matchId);                    
-                    return RedirectToPage( new {matchId});
+                    await _matchService.CompleteMatchAsync(matchId);
+                    return RedirectToPage("/Matches/EndMatch", new { matchId });
                 }
                 
                 await _setService.CreateNewSetAsync(matchId);

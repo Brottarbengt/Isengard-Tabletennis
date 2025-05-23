@@ -4,11 +4,7 @@ using DataAccessLayer.Models;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Services
 {
@@ -143,6 +139,37 @@ namespace Services
                 match.IsCompleted = true;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches)
+                    .ThenInclude(pm => pm.Player)
+                .Include(m => m.Sets)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null)
+                return null;
+
+            var player1 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 1)?.Player;
+            var player2 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 2)?.Player;
+
+            return new EndMatchDTO
+            {
+                MatchId = match.MatchId,
+                Player1Name = player1 != null ? $"{player1.FirstName} {player1.LastName}" : string.Empty,
+                Player2Name = player2 != null ? $"{player2.FirstName} {player2.LastName}" : string.Empty,
+                WinnerId = match.MatchWinner,
+                WinnerName = match.MatchWinner == 1 ? (player1 != null ? $"{player1.FirstName} {player1.LastName}" : "") : (player2 != null ? $"{player2.FirstName} {player2.LastName}" : ""),
+                Sets = match.Sets.OrderBy(s => s.SetNumber).Select(s => new EndMatchDTO.SetResultDTO
+                {
+                    SetNumber = s.SetNumber,
+                    Team1Score = s.Team1Score,
+                    Team2Score = s.Team2Score,
+                    SetWinner = s.SetWinner
+                }).ToList()
+            };
         }
     }
 }
