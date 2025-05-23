@@ -61,7 +61,21 @@ namespace Tabletennis.Pages.Player
             return RedirectToPage("/player/Index");
         }
 
+        public async Task<IActionResult> OnPostDelete(int playerId)
+        {
+            var result = await _playerService.SoftDelete(playerId);
 
+            if (result == Check.Failed)
+            {
+                TempData["ErrorMessage"] = "Kunde inte ta bort spelaren.";
+                SetMaxDate();
+                LoadGenderOptions();
+                return Page();
+            }
+
+            TempData["SuccessMessage"] = "Spelaren togs bort!";
+            return RedirectToPage("/Player/Index");
+        }
 
 
 
