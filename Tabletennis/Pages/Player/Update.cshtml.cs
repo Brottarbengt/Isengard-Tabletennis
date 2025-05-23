@@ -1,5 +1,6 @@
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Enums;
+using DataAccessLayer.Migrations;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,23 +18,26 @@ namespace Tabletennis.Pages.Player
         {
             _playerService = playerService;
         }
-
+        [BindProperty]
         public string FullName { get; set; }
+        [BindProperty]
         public List<SelectListItem> GenderOptions { get; set; }
+        [BindProperty]
         public string MaxDate { get; set; }
+        [BindProperty]
         public PlayerCreateViewModel player {  get; set; }
 
         public async Task OnGet(int playerId)
         {
 
-            //lägga en samling ?
-            TypeAdapterConfig<PlayerCreateViewModel, PlayerDTO>.NewConfig()
-                .Map(dest => dest.Birthday, src => DateOnly.FromDateTime(src.Birthday));
+            ////lägga en samling ?
+            //TypeAdapterConfig<PlayerCreateViewModel, PlayerDTO>.NewConfig()
+            //    .Map(dest => dest.Birthday, src => DateOnly.FromDateTime(src.Birthday));
 
-            TypeAdapterConfig<PlayerDTO, PlayerCreateViewModel>.NewConfig()
-                .Map(dest => dest.Birthday, src => src.Birthday.HasValue
-                    ? src.Birthday.Value.ToDateTime(TimeOnly.MinValue)
-                    : default);
+            //TypeAdapterConfig<PlayerDTO, PlayerCreateViewModel>.NewConfig()
+            //    .Map(dest => dest.Birthday, src => src.Birthday.HasValue
+            //        ? src.Birthday.Value.ToDateTime(TimeOnly.MinValue)
+            //        : default);
 
             SetMaxDate();
             LoadGenderOptions();
@@ -45,6 +49,17 @@ namespace Tabletennis.Pages.Player
 
         public async Task<IActionResult> OnPost()
         {
+            if (!ModelState.IsValid)
+            {
+                SetMaxDate();
+                LoadGenderOptions();
+                return Page();
+            }
+
+            var updatePlayer = player.Adapt<PlayerDTO>();
+            
+
+
             //kanske en tempdata, successully updaterad!
             //kom ihåg modelstate
             //och check.enums

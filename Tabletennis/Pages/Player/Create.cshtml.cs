@@ -40,8 +40,8 @@ namespace Tabletennis.Pages.Player
                 return Page();
             }
 
-            TypeAdapterConfig<PlayerCreateViewModel, PlayerDTO>.NewConfig()
-            .Map(dest => dest.Birthday, src => DateOnly.FromDateTime(src.Birthday));
+            //TypeAdapterConfig<PlayerCreateViewModel, PlayerDTO>.NewConfig()
+            //.Map(dest => dest.Birthday, src => DateOnly.FromDateTime(src.Birthday));
 
             var newPlayer = NewPlayer.Adapt<PlayerDTO>();
             var result = await _playerService.CreatePlayer(newPlayer);
