@@ -1,19 +1,11 @@
 ﻿using DataAccessLayer.Data;
-using DataAccessLayer.DTOs;
-using DataAccessLayer.Enums;
 using DataAccessLayer.Models;
-using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
-    
+
 
     public class SetService : ISetService
     {
@@ -72,10 +64,11 @@ namespace Services
             return newSet;
         }
 
+
         public async Task<bool> IsSetWonAsync(Set set)
         {
             if (set.Team1Score < 11 && set.Team2Score < 11) return false;
-            
+
             var scoreDiff = Math.Abs(set.Team1Score - set.Team2Score);
             return scoreDiff >= 2;
         }

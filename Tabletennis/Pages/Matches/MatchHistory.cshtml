@@ -1,7 +1,35 @@
 ﻿@page
 @model Tabletennis.Pages.Matches.MatchHistoryModel
 @{
+    ViewData["Title"] = "Match History";
 }
-<div class="coming-soon-container">
-    <h1 class="coming-soon-text"> Match History Kommer snart här</h1>
-</div>
+<h2>Match History</h2>
+
+<form method="get">
+    <input type="text" name="query" value="@Model.Query" placeholder="Search matches..." />
+    <button type="submit">Search</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Match ID</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Winner</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var match in Model.Matches)
+        {
+            <tr>
+                <td>@match.MatchId</td>
+                <td>@match.Player1FullName</td>
+                <td>@match.Player2FullName</td>
+                <td>@match.Winner</td>
+                <td>@match.StartDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

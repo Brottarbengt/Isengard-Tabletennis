@@ -138,6 +138,88 @@ namespace Services
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<List<MatchListDTO>> GetFilteredMatchesAsync(string? query)
+        {
+            var matches = _context.Matches
+                .Include(m => m.PlayerMatches).ThenInclude(pm => pm.Player)
+                .Include(m => m.Sets)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                query = query.ToLower();
+                matches = matches.Where(m =>
+                    m.PlayerMatches.Any(pm =>
+                        (pm.Player.FirstName + " " + pm.Player.LastName).ToLower().Contains(query)) ||
+                    m.MatchId.ToString().Contains(query)
+                );
+            }
+
+            var matchEntities = await matches.ToListAsync();
+
+            var result = matchEntities.Select(m =>
+            {
+                var player1 = m.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 1);
+                var player2 = m.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 2);
+
+                return new MatchListDTO
+                {
+                    MatchId = m.MatchId,
+                    Sets = m.Sets.ToList(),
+                    Player1FullName = player1 != null && player1.Player != null
+                        ? $"{player1.Player.FirstName} {player1.Player.LastName}"
+                        : "Unknown Player 1",
+                    Player2FullName = player2 != null && player2.Player != null
+                        ? $"{player2.Player.FirstName} {player2.Player.LastName}"
+                        : "Unknown Player 2",
+                    Winner = m.MatchWinner == 1 ? "Player 1" : "Player 2",
+                    StartDate = m.MatchDate
+                };
+            }).ToList();
+
+            return result;
+        }
+        public async Task<MatchDetailsDTO?> GetMatchDetailsAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches).ThenInclude(pm => pm.Player)
+                .Include(m => m.Sets)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null) return null;
+
+            var playerDTOs = match.PlayerMatches.Select(pm => new PlayerDTO
+            {
+                PlayerId = pm.Player.PlayerId,
+                FirstName = pm.Player.FirstName,
+                LastName = pm.Player.LastName,
+                Email = pm.Player.Email,
+                PhoneNumber = pm.Player.PhoneNumber,
+                Gender = pm.Player.Gender,
+                Birthday = pm.Player.Birthday,
+                FullName = $"{pm.Player.FirstName} {pm.Player.LastName}"
+            }).ToList();
+
+            var setDTOs = match.Sets.Select(s => new SetDTO
+            {
+                SetId = s.SetId,
+                MatchId = s.MatchId,
+                SetNumber = s.SetNumber,
+                Team1Score = s.Team1Score,
+                Team2Score = s.Team2Score,
+                WinnerId = s.SetWinner,
+                IsDecidingSet = s.IsDecidingSet
+            }).ToList();
+
+            return new MatchDetailsDTO
+            {
+                MatchId = match.MatchId,
+                Players = playerDTOs,
+                Sets = setDTOs,
+                MatchDate = match.MatchDate,
+                Winner = match.MatchWinner == 1 ? "Player 1" : "Player 2"
+            };
+        }
     }
 }
 
