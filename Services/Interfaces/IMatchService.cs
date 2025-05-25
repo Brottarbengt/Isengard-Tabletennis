@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.DTOs;
+using Services.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,8 @@ namespace Services.Interfaces
         Task<MatchDTO?> GetMatchByIdAsync(int matchId);
         Task<bool> IsMatchWonAsync(int matchId);
         Task CompleteMatchAsync(int matchId);
-        Task<List<MatchListDTO>> GetFilteredMatchesAsync(string? query);
+        Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters);
+
         //ActiveMatchDTO GetMatchById(int matchId);
     }
 }

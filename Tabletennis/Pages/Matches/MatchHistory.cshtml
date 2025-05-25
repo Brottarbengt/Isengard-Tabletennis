@@ -5,15 +5,17 @@
 }
 <h2>Match History</h2>
 
-<form method="get">
-    <input type="text" name="query" value="@Model.Query" placeholder="Search matches..." />
-    <button type="submit">Search</button>
-</form>
+@* <form method="get" class="form-inline mb-3">
+    <input type="text" name="search" value="@Model.Search" placeholder="Search by player..." class="form-control mr-2" />
+    <input type="date" name="date" value="@Model.Date?.ToString("yyyy-MM-dd")" class="form-control mr-2" />
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form> *@
 
 <table class="table">
     <thead>
         <tr>
             <th>Match ID</th>
+            <th>sets</th>
             <th>Player 1</th>
             <th>Player 2</th>
             <th>Winner</th>
