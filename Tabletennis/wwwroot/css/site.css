@@ -263,15 +263,14 @@ body {
     transition: background-color 0.3s ease;
 }
 
-    .custom-pagination .custom-page-button:hover {
+.custom-pagination .custom-page-button:hover {
         background-color: #5a6268;
-    }
-
-    .custom-pagination .custom-page-button.disabled {
+}
+.custom-pagination .custom-page-button.disabled {
         background-color: #adb5bd;
         cursor: not-allowed;
         pointer-events: none;
-    }
+}
 
 .pagination-info {
     font-size: 1.1rem;

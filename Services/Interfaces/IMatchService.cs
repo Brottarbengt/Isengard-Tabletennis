@@ -17,6 +17,7 @@ namespace Services.Interfaces
         Task<bool> IsMatchWonAsync(int matchId);
         Task CompleteMatchAsync(int matchId);
         Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters);
+        Task<MatchDetailsDTO?> GetMatchDetailsAsync(int matchId);
 
         //ActiveMatchDTO GetMatchById(int matchId);
     }
