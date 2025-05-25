@@ -249,3 +249,31 @@ body {
     margin-right: 0.5rem;
     border-radius: 0.4rem;
 }
+/*Match History */
+.custom-thead {
+    background-color: #c4553e !important;
+    color: white !important;
+}
+.custom-pagination .custom-page-button {
+    background-color: #6c757d;
+    color: white;
+    padding: 12px 30px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+}
+
+    .custom-pagination .custom-page-button:hover {
+        background-color: #5a6268;
+    }
+
+    .custom-pagination .custom-page-button.disabled {
+        background-color: #adb5bd;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+.pagination-info {
+    font-size: 1.1rem;
+    color: #6c757d;
+}

@@ -1,37 +1,130 @@
 ﻿@page
 @model Tabletennis.Pages.Matches.MatchHistoryModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Services.Infrastructure
 @{
     ViewData["Title"] = "Match History";
 }
-<h2>Match History</h2>
+<div class="container mt-4">
+    <h2>Match History</h2>
 
-@* <form method="get" class="form-inline mb-3">
-    <input type="text" name="search" value="@Model.Search" placeholder="Search by player..." class="form-control mr-2" />
-    <input type="date" name="date" value="@Model.Date?.ToString("yyyy-MM-dd")" class="form-control mr-2" />
-    <button type="submit" class="btn btn-primary">Filter</button>
-</form> *@
+    <form method="get" class="mb-3 d-flex gap-2 align-items-center">
+        <input type="text" name="Query" class="form-control" placeholder="Search by player..."
+               value="@Model.Query" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Match ID</th>
-            <th>sets</th>
-            <th>Player 1</th>
-            <th>Player 2</th>
-            <th>Winner</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var match in Model.Matches)
-        {
-            <tr>
-                <td>@match.MatchId</td>
-                <td>@match.Player1FullName</td>
-                <td>@match.Player2FullName</td>
-                <td>@match.Winner</td>
-                <td>@match.StartDate.ToShortDateString()</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <input type="date" name="SelectedDate" class="form-control"
+               value="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))" />
+
+        <button type="submit" class="btn btn-primary" style="background-color: #c4553e;">
+            <i class="bi bi-search"></i> <!-- Bootstrap search icon -->
+        </button>
+    </form>
+
+    @if (Model.Matches.Results.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="custom-thead">Match ID</th>
+                    <th class="custom-thead">Player 1</th>
+                    <th class ="custom-thead">Player 2</th>
+                    <th class="custom-thead">Winner</th>
+                    <th class="custom-thead">Date</th>
+                    <th class="custom-thead">Sets</th>
+                    <th class="custom-thead">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var match in Model.Matches.Results)
+                {
+                    <tr>
+                        <td>@match.MatchId</td>
+                        <td>@match.Player1FullName</td>
+                        <td>@match.Player2FullName</td>
+                        <td>@match.Winner</td>
+                        <td>@match.StartDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (match.Sets != null && match.Sets.Any())
+                            {
+                                @string.Join(", ", match.Sets.Select(s => $"{s.Team1Score}-{s.Team2Score}"))
+                            }
+                            else
+                            {
+                                <em>No Sets</em>
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-info" asp-page="/MatchDetails" asp-route-id="@match.MatchId">Details</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+       @*  <div class="d-flex justify-content-center my-4">
+            <nav>
+                <ul class="pagination custom-pagination">
+                    <li class="page-item @(Model.Matches.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" style="background-color: #c4553e;color:white;" asp-route-pageNumber="@(Model.Matches.CurrentPage - 1)"
+                           asp-route-query="@Model.Query"
+                           asp-route-date="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))">Previous</a>
+                    </li>
+
+                    @for (int i = 1; i <= Model.Matches.PageCount; i++)
+                    {
+                        <li class="page-item @(i == Model.Matches.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-route-pageNumber="@i"
+                               asp-route-query="@Model.Query"
+                               asp-route-date="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))">@i</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(Model.Matches.CurrentPage == Model.Matches.PageCount ? "disabled" : "")">
+                        <a class="page-link" style="background-color: #c4553e;color:white;" asp-route-pageNumber="@(Model.Matches.CurrentPage + 1)"
+                           asp-route-query="@Model.Query"
+                           asp-route-date="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div> *@
+        <div class="pagination-container d-flex justify-content-center mt-4">
+            <div class="custom-pagination d-flex align-items-center gap-4">
+                @if (Model.Matches.CurrentPage > 1)
+                {
+                    <a class="custom-page-button" style="background-color: #c4553e;color:white;"
+                       asp-route-pageNumber="@(Model.Matches.CurrentPage - 1)"
+                       asp-route-query="@Model.Query"
+                       asp-route-date="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))">
+                        Previous
+                    </a>
+                }
+                else
+                {
+                    <span class="custom-page-button disabled">Previous</span>
+                }
+
+                <span class="pagination-info">Page @Model.Matches.CurrentPage of @Model.Matches.PageCount</span>
+
+                @if (Model.Matches.CurrentPage < Model.Matches.PageCount)
+                {
+                    <a class="custom-page-button" style="background-color: #c4553e;color:white;"
+                       asp-route-pageNumber="@(Model.Matches.CurrentPage + 1)"
+                       asp-route-query="@Model.Query"
+                       asp-route-date="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))">
+                        Next
+                    </a>
+                }
+                else
+                {
+                    <span class="custom-page-button disabled">Next</span>
+                }
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="alert alert-info">No matches found.</div>
+    }
+</div>
