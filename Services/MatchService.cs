@@ -3,6 +3,7 @@ using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Services.Infrastructure;
 using Services.Interfaces;
 
 
@@ -139,7 +140,19 @@ namespace Services
             var team2WonSets = match.Sets.Count(s => s.SetWinner == 2);
             var requiredSets = (match.MatchType / 2) + 1;
 
-            return team1WonSets >= requiredSets || team2WonSets >= requiredSets;
+            if (team1WonSets >= requiredSets || team2WonSets >= requiredSets)
+            {
+                if (team1WonSets > team2WonSets)
+                {
+                    match.MatchWinner = 1;
+                }
+                else
+                {
+                    match.MatchWinner = 2;
+                }
+                return true;
+            }
+            return false;
         }
 
         public async Task CompleteMatchAsync(int matchId)
@@ -150,6 +163,92 @@ namespace Services
                 match.IsCompleted = true;
                 await _context.SaveChangesAsync();
             }
+        }
+        public async Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters)
+        {
+            var matches = _context.Matches
+                .Include(m => m.PlayerMatches).ThenInclude(pm => pm.Player)
+                .Include(m => m.Sets)
+                .AsQueryable();
+
+            // Filter by player name
+            if (!string.IsNullOrWhiteSpace(parameters.Query))
+            {
+                var query = parameters.Query.ToLower();
+                matches = matches.Where(m =>
+                    m.PlayerMatches.Any(pm =>
+                        (pm.Player.FirstName + " " + pm.Player.LastName).ToLower().Contains(query)) ||
+                    m.MatchId.ToString().Contains(query)
+                );
+            }
+
+            // Filter by match date
+            if (parameters.Date.HasValue)
+            {
+                matches = matches.Where(m => m.MatchDate.Date == parameters.Date.Value.Date);
+            }
+
+            // Project to DTO before pagination
+            var projected = matches.Select(m => new MatchListDTO
+            {
+                MatchId = m.MatchId,
+                Sets = m.Sets.ToList(),
+                Player1FullName = m.PlayerMatches
+                    .Where(pm => pm.TeamNumber == 1)
+                    .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
+                    .FirstOrDefault() ?? "Unknown Player 1",
+                Player2FullName = m.PlayerMatches
+                    .Where(pm => pm.TeamNumber == 2)
+                    .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
+                    .FirstOrDefault() ?? "Unknown Player 2",
+                Winner = m.MatchWinner == 1 ? "Player 1" : "Player 2",
+                StartDate = m.MatchDate
+            });
+
+            // Apply paging using extension method
+            var pagedResult = projected.GetPaged(parameters.PageNumber, parameters.PageSize);
+            return pagedResult;
+        }
+        public async Task<MatchDetailsDTO?> GetMatchDetailsAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches).ThenInclude(pm => pm.Player)
+                .Include(m => m.Sets)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null) return null;
+
+            var playerDTOs = match.PlayerMatches.Select(pm => new PlayerDTO
+            {
+                PlayerId = pm.Player.PlayerId,
+                FirstName = pm.Player.FirstName,
+                LastName = pm.Player.LastName,
+                Email = pm.Player.Email,
+                PhoneNumber = pm.Player.PhoneNumber,
+                Gender = pm.Player.Gender,
+                Birthday = pm.Player.Birthday,
+                FullName = $"{pm.Player.FirstName} {pm.Player.LastName}"
+            }).ToList();
+
+            var setDTOs = match.Sets.Select(s => new SetDTO
+            {
+                SetId = s.SetId,
+                MatchId = s.MatchId,
+                SetNumber = s.SetNumber,
+                Team1Score = s.Team1Score,
+                Team2Score = s.Team2Score,
+                WinnerId = s.SetWinner,
+                IsSetCompleted = s.IsSetCompleted
+            }).ToList();
+
+            return new MatchDetailsDTO
+            {
+                MatchId = match.MatchId,
+                Players = playerDTOs,
+                Sets = setDTOs,
+                MatchDate = match.MatchDate,
+                Winner = match.MatchWinner == 1 ? "Player 1" : "Player 2"
+            };
         }
 
         public async Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId)

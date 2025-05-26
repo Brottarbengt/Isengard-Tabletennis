@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mapster;
 using DataAccessLayer.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
@@ -40,6 +41,51 @@ namespace Services
             _dbContext.Players.Add(player);
             await _dbContext.SaveChangesAsync();
             return Check.Success;
+        }
+
+        public async Task<List<PlayerSmallInfoDTO>> GetAllSmallAsync()
+        {
+            var players = await _dbContext.Players.Where(c => c.IsActive == true).ToListAsync();
+            return players.Adapt<List<PlayerSmallInfoDTO>>();
+        }
+
+        public async Task<PlayerDTO> GetOneAsync(int playerId)
+        {
+            var playerDb = await _dbContext.Players.FindAsync(playerId);
+            var playerDTO = playerDb.Adapt<PlayerDTO>();
+            return playerDTO;
+        }
+
+        public async Task<Check> Update(PlayerDTO updatePlayer)
+        {
+            var playerToUpdate = await _dbContext.Players.FindAsync(updatePlayer.PlayerId);
+            if (playerToUpdate == null)
+                { return Check.Failed; }
+
+            playerToUpdate.FirstName = updatePlayer.FirstName;
+            playerToUpdate.LastName = updatePlayer.LastName;
+            playerToUpdate.Email = updatePlayer.Email;
+            playerToUpdate.PhoneNumber = updatePlayer.PhoneNumber;
+            playerToUpdate.Gender = updatePlayer.Gender;
+            playerToUpdate.Birthday = updatePlayer.Birthday;
+
+            await _dbContext.SaveChangesAsync();
+            return Check.Success;
+
+
+        }
+
+        public async Task<Check> SoftDelete(int playerId)
+        {
+            var playerToDelete = await _dbContext.Players.FindAsync(playerId);
+            if(playerToDelete == null)
+            { return Check.Failed; }
+
+            playerToDelete.IsActive = false;
+
+            await _dbContext.SaveChangesAsync();
+            return Check.Success;
+
         }
 
 

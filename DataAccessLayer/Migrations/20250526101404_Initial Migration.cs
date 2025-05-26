@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialmigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,6 +51,23 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Matches",
+                columns: table => new
+                {
+                    MatchId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MatchDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MatchWinner = table.Column<int>(type: "int", nullable: false),
+                    IsSingle = table.Column<bool>(type: "bit", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    MatchType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Matches", x => x.MatchId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Players",
                 columns: table => new
                 {
@@ -59,7 +76,10 @@ namespace DataAccessLayer.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    Birthday = table.Column<DateOnly>(type: "date", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -172,6 +192,80 @@ namespace DataAccessLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Sets",
+                columns: table => new
+                {
+                    SetId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MatchId = table.Column<int>(type: "int", nullable: false),
+                    SetNumber = table.Column<int>(type: "int", nullable: false),
+                    Team1Score = table.Column<int>(type: "int", nullable: false),
+                    Team2Score = table.Column<int>(type: "int", nullable: false),
+                    SetWinner = table.Column<int>(type: "int", nullable: false),
+                    IsSetCompleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sets", x => x.SetId);
+                    table.ForeignKey(
+                        name: "FK_Sets_Matches_MatchId",
+                        column: x => x.MatchId,
+                        principalTable: "Matches",
+                        principalColumn: "MatchId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlayerMatches",
+                columns: table => new
+                {
+                    PlayerMatchId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PlayerId = table.Column<int>(type: "int", nullable: false),
+                    MatchId = table.Column<int>(type: "int", nullable: false),
+                    TeamNumber = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlayerMatches", x => x.PlayerMatchId);
+                    table.ForeignKey(
+                        name: "FK_PlayerMatches_Matches_MatchId",
+                        column: x => x.MatchId,
+                        principalTable: "Matches",
+                        principalColumn: "MatchId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlayerMatches_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
+                        principalColumn: "PlayerId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SetInfos",
+                columns: table => new
+                {
+                    SetInfoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InfoMessage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsPlayer1Serve = table.Column<bool>(type: "bit", nullable: false),
+                    IsPlayer1StartServer = table.Column<bool>(type: "bit", nullable: false),
+                    ServeCounter = table.Column<int>(type: "int", nullable: false),
+                    SetId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SetInfos", x => x.SetInfoId);
+                    table.ForeignKey(
+                        name: "FK_SetInfos_Sets_SetId",
+                        column: x => x.SetId,
+                        principalTable: "Sets",
+                        principalColumn: "SetId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -210,6 +304,27 @@ namespace DataAccessLayer.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerMatches_MatchId",
+                table: "PlayerMatches",
+                column: "MatchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerMatches_PlayerId",
+                table: "PlayerMatches",
+                column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SetInfos_SetId",
+                table: "SetInfos",
+                column: "SetId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sets_MatchId",
+                table: "Sets",
+                column: "MatchId");
         }
 
         /// <inheritdoc />
@@ -230,14 +345,26 @@ namespace DataAccessLayer.Migrations
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
-            //migrationBuilder.DropTable(
-            //    name: "Players");
+            migrationBuilder.DropTable(
+                name: "PlayerMatches");
+
+            migrationBuilder.DropTable(
+                name: "SetInfos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Players");
+
+            migrationBuilder.DropTable(
+                name: "Sets");
+
+            migrationBuilder.DropTable(
+                name: "Matches");
         }
     }
 }

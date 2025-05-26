@@ -5,3 +5,57 @@
 
 
 @* kanske en sida för att visa alla spelare för crud ??? *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Player List</h5>
+
+            <input type="text" placeholder="Sök Spelare..." id="playerSearch" class="form-control w-25" />
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Player ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in Model.Players)
+                        {
+                            <tr class="player-item">
+                                <td>@player.PlayerId</td>
+                                <td>@player.FirstName</td>
+                                <td>@player.LastName</td>
+                                <td>
+                                    <a class="btn btn-info" asp-page="/Player/Update" asp-route-playerId="@player.PlayerId">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script>
+            document.getElementById('playerSearch').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            document.querySelectorAll('.player-item').forEach(function(item) {
+                item.style.display = item.textContent.toLowerCase().includes(query) ? '' : 'none';
+            });
+        });
+    </script>
+}
