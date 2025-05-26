@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Interfaces;
+using Tabletennis.Mappings;
 
 
 namespace Tabletennis
@@ -30,6 +31,9 @@ namespace Tabletennis
 
             builder.Services.AddTransient<DataInitializer>();
             builder.Services.AddTransient<ISetService, SetService>();
+
+            MappingConfig.Configure();
+            
 
             var app = builder.Build();
 

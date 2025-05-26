@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Interfaces;
 using Tabletennis.ViewModels;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Tabletennis.Pages.Player
 {
@@ -24,3 +25,4 @@ namespace Tabletennis.Pages.Player
         }
     }
 }
+

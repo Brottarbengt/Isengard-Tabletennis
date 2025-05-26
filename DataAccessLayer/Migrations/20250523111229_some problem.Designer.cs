@@ -4,6 +4,7 @@ using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250523111229_some problem")]
+    partial class someproblem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,9 +127,6 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetId"));
 
-                    b.Property<bool>("IsSetCompleted")
-                        .HasColumnType("bit");
-
                     b.Property<int>("MatchId")
                         .HasColumnType("int");
 
@@ -147,38 +147,6 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("MatchId");
 
                     b.ToTable("Sets");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Models.SetInfo", b =>
-                {
-                    b.Property<int>("SetInfoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetInfoId"));
-
-                    b.Property<string>("InfoMessage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsPlayer1Serve")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPlayer1StartServer")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ServeCounter")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SetId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SetInfoId");
-
-                    b.HasIndex("SetId")
-                        .IsUnique();
-
-                    b.ToTable("SetInfos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -413,17 +381,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Match");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.SetInfo", b =>
-                {
-                    b.HasOne("DataAccessLayer.Models.Set", "Set")
-                        .WithOne("SetInfo")
-                        .HasForeignKey("DataAccessLayer.Models.SetInfo", "SetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Set");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -485,12 +442,6 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.Player", b =>
                 {
                     b.Navigation("PlayerMatches");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Models.Set", b =>
-                {
-                    b.Navigation("SetInfo")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
