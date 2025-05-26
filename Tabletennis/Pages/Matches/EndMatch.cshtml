@@ -1,5 +1,4 @@
-﻿
-@page
+﻿@page
 @model Tabletennis.Pages.Matches.EndMatchModel
 @{
     ViewData["Title"] = "Matchresultat";
@@ -55,6 +54,34 @@
                     Vinnare: @Model.EndMatchVM.WinnerName
                 </h2>
             </div>
+            <div class="row mt-4 text-center">
+                <div class="col-12">
+                    <h5 class="anta-regular">Total matchtid: @GetDuration(Model.EndMatchVM.MatchStartTime, Model.EndMatchVM.MatchEndTime)</h5>
+                </div>
+            </div>
+            <div class="row mt-2 text-center">
+                <div class="col-12">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th class="anta-regular">Set</th>
+                                <th class="anta-regular">Tid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.EndMatchVM.Sets.Count; i++)
+                            {
+                                <tr>
+                                    <td class="anta-regular">@Model.EndMatchVM.Sets[i].SetNumber</td>
+                                    <td class="anta-regular">
+                                        @GetDuration(Model.EndMatchVM.Sets[i].StartTime, Model.EndMatchVM.Sets[i].EndTime)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="row mt-5">
                 <div class="col-md-6 text-center">
                     <a class="btn btn-success btn-lg anta-regular" asp-page="/Matches/CreateMatch">Skapa ny match</a>
@@ -66,3 +93,12 @@
         </div>
     </div>
 </div>
+
+@functions {
+    private string GetDuration(DateTime start, DateTime? end)
+    {
+        if (end == null || start == default) return "-";
+        var duration = end.Value - start;
+        return duration.ToString(@"hh\:mm\:ss");
+    }
+}

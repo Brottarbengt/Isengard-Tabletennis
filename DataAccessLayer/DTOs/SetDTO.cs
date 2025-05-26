@@ -16,6 +16,7 @@ namespace DataAccessLayer.DTOs
         public int WinnerId { get; set; }
         public bool IsDecidingSet { get; set; }
         public int SetInfoId { get; set; }
-
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace DataAccessLayer.Models
         public bool IsSingle { get; set; }
         public bool IsCompleted { get; set; }
         public int MatchType { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public virtual ICollection<PlayerMatch> PlayerMatches { get; set; }
         public virtual ICollection<Set> Sets { get; set; }
     }

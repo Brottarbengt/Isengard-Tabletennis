@@ -21,5 +21,7 @@ namespace DataAccessLayer.DTOs
         public int Team2WonSets { get; set; }
         public bool IsCompleted { get; set; }
         public List<SetDTO> Sets { get; set; } = new();
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
     }
 }

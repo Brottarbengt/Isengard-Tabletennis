@@ -46,6 +46,7 @@ namespace Services
                 IsSingle = true,
                 IsCompleted = false,
                 MatchType = match.MatchType,
+                StartTime = DateTime.Now,
                 PlayerMatches = new List<PlayerMatch>
                     {
                         new PlayerMatch { PlayerId = match.Player1Id, TeamNumber = 1 },
@@ -137,6 +138,7 @@ namespace Services
             if (match != null)
             {
                 match.IsCompleted = true;
+                match.EndTime = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
         }

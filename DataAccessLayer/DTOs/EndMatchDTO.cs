@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace DataAccessLayer.DTOs
@@ -9,6 +10,8 @@ namespace DataAccessLayer.DTOs
         public string Player2Name { get; set; }
         public string WinnerName { get; set; }
         public int WinnerId { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
         public List<SetResultDTO> Sets { get; set; } = new();
 
         public class SetResultDTO
@@ -17,6 +20,8 @@ namespace DataAccessLayer.DTOs
             public int Team1Score { get; set; }
             public int Team2Score { get; set; }
             public int SetWinner { get; set; }
+            public DateTime StartTime { get; set; }
+            public DateTime? EndTime { get; set; }
         }
     }
 } 

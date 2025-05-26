@@ -72,7 +72,8 @@ namespace Services
                 Team1Score = 0,
                 Team2Score = 0,
                 SetWinner = 0,
-                IsSetCompleted = true
+                IsSetCompleted = true,
+                StartTime = DateTime.Now
             };
 
             _dbContext.Sets.Add(newSet);
