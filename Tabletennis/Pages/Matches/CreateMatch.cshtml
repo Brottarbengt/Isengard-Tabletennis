@@ -13,11 +13,25 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Search Player</label>
-                        <select id="searchPlayer" class="form-control custom-select">
+                        <select id="searchPlayer" name="searchPlayer" class="form-control custom-select">
                             <option value=""></option>
-                            @foreach (var player in Model.MatchVM.PlayerList)
+                            @foreach (var player in Model.MatchVM.AllPlayers)
                             {
-                                <option value="@player.Value">@player.Text</option>
+                                var fullName = !string.IsNullOrWhiteSpace(player.FullName)
+                                ? player.FullName
+                                : $"{player.FirstName} {player.LastName}".Trim();
+
+                                if (string.IsNullOrWhiteSpace(fullName)) fullName = "Unnamed Player";
+
+                                var birthYear = player.Birthday.HasValue && player.Birthday != DateOnly.MinValue
+                                ? player.Birthday.Value.Year.ToString()
+                                : "N/A";
+
+                                <option value="@player.PlayerId"
+                                        data-fullname="@fullName"
+                                        data-birthyear="@birthYear">
+                                    @fullName (@birthYear)
+                                </option>
                             }
                         </select>
                     </div>
@@ -33,7 +47,7 @@
                         <div class="input-group">
                             <input type="text" asp-for="MatchVM.Player1Name" id="Player1Name" class="form-control" readonly />
                             <input type="hidden" asp-for="MatchVM.Player1Id" id="Player1Id" />
-                            <button type="button" class="btn btn-custom-red" onclick="clearPlayer('Player1')" style=" background-color: #c4553e;color: white;" >
+                            <button type="button" class="btn btn-custom-red" onclick="clearPlayer('Player1')" style=" background-color: #c4553e;color: white;">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -75,16 +89,37 @@
 
         $(function () {
             $('#searchPlayer').select2({
-                placeholder: "Search and select player...",
-                allowClear: true,
-                width: '100%'
+               placeholder: "Search and select player...",
+               allowClear: true,
+               width: '100%',
+
+               templateResult: function (data) {
+                   if (!data.id || !data.element) return data.text;
+
+                   const $option = $(data.element);
+                   const fullName = $option.data('fullname') || 'Unnamed Player';
+                   const birthYear = $option.data('birthyear') || 'N/A';
+
+                  return `${fullName} (${birthYear})`;
+               },
+
+               templateSelection: function (data) {
+                  if (!data.id || !data.element) return data.text;
+
+                  const $option = $(data.element);
+                  const fullName = $option.data('fullname') || 'Unnamed Player';
+                  const birthYear = $option.data('birthyear') || 'N/A';
+
+                  return `${fullName} (${birthYear})`;
+               }
             });
+       
 
             $('#searchPlayer').on('change', function () {
                 const selectedId = $(this).val();
                 if (!selectedId) return;
 
-                // Prevent same player in both fields
+                // Prevent duplicates
                 if ($('#Player1Id').val() === selectedId || $('#Player2Id').val() === selectedId) {
                     alert('This player is already selected.');
                     $(this).val(null).trigger('change');
@@ -106,10 +141,20 @@
 
         function fetchPlayer(playerId, target) {
             $.get(`?handler=GetPlayer&id=${playerId}`, function (data) {
+                console.log("Returned player:", data);
+
                 if (data) {
-                    $(`#${target}Name`).val(data.fullName);
+                    let displayName = data.fullName;
+                    if (data.birthYear) {
+                        displayName += ` (${data.birthYear})`;
+                    }
+
+                    $(`#${target}Name`).val(displayName);
                     $(`#${target}Id`).val(data.playerId);
-                    $('#searchPlayer').val(null).trigger('change'); // Clear dropdown
+
+                    setTimeout(() => {
+                        $('#searchPlayer').val(null).trigger('change');
+                    }, 200);
                 }
             });
         }
