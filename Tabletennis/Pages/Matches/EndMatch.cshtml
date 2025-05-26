@@ -1,5 +1,4 @@
-﻿
-@page
+﻿@page
 @model Tabletennis.Pages.Matches.EndMatchModel
 @{
     ViewData["Title"] = "Matchresultat";
@@ -13,19 +12,19 @@
         <div class="card-body">
             <div class="row text-center">
                 <div class="col-md-5">
-                    <h3 class="anta-regular player-text">@Model.EndMatchVM.Player1Name</h3>
+                    <h3 class="player-text ">@Model.EndMatchVM.Player1Name</h3>
                 </div>
                 <div class="col-md-2 d-flex align-items-center justify-content-center">
                     <span class="vs-text anta-regular">VS</span>
                 </div>
                 <div class="col-md-5">
-                    <h3 class="anta-regular player-text">@Model.EndMatchVM.Player2Name</h3>
+                    <h3 class="player-text">@Model.EndMatchVM.Player2Name</h3>
                 </div>
             </div>
             <hr />
             <div class="row mt-4">
                 <div class="col-12">
-                    <table class="table table-bordered text-center">
+                    <table class="table table-bordered text-center end-text">
                         <thead>
                             <tr>
                                 <th class="anta-regular">Set</th>
@@ -54,6 +53,12 @@
                 <h2 class="anta-regular winner-text">
                     Vinnare: @Model.EndMatchVM.WinnerName
                 </h2>
+                @if (Model.EndMatchVM.DurationSeconds.HasValue)
+                {
+                    var min = Model.EndMatchVM.DurationSeconds.Value / 60;
+                    var sec = Model.EndMatchVM.DurationSeconds.Value % 60;
+                    <h4 class="anta-regular">Matchtid: @min.ToString("D2"):@sec.ToString("D2")</h4>
+                }
             </div>
             <div class="row mt-5">
                 <div class="col-md-6 text-center">

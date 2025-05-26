@@ -46,7 +46,7 @@
 }
 
 .serve-icon {
-    font-size: 4.5rem;
+    font-size: 4rem;
     grid-area: 1 / 1;
     pointer-events: none;
     color: #fff;
@@ -55,11 +55,17 @@
 .left-serve {
     justify-self: start;
     align-self: start;
-    margin-left: 0.6rem;
+    margin-left: 0.4rem;
+    margin-top: -0.2rem;
 }
 .right-serve {
     justify-self: end;
     align-self: start;
     transform: scaleX(-1);
-    margin-right: 0.6rem;
+    margin-right: 0.4rem;
+    margin-top: -0.2rem;
+}
+.match-timer{
+    font-size: 2rem;
+    font-weight: bold;
 }

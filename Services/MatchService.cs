@@ -58,6 +58,8 @@ namespace Services
                 IsSingle = true,
                 IsCompleted = false,
                 MatchType = match.MatchType,
+                StartTime = null,
+                DurationSeconds = null,
                 PlayerMatches = new List<PlayerMatch>
                     {
                         new PlayerMatch { PlayerId = match.Player1Id, TeamNumber = 1 },
@@ -124,7 +126,9 @@ namespace Services
                 MatchType = match.MatchType,
                 MatchDate = match.MatchDate,
                 Team1WonSets = team1WonSets,
-                Team2WonSets = team2WonSets
+                Team2WonSets = team2WonSets,
+                StartTime = match.StartTime,
+
             };
         }
 
@@ -161,9 +165,28 @@ namespace Services
             if (match != null)
             {
                 match.IsCompleted = true;
+                if (match.StartTime != null)
+                {
+                    match.DurationSeconds = (int)(DateTime.Now - match.StartTime.Value).TotalSeconds;
+                }
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateMatchAsync(MatchDTO matchDTO)
+        {
+            var match = await _context.Matches.FirstOrDefaultAsync(m => m.MatchId == matchDTO.MatchId);
+            if (match == null) throw new Exception("Match not found");
+
+            // Kopiera över de fält du vill uppdatera
+            match.StartTime = matchDTO.StartTime;
+            match.DurationSeconds = matchDTO.DurationSeconds;
+            match.IsCompleted = matchDTO.IsCompleted;
+            // Lägg till fler fält om du vill stödja bredare uppdatering
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters)
         {
             var matches = _context.Matches
@@ -278,7 +301,8 @@ namespace Services
                     Team1Score = s.Team1Score,
                     Team2Score = s.Team2Score,
                     SetWinner = s.SetWinner
-                }).ToList()
+                }).ToList(),
+                DurationSeconds = match.DurationSeconds
             };
         }
     }

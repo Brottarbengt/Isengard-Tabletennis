@@ -25,6 +25,7 @@ namespace Tabletennis.Pages.Matches
                 return NotFound();
 
             EndMatchVM = matchDTO.Adapt<EndMatchViewModel>();
+            EndMatchVM.DurationSeconds = matchDTO.DurationSeconds;
             return Page();
         }
     }
