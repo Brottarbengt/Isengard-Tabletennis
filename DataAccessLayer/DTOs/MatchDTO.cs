@@ -19,5 +19,7 @@ namespace DataAccessLayer.DTOs
         public DateTime MatchDate { get; set; }
         public int Team1WonSets { get; set; }
         public int Team2WonSets { get; set; }
+        public bool IsCompleted { get; set; }
+        public List<SetDTO> Sets { get; set; } = new();
     }
 }

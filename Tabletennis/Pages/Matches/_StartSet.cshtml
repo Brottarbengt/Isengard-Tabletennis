@@ -8,12 +8,12 @@
 {
     if (Model.PreviousSetWinner == 1)
     {
-        <p class="anta-regular">Vinnare av set: @(Model.SetNumber - 1)!</p>
+        <p class="anta-regular winner-text">Vinnare av set: @(Model.SetNumber - 1)!</p>
         <h2 class="player-text">@Model.Player1FirstName</h2>
     }
         else if (Model.PreviousSetWinner == 2)
     {
-        <p class="anta-regular">Vinnare av set: @(Model.SetNumber - 1)!</p>
+        <p class="anta-regular winner-text">Vinnare av set: @(Model.SetNumber - 1)!</p>
         <h2 class="player-text">@Model.Player2FirstName</h2>
     }
 }
@@ -22,15 +22,15 @@
 
 <div class="text-center mt-5">
     <form method="post" asp-page-handler="StartSet" asp-route-matchId="@Model.MatchId">
-        <button type="submit" class="btn btn-primary btn-lg">
+        <button type="submit" class="btn btn-success start-set-btn btn-lg mt-2">
             
                 @if (Model.SetNumber == 1 )
                 {
-                    <h2 class="anta-regular">Starta första set</h2>
+                    <h2 class="anta-regular start-first-set-btn">Starta första set</h2>
                 }
                 else
                 {
-                    <h2 class="anta-regular">Starta nästa set</h2>
+                    <h2 class="anta-regular start-next-set-btn">Starta nästa set</h2>
                 }         
             
         </button>

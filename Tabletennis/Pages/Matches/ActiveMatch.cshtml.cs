@@ -119,9 +119,9 @@ namespace Tabletennis.Pages.Matches
 
                 if (await _matchService.IsMatchWonAsync(matchId))
                 {
+
                     await _matchService.CompleteMatchAsync(matchId);
-                    TempData["SuccessMessage"] = "Match completed!";
-                    return RedirectToPage("/Matches/CreateMatch");
+                    return RedirectToPage("/Matches/EndMatch", new { matchId });
                 }
                 
                 await _setService.CreateNewSetAsync(matchId);
@@ -131,7 +131,7 @@ namespace Tabletennis.Pages.Matches
                 await _setService.UpdateSetAsync(currentSet);
             }
 
-            return RedirectToPage(new { matchId });
+            return RedirectToPage(new {matchId});
         }
 
 
@@ -168,7 +168,7 @@ namespace Tabletennis.Pages.Matches
         {
             int totalPoints = currentSet.Team1Score + currentSet.Team2Score;
 
-            // Hantera deuce-situation (9-9 eller högre)
+            // Hantera deuce-situation (9-9 eller högre)( 9 för att reagera även på 10-10)
             if (currentSet.Team1Score >= 9 && currentSet.Team2Score >= 9)
             {
                 // Vid deuce byts serve varje poäng

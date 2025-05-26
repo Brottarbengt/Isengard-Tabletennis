@@ -16,7 +16,11 @@ referrerpolicy="no-referrer" />
     else if (!@Model.ActiveMatchVM.IsSetCompleted)
     {
         <partial name="_ScoreBoard" model="Model.ActiveMatchVM" />
-    }    
+    }
+    else if (@Model.ActiveMatchVM.IsCompleted)
+    {
+        <partial name="_EndGame" model="Model.ActiveMatchVM" />
+    }
 </div>
 
 @section Scripts {

@@ -18,7 +18,7 @@ namespace Tabletennis.ViewModels
         public int Team1Score { get; set; }
         public int Team2Score { get; set; }
         public int SetNumber { get; set; }
-        public bool IsCompleted { get; set; }
+        public bool IsCompleted { get; set; } //MatchCompleted
         public int MatchWinner { get; set; }
         public int Team1WonSets { get; set; }
         public int Team2WonSets { get; set; }
