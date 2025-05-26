@@ -6,7 +6,7 @@ using Services.Interfaces;
 using Tabletennis.ViewModels;
 using Mapster;
 
-namespace Tabletennis.Pages.Match
+namespace Tabletennis.Pages.Matches
 {
     public class MatchModel : PageModel
     {
@@ -42,8 +42,7 @@ namespace Tabletennis.Pages.Match
             match.MatchType = MatchVM.SelectedSetCount;
             
             var matchId = await _matchService.CreateMatchAsync(match);
-            TempData["SuccessMessage"] = "New Match was successfully created!";
-            //TODO: Skicka bara matchId f�r b�ttre s�kerhet
+            TempData["SuccessMessage"] = "New Match was successfully created!";           
             return RedirectToPage("/Matches/ActiveMatch", new {matchId});
         }
 

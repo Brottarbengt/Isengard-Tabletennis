@@ -15,6 +15,7 @@ namespace DataAccessLayer.DTOs
         public int Team2Score { get; set; }
         public int WinnerId { get; set; }
         public bool IsDecidingSet { get; set; }
-                
+        public int SetInfoId { get; set; }
+
     }
 }

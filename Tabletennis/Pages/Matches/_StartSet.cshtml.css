@@ -1,0 +1,33 @@
+﻿
+.player-text {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 6rem;
+    text-transform: uppercase;
+}
+.anta-regular {
+    font-family: "Anta", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.winner-text{
+    font-size: 4rem;
+    font-weight: bold;
+}
+.set-num{
+    font-size: 4.5rem;
+    font-weight: bold;
+}
+.start-first-set-btn {
+    font-size: 6rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.start-next-set-btn {
+    font-size: 6rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    
+}
+.start-set-btn{
+    padding: 3rem 6rem;
+}

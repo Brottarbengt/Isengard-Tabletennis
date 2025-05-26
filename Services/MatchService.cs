@@ -5,11 +5,7 @@ using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Services.Infrastructure;
 using Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Services
 {
@@ -20,6 +16,7 @@ namespace Services
         {
             _context = context;
         }
+
         public async Task<List<PlayerDTO>> GetAllPlayersAsync()
         {
             return await _context.Players
@@ -77,11 +74,25 @@ namespace Services
                 SetNumber = 1,
                 Team1Score = 0,
                 Team2Score = 0,
-                SetWinner = 0
+                SetWinner = 0,
+                IsSetCompleted = true
             };
-            _context.Sets.Add(firstSet);
+            _context.Sets.Add(firstSet);            
             await _context.SaveChangesAsync();
+
             
+            // Skapa SetInfo för första set
+            var firstSetInfo = new SetInfo
+            {
+                SetId = firstSet.SetId,                 
+                InfoMessage = string.Empty,
+                IsPlayer1Serve = true,
+                IsPlayer1StartServer = true,
+                ServeCounter = 0
+            };
+            _context.SetInfos.Add(firstSetInfo);
+            await _context.SaveChangesAsync();
+
             return newMatch.MatchId;
         }
 
@@ -107,7 +118,9 @@ namespace Services
                 Player1Id = player1?.PlayerId ?? 0,
                 Player2Id = player2?.PlayerId ?? 0,
                 Player1Name = player1 != null ? $"{player1.FirstName} {player1.LastName}" : string.Empty,
+                Player1FirstName = player1 != null ? player1.FirstName : string.Empty,
                 Player2Name = player2 != null ? $"{player2.FirstName} {player2.LastName}" : string.Empty,
+                Player2FirstName = player2 != null ? player2.FirstName : string.Empty,
                 MatchType = match.MatchType,
                 MatchDate = match.MatchDate,
                 Team1WonSets = team1WonSets,
@@ -223,6 +236,37 @@ namespace Services
                 Sets = setDTOs,
                 MatchDate = match.MatchDate,
                 Winner = match.MatchWinner == 1 ? "Player 1" : "Player 2"
+            };
+        }
+
+        public async Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches)
+                    .ThenInclude(pm => pm.Player)
+                .Include(m => m.Sets)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null)
+                return null;
+
+            var player1 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 1)?.Player;
+            var player2 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 2)?.Player;
+
+            return new EndMatchDTO
+            {
+                MatchId = match.MatchId,
+                Player1Name = player1 != null ? $"{player1.FirstName} {player1.LastName}" : string.Empty,
+                Player2Name = player2 != null ? $"{player2.FirstName} {player2.LastName}" : string.Empty,
+                WinnerId = match.MatchWinner,
+                WinnerName = match.MatchWinner == 1 ? (player1 != null ? $"{player1.FirstName} {player1.LastName}" : "") : (player2 != null ? $"{player2.FirstName} {player2.LastName}" : ""),
+                Sets = match.Sets.OrderBy(s => s.SetNumber).Select(s => new EndMatchDTO.SetResultDTO
+                {
+                    SetNumber = s.SetNumber,
+                    Team1Score = s.Team1Score,
+                    Team2Score = s.Team2Score,
+                    SetWinner = s.SetWinner
+                }).ToList()
             };
         }
     }

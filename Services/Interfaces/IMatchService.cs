@@ -1,10 +1,5 @@
 ﻿using DataAccessLayer.DTOs;
-using Services.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Services.Interfaces
 {
@@ -16,6 +11,8 @@ namespace Services.Interfaces
         Task<MatchDTO?> GetMatchByIdAsync(int matchId);
         Task<bool> IsMatchWonAsync(int matchId);
         Task CompleteMatchAsync(int matchId);
+        Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId);
+        
         Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters);
         Task<MatchDetailsDTO?> GetMatchDetailsAsync(int matchId);
 
