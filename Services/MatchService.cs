@@ -226,7 +226,7 @@ namespace Services
                 Team1Score = s.Team1Score,
                 Team2Score = s.Team2Score,
                 WinnerId = s.SetWinner,
-                IsDecidingSet = s.IsDecidingSet
+                IsSetCompleted = s.IsSetCompleted
             }).ToList();
 
             return new MatchDetailsDTO
