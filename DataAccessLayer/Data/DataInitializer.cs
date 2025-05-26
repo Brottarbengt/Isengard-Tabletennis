@@ -47,14 +47,6 @@ public class DataInitializer
     {
         if (_dbContext.Players.Any()) return; // Redan seedat
 
-        // 1. Skapa spelare
-        //var players = new List<Player>
-        //{
-        //    new Player { FirstName = "Alice", LastName = "Andersson", Email = "alice@example.com", Gender = Gender.Female },
-        //    new Player { FirstName = "Bob", LastName = "Bengtsson", Email = "bob@example.com", Gender = Gender.Male },
-        //    new Player { FirstName = "Clara", LastName = "Carlsson", Email = "clara@example.com", Gender = Gender.Female },
-        //    new Player { FirstName = "David", LastName = "Dahl", Email = "david@example.com", Gender = Gender.Male }
-        //};
 
         var players = new List<Player>
             {
