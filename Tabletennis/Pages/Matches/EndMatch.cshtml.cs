@@ -25,13 +25,6 @@ namespace Tabletennis.Pages.Matches
                 return NotFound();
 
             EndMatchVM = matchDTO.Adapt<EndMatchViewModel>();
-            EndMatchVM.MatchStartTime = matchDTO.StartTime;
-            EndMatchVM.MatchEndTime = matchDTO.EndTime;
-            for (int i = 0; i < EndMatchVM.Sets.Count; i++)
-            {
-                EndMatchVM.Sets[i].StartTime = matchDTO.Sets[i].StartTime;
-                EndMatchVM.Sets[i].EndTime = matchDTO.Sets[i].EndTime;
-            }
             return Page();
         }
     }

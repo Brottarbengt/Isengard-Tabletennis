@@ -39,8 +39,6 @@ namespace Tabletennis.Pages.Matches
             }
 
             ActiveMatchVM = match.Adapt<ActiveMatchViewModel>();            
-            ActiveMatchVM.MatchStartTime = match.StartTime;
-            ActiveMatchVM.MatchEndTime = match.EndTime;
             
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet != null)
@@ -60,8 +58,7 @@ namespace Tabletennis.Pages.Matches
                 ActiveMatchVM.InfoMessage = currentSetInfo.InfoMessage;
                 ActiveMatchVM.IsPlayer1Serve = currentSetInfo.IsPlayer1Serve;
                 ActiveMatchVM.IsSetCompleted = currentSet.IsSetCompleted;
-                ActiveMatchVM.SetStartTime = currentSet.StartTime;
-                ActiveMatchVM.SetEndTime = currentSet.EndTime;
+
             }
 
             return Page();
@@ -118,7 +115,6 @@ namespace Tabletennis.Pages.Matches
             {
                 currentSet.SetWinner = currentSet.Team1Score > currentSet.Team2Score ? 1 : 2;
                 currentSet.IsSetCompleted = true;
-                currentSet.EndTime = DateTime.Now;
                 await _setService.UpdateSetAsync(currentSet);
 
                 if (await _matchService.IsMatchWonAsync(matchId))

@@ -46,7 +46,6 @@ namespace Services
                 IsSingle = true,
                 IsCompleted = false,
                 MatchType = match.MatchType,
-                StartTime = DateTime.Now,
                 PlayerMatches = new List<PlayerMatch>
                     {
                         new PlayerMatch { PlayerId = match.Player1Id, TeamNumber = 1 },
@@ -129,7 +128,19 @@ namespace Services
             var team2WonSets = match.Sets.Count(s => s.SetWinner == 2);
             var requiredSets = (match.MatchType / 2) + 1;
 
-            return team1WonSets >= requiredSets || team2WonSets >= requiredSets;
+            if (team1WonSets >= requiredSets || team2WonSets >= requiredSets)
+            {
+                if (team1WonSets > team2WonSets)
+                {
+                    match.MatchWinner = 1;
+                }
+                else
+                {
+                    match.MatchWinner = 2;
+                }
+                return true;
+            }
+            return false;
         }
 
         public async Task CompleteMatchAsync(int matchId)
@@ -138,7 +149,6 @@ namespace Services
             if (match != null)
             {
                 match.IsCompleted = true;
-                match.EndTime = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
         }

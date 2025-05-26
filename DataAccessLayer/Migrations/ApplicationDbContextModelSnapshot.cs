@@ -30,9 +30,6 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MatchId"));
 
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
@@ -47,9 +44,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int>("MatchWinner")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("MatchId");
 
@@ -125,9 +119,6 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetId"));
 
-                    b.Property<DateTime?>("EndTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsSetCompleted")
                         .HasColumnType("bit");
 
@@ -139,9 +130,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int>("SetWinner")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("Team1Score")
                         .HasColumnType("int");

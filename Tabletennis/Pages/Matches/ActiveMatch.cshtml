@@ -15,14 +15,6 @@ referrerpolicy="no-referrer" />
     }
     else if (!@Model.ActiveMatchVM.IsSetCompleted)
     {
-        <div class="row mb-3">
-            <div class="col-6 text-center">
-                <span class="anta-regular">Set-tid: <span id="set-timer"></span></span>
-            </div>
-            <div class="col-6 text-center">
-                <span class="anta-regular">Match-tid: <span id="match-timer"></span></span>
-            </div>
-        </div>
         <partial name="_ScoreBoard" model="Model.ActiveMatchVM" />
     }
     else if (@Model.ActiveMatchVM.IsCompleted)
@@ -33,23 +25,6 @@ referrerpolicy="no-referrer" />
 
 @section Scripts {
     <script>
-        // Byt ut till rätt property-namn om de heter annorlunda i din ViewModel
-        const setStart = new Date('@Model.ActiveMatchVM.SetStartTime.ToString("o")');
-        const matchStart = new Date('@Model.ActiveMatchVM.MatchStartTime.ToString("o")');
-        function updateTimers() {
-            const now = new Date();
-            const setDiff = new Date(now - setStart);
-            const matchDiff = new Date(now - matchStart);
-            document.getElementById('set-timer').innerText =
-                setDiff.getUTCHours().toString().padStart(2, '0') + ':' +
-                setDiff.getUTCMinutes().toString().padStart(2, '0') + ':' +
-                setDiff.getUTCSeconds().toString().padStart(2, '0');
-            document.getElementById('match-timer').innerText =
-                matchDiff.getUTCHours().toString().padStart(2, '0') + ':' +
-                matchDiff.getUTCMinutes().toString().padStart(2, '0') + ':' +
-                matchDiff.getUTCSeconds().toString().padStart(2, '0');
-        }
-        setInterval(updateTimers, 1000);
-        updateTimers();
+        
     </script>
 }

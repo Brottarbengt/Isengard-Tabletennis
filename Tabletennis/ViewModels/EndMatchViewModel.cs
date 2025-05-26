@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Tabletennis.ViewModels
 {
@@ -10,8 +9,6 @@ namespace Tabletennis.ViewModels
         public string Player2Name { get; set; }
         public string WinnerName { get; set; }
         public int WinnerId { get; set; }
-        public DateTime MatchStartTime { get; set; }
-        public DateTime? MatchEndTime { get; set; }
 
         // Lista med alla set och deras resultat
         public List<SetResult> Sets { get; set; } = new();
@@ -22,8 +19,6 @@ namespace Tabletennis.ViewModels
             public int Team1Score { get; set; }
             public int Team2Score { get; set; }
             public int SetWinner { get; set; } // 1 eller 2
-            public DateTime StartTime { get; set; }
-            public DateTime? EndTime { get; set; }
         }
     }
 }
