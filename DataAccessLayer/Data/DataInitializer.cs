@@ -105,6 +105,7 @@ public class DataInitializer
                     IsCompleted = true,
                     MatchType = 1,
                     MatchWinner = player1Id, // godtycklig vinnare
+                    DurationSeconds = 120,
                     PlayerMatches = new List<PlayerMatch>
                     {
                         new PlayerMatch { PlayerId = player1Id, TeamNumber = 1 },
