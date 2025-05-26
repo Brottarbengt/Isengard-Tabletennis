@@ -194,14 +194,17 @@ namespace Services
                 MatchId = m.MatchId,
                 Sets = m.Sets.ToList(),
                 Player1FullName = m.PlayerMatches
-                    .Where(pm => pm.TeamNumber == 1)
-                    .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
-                    .FirstOrDefault() ?? "Unknown Player 1",
-                Player2FullName = m.PlayerMatches
-                    .Where(pm => pm.TeamNumber == 2)
-                    .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
-                    .FirstOrDefault() ?? "Unknown Player 2",
-                Winner = m.MatchWinner == 1 ? "Player 1" : "Player 2",
+                 .Where(pm => pm.TeamNumber == 1)
+                 .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
+                 .FirstOrDefault() ?? "Unknown Player 1",
+                 Player2FullName = m.PlayerMatches
+                  .Where(pm => pm.TeamNumber == 2)
+                  .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
+                  .FirstOrDefault() ?? "Unknown Player 2",
+                 Winner = m.PlayerMatches
+                  .Where(pm => pm.TeamNumber == m.MatchWinner)
+                  .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
+                  .FirstOrDefault() ?? "Unknown Winner",
                 StartDate = m.MatchDate
             });
 
@@ -218,6 +221,7 @@ namespace Services
 
             if (match == null) return null;
 
+            // Convert players to DTOs
             var playerDTOs = match.PlayerMatches.Select(pm => new PlayerDTO
             {
                 PlayerId = pm.Player.PlayerId,
@@ -227,9 +231,11 @@ namespace Services
                 PhoneNumber = pm.Player.PhoneNumber,
                 Gender = pm.Player.Gender,
                 Birthday = pm.Player.Birthday,
-                FullName = $"{pm.Player.FirstName} {pm.Player.LastName}"
+                FullName = $"{pm.Player.FirstName} {pm.Player.LastName}",
+                TeamNumber = pm.TeamNumber // Mapped here
             }).ToList();
 
+            // Convert sets to DTOs
             var setDTOs = match.Sets.Select(s => new SetDTO
             {
                 SetId = s.SetId,
@@ -241,16 +247,25 @@ namespace Services
                 IsSetCompleted = s.IsSetCompleted
             }).ToList();
 
+            // Get full name(s) of the winning team
+            var winningPlayers = match.PlayerMatches
+                .Where(pm => pm.TeamNumber == match.MatchWinner)
+                .Select(pm => pm.Player)
+                .ToList();
+
+            var winnerName = winningPlayers.Any()
+                ? string.Join(" & ", winningPlayers.Select(p => $"{p.FirstName} {p.LastName}"))
+                : "Unknown";
+
             return new MatchDetailsDTO
             {
                 MatchId = match.MatchId,
                 Players = playerDTOs,
                 Sets = setDTOs,
                 MatchDate = match.MatchDate,
-                Winner = match.MatchWinner == 1 ? "Player 1" : "Player 2"
+                Winner = winnerName
             };
         }
-
         public async Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId)
         {
             var match = await _context.Matches
