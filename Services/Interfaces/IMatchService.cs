@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.DTOs;
+using Services.Infrastructure;
 
 
 namespace Services.Interfaces
@@ -13,5 +14,9 @@ namespace Services.Interfaces
         Task CompleteMatchAsync(int matchId);
         Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId);
         
+        Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters);
+        Task<MatchDetailsDTO?> GetMatchDetailsAsync(int matchId);
+
+        //ActiveMatchDTO GetMatchById(int matchId);
     }
 }
