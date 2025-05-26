@@ -118,7 +118,7 @@ namespace Tabletennis.Pages.Matches
                 await _setService.UpdateSetAsync(currentSet);
 
                 if (await _matchService.IsMatchWonAsync(matchId))
-                {
+                {   
 
                     await _matchService.CompleteMatchAsync(matchId);
                     return RedirectToPage("/Matches/EndMatch", new { matchId });

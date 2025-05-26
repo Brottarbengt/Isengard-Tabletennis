@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250521151311_UpdatePlayerBirthdayNullable")]
-    partial class UpdatePlayerBirthdayNullable
+    [Migration("20250526090510_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<DateTime>("MatchDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("MatchType")
+                        .HasColumnType("int");
 
                     b.Property<int>("MatchWinner")
                         .HasColumnType("int");
@@ -119,7 +122,7 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetId"));
 
-                    b.Property<bool>("IsDecidingSet")
+                    b.Property<bool>("IsSetCompleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("MatchId")
@@ -128,13 +131,13 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("SetNumber")
                         .HasColumnType("int");
 
+                    b.Property<int>("SetWinner")
+                        .HasColumnType("int");
+
                     b.Property<int>("Team1Score")
                         .HasColumnType("int");
 
                     b.Property<int>("Team2Score")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WinnerId")
                         .HasColumnType("int");
 
                     b.HasKey("SetId");
@@ -142,6 +145,38 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("MatchId");
 
                     b.ToTable("Sets");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.SetInfo", b =>
+                {
+                    b.Property<int>("SetInfoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetInfoId"));
+
+                    b.Property<string>("InfoMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPlayer1Serve")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPlayer1StartServer")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ServeCounter")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SetId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SetInfoId");
+
+                    b.HasIndex("SetId")
+                        .IsUnique();
+
+                    b.ToTable("SetInfos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -376,6 +411,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Match");
                 });
 
+            modelBuilder.Entity("DataAccessLayer.Models.SetInfo", b =>
+                {
+                    b.HasOne("DataAccessLayer.Models.Set", "Set")
+                        .WithOne("SetInfo")
+                        .HasForeignKey("DataAccessLayer.Models.SetInfo", "SetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Set");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -437,6 +483,12 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.Player", b =>
                 {
                     b.Navigation("PlayerMatches");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.Set", b =>
+                {
+                    b.Navigation("SetInfo")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
