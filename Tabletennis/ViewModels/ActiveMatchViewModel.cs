@@ -26,5 +26,6 @@ namespace Tabletennis.ViewModels
         public bool IsPlayer1Serve { get; set; }
         public bool IsSetCompleted { get; set; }
         public int PreviousSetWinner  { get; set; }
+        public DateTime? StartTime { get; set; }
     }
 }

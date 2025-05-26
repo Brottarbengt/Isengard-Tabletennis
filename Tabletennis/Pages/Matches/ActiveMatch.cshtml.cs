@@ -38,7 +38,8 @@ namespace Tabletennis.Pages.Matches
                 return NotFound();
             }
 
-            ActiveMatchVM = match.Adapt<ActiveMatchViewModel>();            
+            ActiveMatchVM = match.Adapt<ActiveMatchViewModel>();
+            ActiveMatchVM.StartTime = match.StartTime;
             
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet != null)
@@ -57,7 +58,7 @@ namespace Tabletennis.Pages.Matches
                 ActiveMatchVM.SetNumber = currentSet.SetNumber;
                 ActiveMatchVM.InfoMessage = currentSetInfo.InfoMessage;
                 ActiveMatchVM.IsPlayer1Serve = currentSetInfo.IsPlayer1Serve;
-                ActiveMatchVM.IsSetCompleted = currentSet.IsSetCompleted;
+                ActiveMatchVM.IsSetCompleted = currentSet.IsSetCompleted;                
 
             }
 
@@ -67,6 +68,13 @@ namespace Tabletennis.Pages.Matches
 
         public async Task<IActionResult> OnPostStartSetAsync(int matchId)
         {
+            var match = await _matchService.GetMatchByIdAsync(matchId);
+            if (match != null && match.StartTime == null)
+            {
+                match.StartTime = DateTime.Now;
+                await _matchService.UpdateMatchAsync(match.Adapt<MatchDTO>());
+            }
+
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet == null)
             {                
