@@ -78,7 +78,8 @@ namespace DataAccessLayer.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
-                    Birthday = table.Column<DateOnly>(type: "date", nullable: true)
+                    Birthday = table.Column<DateOnly>(type: "date", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
