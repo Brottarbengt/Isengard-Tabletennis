@@ -5,6 +5,28 @@
 
 <div class="container mt-4">
 
+    @* Här ovanför hamnar val av spelare a.k.a:
+    - Search Dropdown med spelare
+    - En div för spelare1 med ta bort knapp
+    - En div för spelare2 med ta bort knapp 
+    - Tomma divar och knappar som inte syns när ingen spelare är vald?*@
+
+    <div class="mb-4">
+        <div class="col-6">
+            <h2 class="player-text">Lovisa Jönsson</h2>
+        </div>
+        <div class="col-6">
+            <h2 class="player-text">Kalle Andersson</h2>
+        </div>
+    </div>
+
+    @* If-sats om ingen spelare är vald visa: *@
+    <partial name="_Top10Players" model="Model" />
+
+    @* If-sats om en spelare är vald visa: *@
     <partial name="_PlayerStats" model="Model" />
+
+    @* If-sats om två spelare är vald visa: *@
+    <partial name="_VsPlayerStats" model="Model" />
 
 </div>
