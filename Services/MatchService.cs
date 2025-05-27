@@ -296,6 +296,43 @@ namespace Services
                 }).ToList()
             };
         }
+        public async Task<MatchDeleteDTO?> GetMatchDeleteDtoAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches).ThenInclude(pm => pm.Player)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null) return null;
+
+            var player1 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 1)?.Player;
+            var player2 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 2)?.Player;
+
+            var winner = match.MatchWinner switch
+            {
+                1 => player1 != null ? $"{player1.FirstName} {player1.LastName}" : "Team 1",
+                2 => player2 != null ? $"{player2.FirstName} {player2.LastName}" : "Team 2",
+                _ => "Unknown"
+            };
+
+            return new MatchDeleteDTO
+            {
+                MatchId = match.MatchId,
+                Player1Name = player1 != null ? $"{player1.FirstName} {player1.LastName}" : "Unknown Player 1",
+                Player2Name = player2 != null ? $"{player2.FirstName} {player2.LastName}" : "Unknown Player 2",
+                MatchDate = match.MatchDate,
+                Winner = winner
+            };
+        }
+        public async Task<bool> DeleteMatchAsync(int id)
+        {
+            var match = await _context.Matches.FindAsync(id);
+            if (match == null) return false;
+
+            _context.Matches.Remove(match);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }
 
