@@ -10,5 +10,7 @@ namespace Services.Interfaces
         Task<PlayerDTO> GetOneAsync(int playerId);
         Task<Check> Update(PlayerDTO updatePlayer);
         Task<Check> SoftDelete(int playerId);
+        Task<List<PlayerDTO>> GetAllPlayerDTOsAsync();
+                
     }
 }

@@ -161,7 +161,27 @@ namespace Services
 
         public async Task CompleteMatchAsync(int matchId)
         {
+            var playerMatches = await _context.PlayerMatches
+                .Where(pm => pm.MatchId == matchId)
+                .ToListAsync();
+
             var match = await _context.Matches.FindAsync(matchId);
+
+
+            foreach (var playerMatch in playerMatches)
+            {
+                // Uppdatera spelare med vinst eller förlust för statistik
+                if (match.MatchWinner == playerMatch.TeamNumber)
+                {
+                    playerMatch.Player.NumberOfWins++;                    
+                }
+                else
+                {
+                    playerMatch.Player.NumberOfLosses++;                    
+                }
+                playerMatch.Player.MatchesPlayed = playerMatch.Player.NumberOfWins + playerMatch.Player.NumberOfLosses;
+            }
+
             if (match != null)
             {
                 match.IsCompleted = true;

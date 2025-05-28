@@ -24,7 +24,7 @@ namespace Services
 
         public async Task<Check> CreatePlayer(PlayerDTO newPlayer)
         {
-            
+
             if (newPlayer == null)
             {
                 return Check.Failed;
@@ -60,7 +60,7 @@ namespace Services
         {
             var playerToUpdate = await _dbContext.Players.FindAsync(updatePlayer.PlayerId);
             if (playerToUpdate == null)
-                { return Check.Failed; }
+            { return Check.Failed; }
 
             playerToUpdate.FirstName = updatePlayer.FirstName;
             playerToUpdate.LastName = updatePlayer.LastName;
@@ -78,7 +78,7 @@ namespace Services
         public async Task<Check> SoftDelete(int playerId)
         {
             var playerToDelete = await _dbContext.Players.FindAsync(playerId);
-            if(playerToDelete == null)
+            if (playerToDelete == null)
             { return Check.Failed; }
 
             playerToDelete.IsActive = false;
@@ -88,6 +88,26 @@ namespace Services
 
         }
 
+        public async void SetPlayerWinRatio(int playerId)
+        {
+            var player = await _dbContext.Players
+                .FirstOrDefaultAsync(p => p.PlayerId == playerId);
 
+            
+            var winRatio = player.NumberOfWins / player.MatchesPlayed;
+            player.PlayerWinRatio = Math.Round((decimal)winRatio * 100, 2); // Store win ratio as percentage
+            await _dbContext.SaveChangesAsync();
+
+        }
+
+        public Task<List<PlayerDTO>> GetAllPlayerDTOsAsync()
+        {
+            var players = _dbContext.Players
+                .Where(p => p.IsActive)
+                .Select(p => p.Adapt<PlayerDTO>())
+                .ToListAsync();
+            return players;
+
+        }
     }
 }
