@@ -1,77 +1,24 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
-<div class="row mt-4">
-    <div class="col-12 mt-3">
-        <table class="table table-bordered text-center">
-            <thead>
-                <tr>
-                    <th scope="col" class="custom-thead">Totalt Antal Vinster</th>
-                    <th scope="col" class="custom-thead">Totalt Antal Förluster</th>
-                    <th scope="col" class="custom-thead">Vinst Ratio</th>
-                </tr>
-            </thead>
-            <tbody>
-                    <tr>
-                        <td class="">15 st</td>
-                        <td class="">5 st</td>
-                        <td class="">75%</td>
-                    </tr>
-            </tbody>
-        </table>
+
+@model Tabletennis.ViewModels.PlayerStatisticsViewModel
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">@Model.FullName</h5>
     </div>
-    <div class="col-12 mt-3">
-        <table class="table table-bordered text-center">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col" class="custom-thead">Matchtid</th>
-                    <th scope="col" class="custom-thead">Sets</th>
-                    <th scope="col" class="custom-thead">Motspelare</th>
-                    <th scope="col" class="custom-thead">Vinnare</th>
-                    <th scope="col" class="custom-thead">Mer info</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="custom-thead fw-bold">Längst Match</td>
-                    <td class="">56:09</td>
-                    <td class="">7 st</td>
-                    <td class="">Kalle Andersson</td>
-                    <td class="">Kalle Andersson</td>
-                    <td class=""><button class="btn btn-outline-secondary">Detaljer</button></td>
-                </tr>
-                <tr>
-                    <td class="custom-thead fw-bold">Kortast Match</td>
-                    <td class="">10:26</td>
-                    <td class="">3 st</td>
-                    <td class="">Ida Nilsson</td>
-                    <td class="">Lovisa Jönsson</td>
-                    <td class=""><button class="btn btn-outline-secondary">Detaljer</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="col-12 mt-3">
-        <table class="table table-bordered text-center">
-            <thead>
-                <tr>
-                    <th scope="col" class="custom-thead">Bäst Resultat mot:</th>
-                    <th scope="col" class="custom-thead">%</th>
-                    <th scope="col" class="custom-thead">Sämst Resultat mot:</th>
-                    <th scope="col" class="custom-thead">%</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="">Ida Nilsson</td>
-                    <td class="">80%</td>
-                    <td class="">Kalle Andersson</td>
-                    <td class="">10%</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h6>Statistik</h6>
+                    <p>Antal matcher: @Model.MatchesPlayed</p>
+                    <p>Vinster: @Model.NumberOfWins</p>
+                    <p>Förluster: @Model.NumberOfLosses</p>
+                    <p>Vinstprocent: @Model.PlayerWinRatio.ToString("F1")%</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

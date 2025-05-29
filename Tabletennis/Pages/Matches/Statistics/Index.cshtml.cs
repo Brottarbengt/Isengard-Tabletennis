@@ -9,98 +9,93 @@ namespace Tabletennis.Pages.Matches.Statistics
 {
     public class IndexModel : PageModel
     {
-        private readonly IMatchService _matchService;
-        private readonly ISetService _setService;
         private readonly IPlayerService _playerService;
 
-        //TODO: Fixa seedning av players s� att top10 f�r spelare
-        public IndexModel(IMatchService matchService, ISetService setService, IPlayerService playerService)
+        public IndexModel(IPlayerService playerService)
         {
-            _matchService = matchService;
-            _setService = setService;  //TODO: remember to Delete if not needed
             _playerService = playerService;
         }
 
-        
-        public List<Top10PlayersViewModel> Top10PlayersVMList { get; set; } = new();
-        //public Top10PlayersViewModel Top10PlayerVM { get; set; } = new(); Obsolete?
-        public CreateMatchViewModel MatchVM { get; set; } = new();
+        [BindProperty]
+        public StatisticsViewModel ViewModel { get; set; } = new();
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int? player1Id, int? player2Id, string searchQuery)
         {
-            await LoadPlayersAsync();
-            await ShowTop10PlayersAsync();
+            ViewModel.SelectedPlayer1Id = player1Id;
+            ViewModel.SelectedPlayer2Id = player2Id;
+            ViewModel.SearchQuery = searchQuery ?? string.Empty;
 
+            // Hämta alla aktiva spelare
+            var allPlayers = await _playerService.GetAllPlayersAsync();
+            ViewModel.AllPlayers = allPlayers;
+
+            // Skapa SelectList för dropdown
+            ViewModel.PlayerSelectList = allPlayers
+                .Select(p => new SelectListItem
+                {
+                    Value = p.PlayerId.ToString(),
+                    Text = $"{p.FirstName} {p.LastName}"
+                })
+                .ToList();
+
+            // Om ingen spelare är vald, visa Top 10
+            if (!player1Id.HasValue && !player2Id.HasValue)
+            {
+                // Hämta Top 10 spelare baserat på WinRatio
+                var top10Players = allPlayers
+                    .OrderByDescending(p => p.PlayerWinRatio)
+                    .Take(10)
+                    .Select(p => new Top10PlayersViewModel
+                    {
+                        PlayerId = p.PlayerId,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        PlayerWinRatio = p.PlayerWinRatio,
+                        MatchesPlayed = p.MatchesPlayed,
+                        NumberOfWins = p.NumberOfWins,
+                        FullName = $"{p.FirstName} {p.LastName}"
+                    })
+                    .ToList();
+
+                ViewModel.Top10Players = top10Players;
+            }
+            else
+            {
+                // Om en spelare är vald, visa deras statistik
+                if (player1Id.HasValue)
+                {
+                    var player1 = await _playerService.GetPlayerByIdAsync(player1Id.Value);
+                    ViewModel.Player1Stats = new PlayerStatisticsViewModel
+                    {
+                        PlayerId = player1.PlayerId,
+                        FirstName = player1.FirstName,
+                        LastName = player1.LastName,
+                        NumberOfWins = player1.NumberOfWins,
+                        NumberOfLosses = player1.NumberOfLosses,
+                        PlayerWinRatio = player1.PlayerWinRatio,
+                        MatchesPlayed = player1.MatchesPlayed,
+                        FullName = $"{player1.FirstName} {player1.LastName}"
+                    };
+                }
+
+                if (player2Id.HasValue)
+                {
+                    var player2 = await _playerService.GetPlayerByIdAsync(player2Id.Value);
+                    ViewModel.Player2Stats = new PlayerStatisticsViewModel
+                    {
+                        PlayerId = player2.PlayerId,
+                        FirstName = player2.FirstName,
+                        LastName = player2.LastName,
+                        NumberOfWins = player2.NumberOfWins,
+                        NumberOfLosses = player2.NumberOfLosses,
+                        PlayerWinRatio = player2.PlayerWinRatio,
+                        MatchesPlayed = player2.MatchesPlayed,
+                        FullName = $"{player2.FirstName} {player2.LastName}"
+                    };
+                }
+            }
 
             return Page();
-        }
-
-        private async Task ShowTop10PlayersAsync()
-        {
-            //var allPlayers = await _playerService.GetAllPlayersAsync();
-            Top10PlayersVMList = new List<Top10PlayersViewModel>();
-
-            foreach (var player in MatchVM.AllPlayers)
-            {
-                var top10Player = new Top10PlayersViewModel
-                {
-                    PlayerId = player.PlayerId,
-                    FirstName = player.FirstName,
-                    LastName = player.LastName,
-                    NumberOfWins = player.NumberOfWins,
-                    MatchesPlayed = player.MatchesPlayed,
-                    PlayerWinRatio = player.PlayerWinRatio
-                };
-                Top10PlayersVMList.Add(top10Player);
-            }
-
-            Top10PlayersVMList = Top10PlayersVMList
-                .Where(p => p.MatchesPlayed >= 10)
-                .OrderByDescending(p => p.PlayerWinRatio)
-                .ThenByDescending(p => p.MatchesPlayed)
-                .Take(10)
-                .ToList();
-        }
-
-        private async Task LoadPlayersAsync()
-        {
-            var players = await _playerService.GetAllPlayersAsync();
-
-            MatchVM.AllPlayers = players.ToList();
-            MatchVM.PlayerList = players
-               .OrderBy(p => p.FullName)
-             .Select(p => new SelectListItem
-             {
-                 Value = p.PlayerId.ToString(),
-                 Text = $"{p.FullName} ({(p.BirthYear?.ToString() ?? "N/A")})"
-             })
-             .ToList();
-        }
-
-        public async Task<JsonResult> OnGetGetPlayer(int id)
-        {
-            var player = await _playerService.GetPlayerByIdAsync(id);
-
-            if (player == null)
-            {
-                return new JsonResult(new { error = "Player not found" });
-            }
-
-            // Optional debug
-            Console.WriteLine($"DEBUG: PlayerId={player.PlayerId}, FullName={player.FullName}, BirthYear={player.BirthYear}");
-
-            return new JsonResult(new
-            {
-                player.PlayerId,
-                player.FirstName,
-                player.LastName,
-                player.FullName,
-                player.Email,
-                player.PhoneNumber,
-                player.Gender,
-                Birthday = player.Birthday?.ToString("yyyy-MM-dd") ?? "N/A", // format safely
-                player.BirthYear
-            });
         }
     }
 }

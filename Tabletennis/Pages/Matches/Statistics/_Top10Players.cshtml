@@ -1,41 +1,38 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+
 @model List<Tabletennis.ViewModels.Top10PlayersViewModel>
 
-<div class="row mt-4">
-    <h2 class="player-text ">
-        Topp 10 spelare
-    </h2>
-    <p>(Endast spelare med 10 eller fler spelade matcher visas i listan)</p>
-    <div class="col-12 mt-3">
-        <table class="table table-bordered text-center">
-            <thead>
-                <tr>
-                    <th scope="col" class="custom-thead">Spelare</th>
-                    <th scope="col" class="custom-thead">Totalt antal matcher</th>
-                    <th scope="col" class="custom-thead">Totalt antal vinster</th>
-                    <th scope="col" class="custom-thead">Vinstprocent</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var player in Model)
-                    {
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Topp 10 Spelare</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
                         <tr>
-                            <td>@player.FirstName @player.LastName</td>
-                            <td>@player.MatchesPlayed st</td>
-                            <td>@player.NumberOfWins st</td>
-                            <td>@player.PlayerWinRatio %</td>
+                            <th>Spelare</th>
+                            <th>Vinster</th>
+                            <th>Matcher</th>
+                            <th>Vinstprocent</th>
                         </tr>
-                    }
-                }
-                else
-                {
-                    <tr><td colspan="4">Ingen statistik tillgänglig.</td></tr>
-                }
-            </tbody>
-        </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var player in Model)
+                        {
+                            <tr>
+                                <td>@player.FullName</td>
+                                <td>@player.NumberOfWins</td>
+                                <td>@player.MatchesPlayed</td>
+                                <td>@player.PlayerWinRatio.ToString("F1")%</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
