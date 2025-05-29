@@ -155,10 +155,24 @@
 
             // Hantera rensning av spelare
             clearPlayer1.on('click', function() {
-                player1Input.val('');
-                player1Id.val('');
-                $(this).prop('disabled', true);
-                window.location.href = `?player1Id=&player2Id=${player2Id.val()}&searchQuery=${playerSearch.val()}`;
+                // Om spelare 2 är vald, flytta den till spelare 1
+                if (player2Input.val()) {
+                    player1Input.val(player2Input.val());
+                    player1Id.val(player2Id.val());
+                    clearPlayer1.prop('disabled', false);
+                    
+                    // Rensa spelare 2
+                    player2Input.val('');
+                    player2Id.val('');
+                    clearPlayer2.prop('disabled', true);
+                } else {
+                    // Om ingen spelare 2, bara rensa spelare 1
+                    player1Input.val('');
+                    player1Id.val('');
+                    $(this).prop('disabled', true);
+                }
+                
+                window.location.href = `?player1Id=${player1Id.val()}&player2Id=${player2Id.val()}&searchQuery=${playerSearch.val()}`;
             });
 
             clearPlayer2.on('click', function() {
