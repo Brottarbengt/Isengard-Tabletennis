@@ -125,12 +125,13 @@
                 const playerName = $(this).data('player-name');
                 const playerId = $(this).data('player-id');
 
-                // Kontrollera om spelaren redan är vald
+                // Kontrollera om spelaren redan är vald i något av fälten
                 if (playerId === player1Id.val() || playerId === player2Id.val()) {
                     alert('Denna spelare är redan vald!');
                     return;
                 }
 
+                // Välj spelare i första tomma fältet
                 if (!player1Input.val()) {
                     player1Input.val(playerName);
                     player1Id.val(playerId);

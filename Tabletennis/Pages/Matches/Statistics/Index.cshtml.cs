@@ -23,6 +23,13 @@ namespace Tabletennis.Pages.Matches.Statistics
 
         public async Task<IActionResult> OnGetAsync(int? player1Id, int? player2Id, string searchQuery)
         {
+            // Kontrollera om samma spelare är vald två gånger
+            if (player1Id.HasValue && player2Id.HasValue && player1Id.Value == player2Id.Value)
+            {
+                // Om samma spelare är vald, återställ player2Id
+                player2Id = null;
+            }
+
             ViewModel.SelectedPlayer1Id = player1Id;
             ViewModel.SelectedPlayer2Id = player2Id;
             ViewModel.SearchQuery = searchQuery ?? string.Empty;
@@ -36,7 +43,7 @@ namespace Tabletennis.Pages.Matches.Statistics
                 .Select(p => new SelectListItem
                 {
                     Value = p.PlayerId.ToString(),
-                    Text = $"{p.FirstName} {p.LastName}"
+                    Text = p.BirthYear.HasValue ? $"{p.FullName} ({p.BirthYear})" : p.FullName
                 })
                 .ToList();
 
@@ -80,7 +87,7 @@ namespace Tabletennis.Pages.Matches.Statistics
                         NumberOfLosses = player1.NumberOfLosses,
                         PlayerWinRatio = player1.PlayerWinRatio,
                         MatchesPlayed = player1.MatchesPlayed,
-                        FullName = $"{player1.FirstName} {player1.LastName}"
+                        FullName = player1.BirthYear.HasValue ? $"{player1.FullName} ({player1.BirthYear})" : player1.FullName
                     },
                     Player2 = new PlayerStatisticsViewModel
                     {
@@ -91,7 +98,7 @@ namespace Tabletennis.Pages.Matches.Statistics
                         NumberOfLosses = player2.NumberOfLosses,
                         PlayerWinRatio = player2.PlayerWinRatio,
                         MatchesPlayed = player2.MatchesPlayed,
-                        FullName = $"{player2.FirstName} {player2.LastName}"
+                        FullName = player2.BirthYear.HasValue ? $"{player2.FullName} ({player2.BirthYear})" : player2.FullName
                     },
                     Player1Wins = player1Wins,
                     Player2Wins = player2Wins,
@@ -115,7 +122,7 @@ namespace Tabletennis.Pages.Matches.Statistics
                         PlayerWinRatio = p.PlayerWinRatio,
                         MatchesPlayed = p.MatchesPlayed,
                         NumberOfWins = p.NumberOfWins,
-                        FullName = $"{p.FirstName} {p.LastName}"
+                        FullName = p.BirthYear.HasValue ? $"{p.FullName} ({p.BirthYear})" : p.FullName
                     })
                     .ToList();
 
@@ -184,18 +191,22 @@ namespace Tabletennis.Pages.Matches.Statistics
                         NumberOfLosses = selectedPlayer.NumberOfLosses,
                         PlayerWinRatio = selectedPlayer.PlayerWinRatio,
                         MatchesPlayed = selectedPlayer.MatchesPlayed,
-                        FullName = $"{selectedPlayer.FirstName} {selectedPlayer.LastName}",
+                        FullName = selectedPlayer.BirthYear.HasValue ? $"{selectedPlayer.FullName} ({selectedPlayer.BirthYear})" : selectedPlayer.FullName,
                         BestOpponent = bestOpponent != null ? new OpponentStatsViewModel
                         {
                             PlayerId = bestOpponent.PlayerId,
-                            FullName = allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName,
+                            FullName = allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).BirthYear.HasValue 
+                                ? $"{allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName} ({allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).BirthYear})"
+                                : allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName,
                             WinRatio = bestOpponent.WinRatio,
                             TotalMatches = bestOpponent.TotalMatches
                         } : null,
                         WorstOpponent = worstOpponent != null ? new OpponentStatsViewModel
                         {
                             PlayerId = worstOpponent.PlayerId,
-                            FullName = allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName,
+                            FullName = allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).BirthYear.HasValue 
+                                ? $"{allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName} ({allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).BirthYear})"
+                                : allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName,
                             WinRatio = worstOpponent.WinRatio,
                             TotalMatches = worstOpponent.TotalMatches
                         } : null
@@ -213,18 +224,22 @@ namespace Tabletennis.Pages.Matches.Statistics
                         NumberOfLosses = selectedPlayer.NumberOfLosses,
                         PlayerWinRatio = selectedPlayer.PlayerWinRatio,
                         MatchesPlayed = selectedPlayer.MatchesPlayed,
-                        FullName = $"{selectedPlayer.FirstName} {selectedPlayer.LastName}",
+                        FullName = selectedPlayer.BirthYear.HasValue ? $"{selectedPlayer.FullName} ({selectedPlayer.BirthYear})" : selectedPlayer.FullName,
                         BestOpponent = bestOpponent != null ? new OpponentStatsViewModel
                         {
                             PlayerId = bestOpponent.PlayerId,
-                            FullName = allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName,
+                            FullName = allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).BirthYear.HasValue 
+                                ? $"{allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName} ({allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).BirthYear})"
+                                : allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName,
                             WinRatio = bestOpponent.WinRatio,
                             TotalMatches = bestOpponent.TotalMatches
                         } : null,
                         WorstOpponent = worstOpponent != null ? new OpponentStatsViewModel
                         {
                             PlayerId = worstOpponent.PlayerId,
-                            FullName = allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName,
+                            FullName = allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).BirthYear.HasValue 
+                                ? $"{allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName} ({allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).BirthYear})"
+                                : allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName,
                             WinRatio = worstOpponent.WinRatio,
                             TotalMatches = worstOpponent.TotalMatches
                         } : null
