@@ -88,15 +88,14 @@ namespace Services
 
         }
 
-        public async void SetPlayerWinRatio(int playerId)
+        public async Task<decimal> SetPlayerWinRatioAsync(int playerId)
         {
             var player = await _dbContext.Players
                 .FirstOrDefaultAsync(p => p.PlayerId == playerId);
 
-            
-            var winRatio = player.NumberOfWins / player.MatchesPlayed;
-            player.PlayerWinRatio = Math.Round((decimal)winRatio * 100, 2); // Store win ratio as percentage
-            await _dbContext.SaveChangesAsync();
+
+            decimal winRatio = (decimal)player.NumberOfWins / (decimal)player.MatchesPlayed;
+            return Math.Round(winRatio * 100 , 2);
 
         }
 

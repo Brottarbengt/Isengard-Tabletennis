@@ -8,8 +8,8 @@
         public int NumberOfWins { get; set; }        
         public decimal PlayerWinRatio { get; set; }
         public int MatchesPlayed { get; set; }
-        public string FullName => $"{FirstName} {LastName}";
-        
-        
+        public string FullName { get; set; } = string.Empty;
+
+
     }
 }

@@ -12,7 +12,7 @@ namespace Tabletennis.Pages.Matches.Statistics
         private readonly ISetService _setService;
         private readonly IPlayerService _playerService;
 
-
+        //TODO: Fixa seedning av players s� att top10 f�r spelare
         public IndexModel(IMatchService matchService, ISetService setService, IPlayerService playerService)
         {
             _matchService = matchService;
@@ -21,29 +21,37 @@ namespace Tabletennis.Pages.Matches.Statistics
         }
 
         
-        public List<Top10PlayersViewModel> Top10PlayersVM { get; set; } = new();
+        public List<Top10PlayersViewModel> Top10PlayersVMList { get; set; } = new();
+        public Top10PlayersViewModel Top10PlayerVM { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync()
         {
             var allPlayers = await _playerService.GetAllPlayerDTOsAsync();
-            Top10PlayersVM = allPlayers
+            Top10PlayersVMList = new List<Top10PlayersViewModel>();
+
+            foreach (var player in allPlayers) 
+            { 
+                var top10Player = new Top10PlayersViewModel
+                {
+                    PlayerId = player.PlayerId,
+                    FirstName = player.FirstName,
+                    LastName = player.LastName,
+                    NumberOfWins = player.NumberOfWins,
+                    MatchesPlayed = player.MatchesPlayed,
+                    PlayerWinRatio = player.PlayerWinRatio
+                };
+                Top10PlayersVMList.Add(top10Player);
+            }
+
+            Top10PlayersVMList = Top10PlayersVMList
+                .Where(p => p.MatchesPlayed >= 10)
                 .OrderByDescending(p => p.PlayerWinRatio)
                 .ThenByDescending(p => p.MatchesPlayed)
                 .Take(10)
-                .Select(p => new Top10PlayersViewModel
-                {
-                    PlayerId = p.PlayerId,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    NumberOfWins = p.NumberOfWins,                    
-                    PlayerWinRatio = p.PlayerWinRatio,
-                    MatchesPlayed = p.MatchesPlayed
-                })
                 .ToList();
 
             return Page();
         }
-
        
     }
 }

@@ -20,13 +20,8 @@
         </div>
     </div>
 
-    @* If-sats om ingen spelare är vald visa: *@
-    <partial name="_Top10Players" model="Model.Top10PlayersVM" />
-
-    @* If-sats om en spelare är vald visa: *@
+    <partial name="_Top10Players" model="Model.Top10PlayersVMList" />
     <partial name="_PlayerStats" model="Model" />
-
-    @* If-sats om två spelare är vald visa: *@
     <partial name="_VsPlayerStats" model="Model" />
 
 </div>

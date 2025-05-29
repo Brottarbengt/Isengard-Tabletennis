@@ -12,9 +12,11 @@ namespace Services
     public class MatchService : IMatchService
     {
         private readonly ApplicationDbContext _context;
-        public MatchService(ApplicationDbContext context)
+        private readonly IPlayerService _playerService;
+        public MatchService(ApplicationDbContext context, IPlayerService playerService)
         {
             _context = context;
+            _playerService = playerService;
         }
 
         public async Task<List<PlayerDTO>> GetAllPlayersAsync()
@@ -88,9 +90,8 @@ namespace Services
             {
                 SetId = firstSet.SetId,                 
                 InfoMessage = string.Empty,
-                IsPlayer1Serve = true,
-                IsPlayer1StartServer = true,
-                ServeCounter = 0
+                IsPlayer1Serve = true,  //TODO: Ändra till false för att byta startserver till player2
+                IsPlayer1StartServer = true, // Ändra till false för att byta startserver player 2                
             };
             _context.SetInfos.Add(firstSetInfo);
             await _context.SaveChangesAsync();
@@ -173,13 +174,14 @@ namespace Services
                 // Uppdatera spelare med vinst eller förlust för statistik
                 if (match.MatchWinner == playerMatch.TeamNumber)
                 {
-                    playerMatch.Player.NumberOfWins++;                    
+                    playerMatch.Player.NumberOfWins++;
                 }
                 else
                 {
-                    playerMatch.Player.NumberOfLosses++;                    
+                    playerMatch.Player.NumberOfLosses++;
                 }
                 playerMatch.Player.MatchesPlayed = playerMatch.Player.NumberOfWins + playerMatch.Player.NumberOfLosses;
+                playerMatch.Player.PlayerWinRatio = await _playerService.SetPlayerWinRatioAsync(playerMatch.Player.PlayerId);
             }
 
             if (match != null)
