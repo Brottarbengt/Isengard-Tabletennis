@@ -55,7 +55,11 @@
     </div>
 
     <div class="row">
-        @if (!Model.ViewModel.SelectedPlayer1Id.HasValue && !Model.ViewModel.SelectedPlayer2Id.HasValue)
+        @if (Model.ViewModel.SelectedPlayer1Id.HasValue && Model.ViewModel.SelectedPlayer2Id.HasValue)
+        {
+            <partial name="_VsPlayerStats" model="Model.ViewModel.VsStats" />
+        }
+        else if (!Model.ViewModel.SelectedPlayer1Id.HasValue && !Model.ViewModel.SelectedPlayer2Id.HasValue)
         {
             <partial name="_Top10Players" model="Model.ViewModel.Top10Players" />
         }

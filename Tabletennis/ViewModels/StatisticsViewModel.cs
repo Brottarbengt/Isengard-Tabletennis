@@ -13,5 +13,6 @@ namespace Tabletennis.ViewModels
         public List<Top10PlayersViewModel> Top10Players { get; set; } = new();
         public PlayerStatisticsViewModel? Player1Stats { get; set; }
         public PlayerStatisticsViewModel? Player2Stats { get; set; }
+        public VsPlayerStatsViewModel? VsStats { get; set; }
     }
 } 
