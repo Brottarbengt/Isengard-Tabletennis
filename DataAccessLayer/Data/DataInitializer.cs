@@ -79,8 +79,8 @@ public class DataInitializer
         {
             for (int j = i + 1; j < playerIds.Count; j++)
             {
-                // Slumpa antal matcher mellan 13 och 50 för varje spelarpar
-                int numberOfMatches = random.Next(13, 51);
+                // Slumpa antal matcher mellan 6 och 23 för varje spelarpar
+                int numberOfMatches = random.Next(6, 23);
                 
                 for (int m = 0; m < numberOfMatches; m++)
                 {
@@ -99,15 +99,46 @@ public class DataInitializer
                         Sets = new List<Set>()
                     };
 
-                    // Slumpa vinnare
-                    int winner = random.Next(1, 3);
-                    match.MatchWinner = winner == 1 ? playerIds[i] : playerIds[j];
+                    // Skapa 3 set per match
+                    for (int setNum = 1; setNum <= 3; setNum++)
+                    {
+                        // Slumpa vem som vinner setet
+                        int setWinner = random.Next(1, 3);
+                        int team1Score, team2Score;
+
+                        if (setWinner == 1)
+                        {
+                            team1Score = random.Next(11, 14); // 11-13 poäng
+                            team2Score = random.Next(0, team1Score); // Mindre än team1
+                        }
+                        else
+                        {
+                            team2Score = random.Next(11, 14); // 11-13 poäng
+                            team1Score = random.Next(0, team2Score); // Mindre än team2
+                        }
+
+                        var set = new Set
+                        {
+                            SetNumber = setNum,
+                            Team1Score = team1Score,
+                            Team2Score = team2Score,
+                            SetWinner = setWinner,
+                            IsSetCompleted = true
+                        };
+
+                        match.Sets.Add(set);
+                    }
+
+                    // Uppdatera match-vinnaren baserat på set-resultaten
+                    int team1WonSets = match.Sets.Count(s => s.SetWinner == 1);
+                    int team2WonSets = match.Sets.Count(s => s.SetWinner == 2);
+                    match.MatchWinner = team1WonSets > team2WonSets ? playerIds[i] : playerIds[j];
 
                     // Uppdatera statistik
                     var stats1 = playerStats[playerIds[i]];
                     var stats2 = playerStats[playerIds[j]];
                     
-                    if (winner == 1)
+                    if (match.MatchWinner == playerIds[i])
                     {
                         stats1.wins++;
                         stats2.losses++;
@@ -120,24 +151,6 @@ public class DataInitializer
                     
                     playerStats[playerIds[i]] = stats1;
                     playerStats[playerIds[j]] = stats2;
-
-                    // Skapa 3 set per match
-                    for (int setNum = 1; setNum <= 3; setNum++)
-                    {
-                        var team1Score = random.Next(11, 14); // 11-13 poäng
-                        var team2Score = random.Next(0, team1Score); // Mindre än team1
-
-                        var set = new Set
-                        {
-                            SetNumber = setNum,
-                            Team1Score = team1Score,
-                            Team2Score = team2Score,
-                            SetWinner = 1,
-                            IsSetCompleted = true
-                        };
-
-                        match.Sets.Add(set);
-                    }
 
                     matches.Add(match);
                 }
