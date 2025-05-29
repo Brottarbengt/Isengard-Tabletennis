@@ -19,6 +19,26 @@
                     <p>Vinstprocent: @Model.PlayerWinRatio.ToString("F1")%</p>
                 </div>
             </div>
+            <div class="col-md-6">
+                @if (Model.BestOpponent != null)
+                {
+                    <div class="mb-3">
+                        <h6>Bästa motståndare</h6>
+                        <p>@Model.BestOpponent.FullName</p>
+                        <p>Vinstprocent: @Model.BestOpponent.WinRatio.ToString("F1")%</p>
+                        <p>Antal matcher: @Model.BestOpponent.TotalMatches</p>
+                    </div>
+                }
+                @if (Model.WorstOpponent != null)
+                {
+                    <div class="mb-3">
+                        <h6>Sämsta motståndare</h6>
+                        <p>@Model.WorstOpponent.FullName</p>
+                        <p>Vinstprocent: @Model.WorstOpponent.WinRatio.ToString("F1")%</p>
+                        <p>Antal matcher: @Model.WorstOpponent.TotalMatches</p>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>
