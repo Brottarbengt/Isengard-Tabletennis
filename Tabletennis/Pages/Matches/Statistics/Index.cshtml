@@ -4,24 +4,189 @@
 }
 
 <div class="container mt-4">
+    <h1 class="player-text page-title">
+        Spelar statistik
+    </h1>
 
-    @* Här ovanför hamnar val av spelare a.k.a:
-    - Search Dropdown med spelare
-    - En div för spelare1 med ta bort knapp
-    - En div för spelare2 med ta bort knapp 
-    - Tomma divar och knappar som inte syns när ingen spelare är vald?*@
+    <div class="card-body">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Search Player</label>
+                    <select id="searchPlayer" name="searchPlayer" class="form-control custom-select">
+                        <option value=""></option>
+                        @foreach (var player in Model.MatchVM.AllPlayers)
+                        {
+                            var fullName = !string.IsNullOrWhiteSpace(player.FullName)
+                            ? player.FullName
+                            : $"{player.FirstName} {player.LastName}".Trim();
 
-    <div class="mb-4">
-        <div class="col-6">
-            <h2 class="player-text">Lovisa Jönsson</h2>
-        </div>
-        <div class="col-6">
-            <h2 class="player-text">Kalle Andersson</h2>
-        </div>
+                            if (string.IsNullOrWhiteSpace(fullName)) fullName = "Unnamed Player";
+
+                            var birthYear = player.Birthday.HasValue && player.Birthday != DateOnly.MinValue
+                            ? player.Birthday.Value.Year.ToString()
+                            : "N/A";
+
+                            <option value="@player.PlayerId"
+                                    data-fullname="@fullName"
+                                    data-birthyear="@birthYear">
+                                @fullName (@birthYear)
+                            </option>
+                        }
+                    </select>
+                </div>                
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label>Player 1</label>
+                    <div class="input-group">
+                        <input type="text" asp-for="MatchVM.Player1Name" id="Player1Name" class="form-control" readonly />
+                        <input type="hidden" asp-for="MatchVM.Player1Id" id="Player1Id" />
+                        <button type="button" class="btn btn-custom-red" onclick="clearPlayer('Player1')" style=" background-color: #c4553e;color: white;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Player 2</label>
+                    <div class="input-group">
+                        <input type="text" asp-for="MatchVM.Player2Name" id="Player2Name" class="form-control" readonly />
+                        <input type="hidden" asp-for="MatchVM.Player2Id" id="Player2Id" />
+                        <button type="button" class="btn btn-custom-red" onclick="clearPlayer('Player2')" style=" background-color: #c4553e;color: white;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+           
+        </form>
     </div>
-
-    <partial name="_Top10Players" model="Model.Top10PlayersVMList" />
-    <partial name="_PlayerStats" model="Model" />
-    <partial name="_VsPlayerStats" model="Model" />
+    <div id="top10">
+        <partial name="_Top10Players" model="Model.Top10PlayersVMList" />
+    </div>
+    <div id="player-stats">
+        <partial name="_PlayerStats" model="Model" />
+    </div>
+    <div id="vs-player-stats">
+        <partial name="_VsPlayerStats" model="Model" />
+    </div>
+     
 
 </div>
+
+@section Scripts {
+    <script>
+        let player1Selected = false;
+        let player2Selected = false;
+
+        function updateDivVisibility() {
+            if (!player1Selected && !player2Selected) {
+                $('#top10').show();
+                $('#player-stats').hide();
+                $('#vs-player-stats').hide();
+            } else if (player1Selected && !player2Selected) {
+                $('#top10').hide();
+                $('#player-stats').show();
+                $('#vs-player-stats').hide();
+            } else if (player1Selected && player2Selected) {
+                $('#top10').hide();
+                $('#player-stats').hide();
+                $('#vs-player-stats').show();
+            }
+        }
+
+        $(function () {
+            // Initial visibility
+            updateDivVisibility();
+
+            $('#searchPlayer').select2({
+               placeholder: "Search and select player...",
+               allowClear: true,
+               width: '100%',
+
+               templateResult: function (data) {
+                   if (!data.id || !data.element) return data.text;
+
+                   const $option = $(data.element);
+                   const fullName = $option.data('fullname') || 'Unnamed Player';
+                   const birthYear = $option.data('birthyear') || 'N/A';
+
+                  return `${fullName} (${birthYear})`;
+               },
+
+               templateSelection: function (data) {
+                  if (!data.id || !data.element) return data.text;
+
+                  const $option = $(data.element);
+                  const fullName = $option.data('fullname') || 'Unnamed Player';
+                  const birthYear = $option.data('birthyear') || 'N/A';
+
+                  return `${fullName} (${birthYear})`;
+               }
+            });
+
+
+            $('#searchPlayer').on('change', function () {
+                const selectedId = $(this).val();
+                if (!selectedId) return;
+
+                // Prevent duplicates
+                if ($('#Player1Id').val() === selectedId || $('#Player2Id').val() === selectedId) {
+                    alert('This player is already selected.');
+                    $(this).val(null).trigger('change');
+                    return;
+                }
+
+                if (!player1Selected) {
+                    fetchPlayer(selectedId, 'Player1');
+                    player1Selected = true;
+                } else if (!player2Selected) {
+                    fetchPlayer(selectedId, 'Player2');
+                    player2Selected = true;
+                } else {
+                    alert('Both players are already selected.');
+                    $(this).val(null).trigger('change');
+                }
+                updateDivVisibility();
+            });
+        });
+
+        function fetchPlayer(playerId, target) {
+            $.get(`?handler=GetPlayer&id=${playerId}`, function (data) {
+                console.log("Returned player:", data);
+
+                if (data) {
+                    let displayName = data.fullName;
+                    if (data.birthYear) {
+                        displayName += ` (${data.birthYear})`;
+                    }
+
+                    $(`#${target}Name`).val(displayName);
+                    $(`#${target}Id`).val(data.playerId);
+
+                    setTimeout(() => {
+                        $('#searchPlayer').val(null).trigger('change');
+                    }, 200);
+                }
+            });
+        }
+
+        function clearPlayer(target) {
+            if (target === 'Player1' && player2Selected) {
+                // Flytta Player2 till Player1
+                $('#Player1Name').val($('#Player2Name').val());
+                $('#Player1Id').val($('#Player2Id').val());
+                $('#Player2Name').val('');
+                $('#Player2Id').val('');
+                player2Selected = false;
+            } else {
+                $(`#${target}Name`).val('');
+                $(`#${target}Id`).val('');
+                if (target === 'Player1') player1Selected = false;
+                if (target === 'Player2') player2Selected = false;
+            }
+            updateDivVisibility();
+        }
+    </script>
+}

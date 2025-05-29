@@ -1,6 +1,7 @@
 using DataAccessLayer.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Interfaces;
 using Tabletennis.ViewModels;
 
@@ -22,15 +23,25 @@ namespace Tabletennis.Pages.Matches.Statistics
 
         
         public List<Top10PlayersViewModel> Top10PlayersVMList { get; set; } = new();
-        public Top10PlayersViewModel Top10PlayerVM { get; set; } = new();
+        //public Top10PlayersViewModel Top10PlayerVM { get; set; } = new(); Obsolete?
+        public CreateMatchViewModel MatchVM { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync()
+        {
+            await LoadPlayersAsync();
+            await ShowTop10PlayersAsync();
+
+
+            return Page();
+        }
+
+        private async Task ShowTop10PlayersAsync()
         {
             var allPlayers = await _playerService.GetAllPlayerDTOsAsync();
             Top10PlayersVMList = new List<Top10PlayersViewModel>();
 
-            foreach (var player in allPlayers) 
-            { 
+            foreach (var player in allPlayers)
+            {
                 var top10Player = new Top10PlayersViewModel
                 {
                     PlayerId = player.PlayerId,
@@ -49,9 +60,47 @@ namespace Tabletennis.Pages.Matches.Statistics
                 .ThenByDescending(p => p.MatchesPlayed)
                 .Take(10)
                 .ToList();
-
-            return Page();
         }
-       
+
+        private async Task LoadPlayersAsync()
+        {
+            var players = await _matchService.GetAllPlayersAsync();
+
+            MatchVM.AllPlayers = players.ToList();
+            MatchVM.PlayerList = players
+               .OrderBy(p => p.FullName)
+             .Select(p => new SelectListItem
+             {
+                 Value = p.PlayerId.ToString(),
+                 Text = $"{p.FullName} ({(p.BirthYear?.ToString() ?? "N/A")})"
+             })
+             .ToList();
+        }
+
+        public async Task<JsonResult> OnGetGetPlayer(int id)
+        {
+            var player = await _matchService.GetPlayerByIdAsync(id);
+
+            if (player == null)
+            {
+                return new JsonResult(new { error = "Player not found" });
+            }
+
+            // Optional debug
+            Console.WriteLine($"DEBUG: PlayerId={player.PlayerId}, FullName={player.FullName}, BirthYear={player.BirthYear}");
+
+            return new JsonResult(new
+            {
+                player.PlayerId,
+                player.FirstName,
+                player.LastName,
+                player.FullName,
+                player.Email,
+                player.PhoneNumber,
+                player.Gender,
+                Birthday = player.Birthday?.ToString("yyyy-MM-dd") ?? "N/A", // format safely
+                player.BirthYear
+            });
+        }
     }
 }
