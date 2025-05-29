@@ -19,38 +19,38 @@ namespace Services
             _playerService = playerService;
         }
 
-        public async Task<List<PlayerDTO>> GetAllPlayersAsync()
-        {
-            return await _context.Players
-              .Select(player => new PlayerDTO
-              {
-                 PlayerId = player.PlayerId,
-                 FirstName = player.FirstName,
-                 LastName = player.LastName,
-                 FullName = $"{player.FirstName} {player.LastName}",
-                 Birthday = player.Birthday, // 🟢 Required for BirthYear
-                 Email = player.Email,
-                 PhoneNumber = player.PhoneNumber,
-                 Gender = player.Gender
-              })
-               .ToListAsync();
-        }
+        //public async Task<List<PlayerDTO>> GetAllPlayersAsync()
+        //{
+        //    return await _context.Players
+        //      .Select(player => new PlayerDTO
+        //      {
+        //         PlayerId = player.PlayerId,
+        //         FirstName = player.FirstName,
+        //         LastName = player.LastName,
+        //         FullName = $"{player.FirstName} {player.LastName}",
+        //         Birthday = player.Birthday, // 🟢 Required for BirthYear
+        //         Email = player.Email,
+        //         PhoneNumber = player.PhoneNumber,
+        //         Gender = player.Gender
+        //      })
+        //       .ToListAsync();
+        //}
 
-        public async Task<PlayerDTO?> GetPlayerByIdAsync(int playerId)
-        {
-            var player = await _context.Players.FindAsync(playerId);
-            return player == null ? null : new PlayerDTO
-            {
-                PlayerId = player.PlayerId,
-                FirstName = player.FirstName,
-                LastName = player.LastName,
-                FullName = $"{player.FirstName} {player.LastName}",
-                Birthday = player.Birthday,
-                Email = player.Email,
-                PhoneNumber = player.PhoneNumber,
-                Gender = player.Gender
-            };
-        }
+        //public async Task<PlayerDTO?> GetPlayerByIdAsync(int playerId)
+        //{
+        //    var player = await _context.Players.FindAsync(playerId);
+        //    return player == null ? null : new PlayerDTO
+        //    {
+        //        PlayerId = player.PlayerId,
+        //        FirstName = player.FirstName,
+        //        LastName = player.LastName,
+        //        FullName = $"{player.FirstName} {player.LastName}",
+        //        Birthday = player.Birthday,
+        //        Email = player.Email,
+        //        PhoneNumber = player.PhoneNumber,
+        //        Gender = player.Gender
+        //    };
+        //}
 
         public async Task<int> CreateMatchAsync(MatchDTO match)
         {

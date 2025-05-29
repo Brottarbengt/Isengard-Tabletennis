@@ -49,7 +49,7 @@ namespace Services
             return players.Adapt<List<PlayerSmallInfoDTO>>();
         }
 
-        public async Task<PlayerDTO> GetOneAsync(int playerId)
+        public async Task<PlayerDTO> GetPlayerByIdAsync(int playerId)
         {
             var playerDb = await _dbContext.Players.FindAsync(playerId);
             var playerDTO = playerDb.Adapt<PlayerDTO>();
@@ -99,7 +99,7 @@ namespace Services
 
         }
 
-        public Task<List<PlayerDTO>> GetAllPlayerDTOsAsync()
+        public Task<List<PlayerDTO>> GetAllPlayersAsync()
         {
             var players = _dbContext.Players
                 .Where(p => p.IsActive)
