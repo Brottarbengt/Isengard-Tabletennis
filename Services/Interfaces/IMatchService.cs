@@ -19,6 +19,9 @@ namespace Services.Interfaces
         // Match  Delete //
         Task<MatchDeleteDTO?> GetMatchDeleteDtoAsync(int matchId);
         Task<bool> DeleteMatchAsync(int id);
+        // Match Update //
+        Task<MatchUpdateDTO?> GetMatchUpdateDtoAsync(int matchId);
+        Task<bool> UpdateMatchAsync(MatchUpdateDTO dto);
 
         //ActiveMatchDTO GetMatchById(int matchId);
     }

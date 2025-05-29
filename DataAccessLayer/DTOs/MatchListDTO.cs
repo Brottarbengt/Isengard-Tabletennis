@@ -15,6 +15,7 @@ namespace DataAccessLayer.DTOs
         public string? Player2FullName { get; set; }
         public string? Winner { get; set; }
         public DateTime StartDate { get; set; }
-        
+        public int SetCount => Sets?.Count ?? 0;
+
     }
 }

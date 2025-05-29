@@ -332,6 +332,34 @@ namespace Services
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<MatchUpdateDTO?> GetMatchUpdateDtoAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.Sets)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null) return null;
+
+            return new MatchUpdateDTO
+            {
+                MatchId = match.MatchId,
+                MatchDate = match.MatchDate,
+                MatchType = match.MatchType,
+                MatchWinner = match.MatchWinner
+            };
+        }
+        public async Task<bool> UpdateMatchAsync(MatchUpdateDTO matchDto)
+        {
+            var match = await _context.Matches.FindAsync(matchDto.MatchId);
+            if (match == null) return false;
+
+            match.MatchDate = matchDto.MatchDate;
+            match.MatchType = matchDto.MatchType;
+            match.MatchWinner = matchDto.MatchWinner;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
 
     }
 }
