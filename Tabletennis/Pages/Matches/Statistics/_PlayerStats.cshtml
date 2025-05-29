@@ -1,8 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
+@model Tabletennis.ViewModels.PlayerStatisticsViewModel
 <div class="row mt-4">
     <div class="col-12 mt-3">
         <table class="table table-bordered text-center">
@@ -15,7 +14,7 @@
             </thead>
             <tbody>
                     <tr>
-                        <td class="">15 st</td>
+                        <td class="">@Model.NumberOfWins st</td>
                         <td class="">5 st</td>
                         <td class="">75%</td>
                     </tr>
