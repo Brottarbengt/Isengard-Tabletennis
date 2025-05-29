@@ -88,8 +88,8 @@ namespace Services
             {
                 SetId = firstSet.SetId,                 
                 InfoMessage = string.Empty,
-                IsPlayer1Serve = true,
-                IsPlayer1StartServer = true,
+                IsPlayer1Serve = true, //TODO: Ändra till false för att byta startserver till player2
+                IsPlayer1StartServer = true, //TODO: Ändra till false för att byta startserver till player2
                 ServeCounter = 0
             };
             _context.SetInfos.Add(firstSetInfo);
