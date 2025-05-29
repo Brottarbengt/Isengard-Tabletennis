@@ -11,16 +11,28 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <h6>@Model.Player1.FullName</h6>
-                    <p>Vinster: @Model.Player1Wins</p>
-                    <p>Förluster: @Model.Player2Wins</p>
-                    <p>Vinstprocent: @Model.Player1WinRatio.ToString("F1")%</p>
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">@Model.Player1.FullName</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Vinster: @Model.Player1Wins</p>
+                            <p>Förluster: @Model.Player2Wins</p>
+                            <p>Vinstprocent: @Model.Player1WinRatio.ToString("F1")%</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <h6>@Model.Player2.FullName</h6>
-                    <p>Vinster: @Model.Player2Wins</p>
-                    <p>Förluster: @Model.Player1Wins</p>
-                    <p>Vinstprocent: @Model.Player2WinRatio.ToString("F1")%</p>
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">@Model.Player2.FullName</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Vinster: @Model.Player2Wins</p>
+                            <p>Förluster: @Model.Player1Wins</p>
+                            <p>Vinstprocent: @Model.Player2WinRatio.ToString("F1")%</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row mt-3">

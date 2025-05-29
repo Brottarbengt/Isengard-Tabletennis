@@ -27,7 +27,7 @@
                 </div>
                 <div class="card-body">
                     <div class="input-group">
-                        <input type="text" id="player1Input" class="form-control" readonly value="@(Model.ViewModel.Player1Stats?.FullName ?? "")">
+                        <input type="text" id="player1Input" class="form-control" readonly value="@(Model.ViewModel.VsStats?.Player1.FullName ?? Model.ViewModel.Player1Stats?.FullName ?? "")">
                         <input type="hidden" id="player1Id" value="@Model.ViewModel.SelectedPlayer1Id">
                         <button class="btn btn-outline-danger" type="button" id="clearPlayer1" @(Model.ViewModel.SelectedPlayer1Id == null ? "disabled" : "")>
                             <i class="fas fa-times"></i>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="card-body">
                     <div class="input-group">
-                        <input type="text" id="player2Input" class="form-control" readonly value="@(Model.ViewModel.Player2Stats?.FullName ?? "")">
+                        <input type="text" id="player2Input" class="form-control" readonly value="@(Model.ViewModel.VsStats?.Player2.FullName ?? Model.ViewModel.Player2Stats?.FullName ?? "")">
                         <input type="hidden" id="player2Id" value="@Model.ViewModel.SelectedPlayer2Id">
                         <button class="btn btn-outline-danger" type="button" id="clearPlayer2" @(Model.ViewModel.SelectedPlayer2Id == null ? "disabled" : "")>
                             <i class="fas fa-times"></i>
@@ -109,7 +109,13 @@
                 const searchValue = playerSearch.val().toLowerCase();
                 playerDropdown.find('.dropdown-item').each(function() {
                     const text = $(this).text().toLowerCase();
-                    $(this).toggle(text.includes(searchValue));
+                    const playerId = $(this).data('player-id');
+                    
+                    // Dölj spelare som redan är valda
+                    const isPlayer1 = playerId === player1Id.val();
+                    const isPlayer2 = playerId === player2Id.val();
+                    
+                    $(this).toggle(text.includes(searchValue) && !isPlayer1 && !isPlayer2);
                 });
             }
 
@@ -118,6 +124,12 @@
                 e.preventDefault();
                 const playerName = $(this).data('player-name');
                 const playerId = $(this).data('player-id');
+
+                // Kontrollera om spelaren redan är vald
+                if (playerId === player1Id.val() || playerId === player2Id.val()) {
+                    alert('Denna spelare är redan vald!');
+                    return;
+                }
 
                 if (!player1Input.val()) {
                     player1Input.val(playerName);
