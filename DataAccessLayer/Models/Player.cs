@@ -13,6 +13,10 @@ namespace DataAccessLayer.Models
         public Gender Gender { get; set; }
         public DateOnly? Birthday { get; set; }
         public bool IsActive { get; set; } = true;
+        public int NumberOfWins { get; set; }
+        public int NumberOfLosses { get; set; }
+        public decimal PlayerWinRatio { get; set; }
+        public int MatchesPlayed { get; set; }
 
         public ICollection<PlayerMatch> PlayerMatches { get; set; } = new List<PlayerMatch>();
     }

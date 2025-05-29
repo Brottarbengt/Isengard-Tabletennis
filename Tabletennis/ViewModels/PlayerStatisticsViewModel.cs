@@ -1,31 +1,30 @@
-﻿using DataAccessLayer.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.DTOs
+namespace Tabletennis.ViewModels
 {
-    public class PlayerDTO
+    public class PlayerStatisticsViewModel
     {
         public int PlayerId { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string PhoneNumber { get; set; } = string.Empty;
-        public Gender Gender { get; set; }
-        public DateOnly? Birthday { get; set; }
-        public bool IsActive { get; set; }
         public int NumberOfWins { get; set; }
         public int NumberOfLosses { get; set; }
         public decimal PlayerWinRatio { get; set; }
         public int MatchesPlayed { get; set; }
-
         public string FullName { get; set; } = string.Empty;
-        public int? BirthYear => Birthday.HasValue && Birthday != DateOnly.MinValue
-        ? Birthday.Value.Year
-        : null;
+        public OpponentStatsViewModel? BestOpponent { get; set; }
+        public OpponentStatsViewModel? WorstOpponent { get; set; }
     }
-}
+
+    public class OpponentStatsViewModel
+    {
+        public int PlayerId { get; set; }
+        public string FullName { get; set; } = string.Empty;
+        public decimal WinRatio { get; set; }
+        public int TotalMatches { get; set; }
+    }
+} 

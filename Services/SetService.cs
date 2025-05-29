@@ -75,8 +75,7 @@ namespace Services
                 SetId = newSet.SetId,
                 InfoMessage = string.Empty,
                 IsPlayer1Serve = setServer,
-                IsPlayer1StartServer = setServer,
-                ServeCounter = 0
+                IsPlayer1StartServer = setServer,                
             };
 
             _dbContext.SetInfos.Add(newSetInfo);            

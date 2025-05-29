@@ -32,7 +32,7 @@ namespace Tabletennis.Pages.Player
             SetMaxDate();
             LoadGenderOptions();
 
-            var playerDTO = await _playerService.GetOneAsync(playerId);
+            var playerDTO = await _playerService.GetPlayerByIdAsync(playerId);
             player = playerDTO.Adapt<PlayerUpdateViewModel>();
             FullName = player.FirstName + " " + player.LastName;
         }

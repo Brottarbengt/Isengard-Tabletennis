@@ -1,0 +1,186 @@
+﻿@page
+@model Tabletennis.Pages.Matches.Statistics.IndexModel
+@{
+    ViewData["Title"] = "Statistik";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="position-relative">
+                <input type="text" id="playerSearch" class="form-control" placeholder="Sök efter spelare..." value="@Model.ViewModel.SearchQuery">
+                <div id="playerDropdown" class="dropdown-menu w-100" style="max-height: 300px; overflow-y: auto;">
+                    @foreach (var player in Model.ViewModel.PlayerSelectList)
+                    {
+                        <a class="dropdown-item" href="#" data-player-id="@player.Value" data-player-name="@player.Text">@player.Text</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Spelare 1</h5>
+                </div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" id="player1Input" class="form-control" readonly value="@(Model.ViewModel.VsStats?.Player1.FullName ?? Model.ViewModel.Player1Stats?.FullName ?? "")">
+                        <input type="hidden" id="player1Id" value="@Model.ViewModel.SelectedPlayer1Id">
+                        <button class="btn btn-outline-danger" type="button" id="clearPlayer1" @(Model.ViewModel.SelectedPlayer1Id == null ? "disabled" : "")>
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Spelare 2</h5>
+                </div>
+                <div class="card-body">
+                    <div class="input-group">
+                        <input type="text" id="player2Input" class="form-control" readonly value="@(Model.ViewModel.VsStats?.Player2.FullName ?? Model.ViewModel.Player2Stats?.FullName ?? "")">
+                        <input type="hidden" id="player2Id" value="@Model.ViewModel.SelectedPlayer2Id">
+                        <button class="btn btn-outline-danger" type="button" id="clearPlayer2" @(Model.ViewModel.SelectedPlayer2Id == null ? "disabled" : "")>
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model.ViewModel.SelectedPlayer1Id.HasValue && Model.ViewModel.SelectedPlayer2Id.HasValue)
+        {
+            <partial name="_VsPlayerStats" model="Model.ViewModel.VsStats" />
+        }
+        else if (!Model.ViewModel.SelectedPlayer1Id.HasValue && !Model.ViewModel.SelectedPlayer2Id.HasValue)
+        {
+            <partial name="_Top10Players" model="Model.ViewModel.Top10Players" />
+        }
+        else
+        {
+            if (Model.ViewModel.SelectedPlayer1Id.HasValue)
+            {
+                <div class="col-md-6">
+                    <partial name="_PlayerStats" model="Model.ViewModel.Player1Stats" />
+                </div>
+            }
+            if (Model.ViewModel.SelectedPlayer2Id.HasValue)
+            {
+                <div class="col-md-6">
+                    <partial name="_PlayerStats" model="Model.ViewModel.Player2Stats" />
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const playerSearch = $('#playerSearch');
+            const playerDropdown = $('#playerDropdown');
+            const player1Input = $('#player1Input');
+            const player2Input = $('#player2Input');
+            const player1Id = $('#player1Id');
+            const player2Id = $('#player2Id');
+            const clearPlayer1 = $('#clearPlayer1');
+            const clearPlayer2 = $('#clearPlayer2');
+
+            // Visa dropdown när man klickar på sökfältet
+            playerSearch.on('focus', function() {
+                updateDropdown();
+                playerDropdown.show();
+            });
+
+            // Uppdatera dropdown baserat på söktext
+            playerSearch.on('input', function() {
+                updateDropdown();
+                playerDropdown.show();
+            });
+
+            function updateDropdown() {
+                const searchValue = playerSearch.val().toLowerCase();
+                playerDropdown.find('.dropdown-item').each(function() {
+                    const text = $(this).text().toLowerCase();
+                    const playerId = $(this).data('player-id');
+                    
+                    // Dölj spelare som redan är valda
+                    const isPlayer1 = playerId === player1Id.val();
+                    const isPlayer2 = playerId === player2Id.val();
+                    
+                    $(this).toggle(text.includes(searchValue) && !isPlayer1 && !isPlayer2);
+                });
+            }
+
+            // Hantera val av spelare
+            playerDropdown.on('click', '.dropdown-item', function(e) {
+                e.preventDefault();
+                const playerName = $(this).data('player-name');
+                const playerId = $(this).data('player-id');
+
+                // Kontrollera om spelaren redan är vald i något av fälten
+                if (playerId === player1Id.val() || playerId === player2Id.val()) {
+                    alert('Denna spelare är redan vald!');
+                    return;
+                }
+
+                // Välj spelare i första tomma fältet
+                if (!player1Input.val()) {
+                    player1Input.val(playerName);
+                    player1Id.val(playerId);
+                    clearPlayer1.prop('disabled', false);
+                } else if (!player2Input.val()) {
+                    player2Input.val(playerName);
+                    player2Id.val(playerId);
+                    clearPlayer2.prop('disabled', false);
+                }
+
+                // Uppdatera sidan med de valda spelarna
+                window.location.href = `?player1Id=${player1Id.val()}&player2Id=${player2Id.val()}&searchQuery=${playerSearch.val()}`;
+            });
+
+            // Dölj dropdown när man klickar utanför
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.position-relative').length) {
+                    playerDropdown.hide();
+                }
+            });
+
+            // Hantera rensning av spelare
+            clearPlayer1.on('click', function() {
+                // Om spelare 2 är vald, flytta den till spelare 1
+                if (player2Input.val()) {
+                    player1Input.val(player2Input.val());
+                    player1Id.val(player2Id.val());
+                    clearPlayer1.prop('disabled', false);
+                    
+                    // Rensa spelare 2
+                    player2Input.val('');
+                    player2Id.val('');
+                    clearPlayer2.prop('disabled', true);
+                } else {
+                    // Om ingen spelare 2, bara rensa spelare 1
+                    player1Input.val('');
+                    player1Id.val('');
+                    $(this).prop('disabled', true);
+                }
+                
+                window.location.href = `?player1Id=${player1Id.val()}&player2Id=${player2Id.val()}&searchQuery=${playerSearch.val()}`;
+            });
+
+            clearPlayer2.on('click', function() {
+                player2Input.val('');
+                player2Id.val('');
+                $(this).prop('disabled', true);
+                window.location.href = `?player1Id=${player1Id.val()}&player2Id=&searchQuery=${playerSearch.val()}`;
+            });
+        });
+    </script>
+}
