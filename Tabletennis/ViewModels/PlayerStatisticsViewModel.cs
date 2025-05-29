@@ -18,6 +18,10 @@ namespace Tabletennis.ViewModels
         public string FullName { get; set; } = string.Empty;
         public OpponentStatsViewModel? BestOpponent { get; set; }
         public OpponentStatsViewModel? WorstOpponent { get; set; }
+        public TimeSpan LongestMatchDuration { get; set; }
+        public TimeSpan ShortestMatchDuration { get; set; }
+        public string LongestMatchOpponent { get; set; }
+        public string ShortestMatchOpponent { get; set; }
     }
 
     public class OpponentStatsViewModel

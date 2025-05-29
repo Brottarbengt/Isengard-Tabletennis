@@ -76,6 +76,19 @@ namespace Tabletennis.Pages.Matches.Statistics
 
                 var totalMatches = headToHeadMatches.Count;
 
+                // Beräkna längsta och snabbaste matchen
+                var matchDurations = headToHeadMatches
+                    .Where(m => m.DurationSeconds.HasValue && m.DurationSeconds.Value > 0)
+                    .Select(m => new
+                    {
+                        Duration = TimeSpan.FromSeconds(m.DurationSeconds.Value),
+                        MatchDate = m.MatchDate
+                    })
+                    .ToList();
+
+                var longestMatch = matchDurations.OrderByDescending(m => m.Duration).FirstOrDefault();
+                var shortestMatch = matchDurations.OrderBy(m => m.Duration).FirstOrDefault();
+
                 ViewModel.VsStats = new VsPlayerStatsViewModel
                 {
                     Player1 = new PlayerStatisticsViewModel
@@ -104,7 +117,11 @@ namespace Tabletennis.Pages.Matches.Statistics
                     Player2Wins = player2Wins,
                     TotalMatches = totalMatches,
                     Player1WinRatio = totalMatches > 0 ? (decimal)player1Wins / totalMatches * 100 : 0,
-                    Player2WinRatio = totalMatches > 0 ? (decimal)player2Wins / totalMatches * 100 : 0
+                    Player2WinRatio = totalMatches > 0 ? (decimal)player2Wins / totalMatches * 100 : 0,
+                    LongestMatchDuration = longestMatch?.Duration ?? TimeSpan.Zero,
+                    ShortestMatchDuration = shortestMatch?.Duration ?? TimeSpan.Zero,
+                    LongestMatchDate = longestMatch?.MatchDate ?? DateTime.MinValue,
+                    ShortestMatchDate = shortestMatch?.MatchDate ?? DateTime.MinValue
                 };
             }
             // Om ingen spelare är vald, visa Top 10
@@ -144,6 +161,19 @@ namespace Tabletennis.Pages.Matches.Statistics
                     .Select(m => _matchService.GetMatchByIdAsync(m.MatchId).Result)
                     .Where(m => m != null && (m.Player1Id == selectedPlayerId || m.Player2Id == selectedPlayerId))
                     .ToList();
+
+                // Beräkna längsta och snabbaste matchen
+                var matchDurations = playerMatches
+                    .Where(m => m.DurationSeconds.HasValue && m.DurationSeconds.Value > 0)
+                    .Select(m => new
+                    {
+                        Duration = TimeSpan.FromSeconds(m.DurationSeconds.Value),
+                        Opponent = allPlayers.First(p => p.PlayerId == (m.Player1Id == selectedPlayerId ? m.Player2Id : m.Player1Id))
+                    })
+                    .ToList();
+
+                var longestMatch = matchDurations.OrderByDescending(m => m.Duration).FirstOrDefault();
+                var shortestMatch = matchDurations.OrderBy(m => m.Duration).FirstOrDefault();
 
                 // Beräkna vinstratio mot varje motståndare
                 var opponentStats = new Dictionary<int, (int wins, int total)>();
@@ -192,6 +222,14 @@ namespace Tabletennis.Pages.Matches.Statistics
                         PlayerWinRatio = selectedPlayer.PlayerWinRatio,
                         MatchesPlayed = selectedPlayer.MatchesPlayed,
                         FullName = selectedPlayer.BirthYear.HasValue ? $"{selectedPlayer.FullName} ({selectedPlayer.BirthYear})" : selectedPlayer.FullName,
+                        LongestMatchDuration = longestMatch?.Duration ?? TimeSpan.Zero,
+                        ShortestMatchDuration = shortestMatch?.Duration ?? TimeSpan.Zero,
+                        LongestMatchOpponent = longestMatch?.Opponent.BirthYear.HasValue == true 
+                            ? $"{longestMatch.Opponent.FullName} ({longestMatch.Opponent.BirthYear})"
+                            : longestMatch?.Opponent.FullName,
+                        ShortestMatchOpponent = shortestMatch?.Opponent.BirthYear.HasValue == true 
+                            ? $"{shortestMatch.Opponent.FullName} ({shortestMatch.Opponent.BirthYear})"
+                            : shortestMatch?.Opponent.FullName,
                         BestOpponent = bestOpponent != null ? new OpponentStatsViewModel
                         {
                             PlayerId = bestOpponent.PlayerId,
@@ -225,6 +263,14 @@ namespace Tabletennis.Pages.Matches.Statistics
                         PlayerWinRatio = selectedPlayer.PlayerWinRatio,
                         MatchesPlayed = selectedPlayer.MatchesPlayed,
                         FullName = selectedPlayer.BirthYear.HasValue ? $"{selectedPlayer.FullName} ({selectedPlayer.BirthYear})" : selectedPlayer.FullName,
+                        LongestMatchDuration = longestMatch?.Duration ?? TimeSpan.Zero,
+                        ShortestMatchDuration = shortestMatch?.Duration ?? TimeSpan.Zero,
+                        LongestMatchOpponent = longestMatch?.Opponent.BirthYear.HasValue == true 
+                            ? $"{longestMatch.Opponent.FullName} ({longestMatch.Opponent.BirthYear})"
+                            : longestMatch?.Opponent.FullName,
+                        ShortestMatchOpponent = shortestMatch?.Opponent.BirthYear.HasValue == true 
+                            ? $"{shortestMatch.Opponent.FullName} ({shortestMatch.Opponent.BirthYear})"
+                            : shortestMatch?.Opponent.FullName,
                         BestOpponent = bestOpponent != null ? new OpponentStatsViewModel
                         {
                             PlayerId = bestOpponent.PlayerId,

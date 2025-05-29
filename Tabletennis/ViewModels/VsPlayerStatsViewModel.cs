@@ -9,5 +9,9 @@ namespace Tabletennis.ViewModels
         public decimal Player1WinRatio { get; set; }
         public decimal Player2WinRatio { get; set; }
         public int TotalMatches { get; set; }
+        public TimeSpan LongestMatchDuration { get; set; }
+        public TimeSpan ShortestMatchDuration { get; set; }
+        public DateTime LongestMatchDate { get; set; }
+        public DateTime ShortestMatchDate { get; set; }
     }
 } 
