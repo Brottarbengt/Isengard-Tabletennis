@@ -49,8 +49,11 @@ namespace Tabletennis.Pages.Player
                 SetMaxDate();
                 return Page();
             }
-
+            
             TempData["SuccessMessage"] = "Player was successfully created!";
+
+            NewPlayer = new PlayerCreateViewModel();
+            ModelState.Clear();
             return Page();
         }
 

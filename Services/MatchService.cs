@@ -12,43 +12,45 @@ namespace Services
     public class MatchService : IMatchService
     {
         private readonly ApplicationDbContext _context;
-        public MatchService(ApplicationDbContext context)
+        private readonly IPlayerService _playerService;
+        public MatchService(ApplicationDbContext context, IPlayerService playerService)
         {
             _context = context;
+            _playerService = playerService;
         }
 
-        public async Task<List<PlayerDTO>> GetAllPlayersAsync()
-        {
-            return await _context.Players
-              .Select(player => new PlayerDTO
-              {
-                 PlayerId = player.PlayerId,
-                 FirstName = player.FirstName,
-                 LastName = player.LastName,
-                 FullName = $"{player.FirstName} {player.LastName}",
-                 Birthday = player.Birthday, // 🟢 Required for BirthYear
-                 Email = player.Email,
-                 PhoneNumber = player.PhoneNumber,
-                 Gender = player.Gender
-              })
-               .ToListAsync();
-        }
+        //public async Task<List<PlayerDTO>> GetAllPlayersAsync()
+        //{
+        //    return await _context.Players
+        //      .Select(player => new PlayerDTO
+        //      {
+        //         PlayerId = player.PlayerId,
+        //         FirstName = player.FirstName,
+        //         LastName = player.LastName,
+        //         FullName = $"{player.FirstName} {player.LastName}",
+        //         Birthday = player.Birthday, // 🟢 Required for BirthYear
+        //         Email = player.Email,
+        //         PhoneNumber = player.PhoneNumber,
+        //         Gender = player.Gender
+        //      })
+        //       .ToListAsync();
+        //}
 
-        public async Task<PlayerDTO?> GetPlayerByIdAsync(int playerId)
-        {
-            var player = await _context.Players.FindAsync(playerId);
-            return player == null ? null : new PlayerDTO
-            {
-                PlayerId = player.PlayerId,
-                FirstName = player.FirstName,
-                LastName = player.LastName,
-                FullName = $"{player.FirstName} {player.LastName}",
-                Birthday = player.Birthday,
-                Email = player.Email,
-                PhoneNumber = player.PhoneNumber,
-                Gender = player.Gender
-            };
-        }
+        //public async Task<PlayerDTO?> GetPlayerByIdAsync(int playerId)
+        //{
+        //    var player = await _context.Players.FindAsync(playerId);
+        //    return player == null ? null : new PlayerDTO
+        //    {
+        //        PlayerId = player.PlayerId,
+        //        FirstName = player.FirstName,
+        //        LastName = player.LastName,
+        //        FullName = $"{player.FirstName} {player.LastName}",
+        //        Birthday = player.Birthday,
+        //        Email = player.Email,
+        //        PhoneNumber = player.PhoneNumber,
+        //        Gender = player.Gender
+        //    };
+        //}
 
         public async Task<int> CreateMatchAsync(MatchDTO match)
         {
@@ -58,6 +60,8 @@ namespace Services
                 IsSingle = true,
                 IsCompleted = false,
                 MatchType = match.MatchType,
+                StartTime = null,
+                DurationSeconds = null,
                 PlayerMatches = new List<PlayerMatch>
                     {
                         new PlayerMatch { PlayerId = match.Player1Id, TeamNumber = 1 },
@@ -86,9 +90,8 @@ namespace Services
             {
                 SetId = firstSet.SetId,                 
                 InfoMessage = string.Empty,
-                IsPlayer1Serve = true,
-                IsPlayer1StartServer = true,
-                ServeCounter = 0
+                IsPlayer1Serve = true,  //TODO: Ändra till false för att byta startserver till player2
+                IsPlayer1StartServer = true, // Ändra till false för att byta startserver player 2                
             };
             _context.SetInfos.Add(firstSetInfo);
             await _context.SaveChangesAsync();
@@ -124,7 +127,10 @@ namespace Services
                 MatchType = match.MatchType,
                 MatchDate = match.MatchDate,
                 Team1WonSets = team1WonSets,
-                Team2WonSets = team2WonSets
+                Team2WonSets = team2WonSets,
+                StartTime = match.StartTime,
+                DurationSeconds = match.DurationSeconds,
+                IsCompleted = match.IsCompleted
             };
         }
 
@@ -157,13 +163,53 @@ namespace Services
 
         public async Task CompleteMatchAsync(int matchId)
         {
+            var playerMatches = await _context.PlayerMatches
+                .Where(pm => pm.MatchId == matchId)
+                .ToListAsync();
+
             var match = await _context.Matches.FindAsync(matchId);
+
+
+            foreach (var playerMatch in playerMatches)
+            {
+                // Uppdatera spelare med vinst eller förlust för statistik
+                if (match.MatchWinner == playerMatch.TeamNumber)
+                {
+                    playerMatch.Player.NumberOfWins++;
+                }
+                else
+                {
+                    playerMatch.Player.NumberOfLosses++;
+                }
+                playerMatch.Player.MatchesPlayed = playerMatch.Player.NumberOfWins + playerMatch.Player.NumberOfLosses;
+                playerMatch.Player.PlayerWinRatio = await _playerService.SetPlayerWinRatioAsync(playerMatch.Player.PlayerId);
+            }
+
             if (match != null)
             {
                 match.IsCompleted = true;
+                if (match.StartTime != null)
+                {
+                    match.DurationSeconds = (int)(DateTime.Now - match.StartTime.Value).TotalSeconds;
+                }
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateMatchAsync(MatchDTO matchDTO)
+        {
+            var match = await _context.Matches.FirstOrDefaultAsync(m => m.MatchId == matchDTO.MatchId);
+            if (match == null) throw new Exception("Match not found");
+
+            // Kopiera över de fält du vill uppdatera
+            match.StartTime = matchDTO.StartTime;
+            match.DurationSeconds = matchDTO.DurationSeconds;
+            match.IsCompleted = matchDTO.IsCompleted;
+            // Lägg till fler fält om du vill stödja bredare uppdatering
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters)
         {
             var matches = _context.Matches
@@ -293,7 +339,8 @@ namespace Services
                     Team1Score = s.Team1Score,
                     Team2Score = s.Team2Score,
                     SetWinner = s.SetWinner
-                }).ToList()
+                }).ToList(),
+                DurationSeconds = match.DurationSeconds
             };
         }
         public async Task<MatchDeleteDTO?> GetMatchDeleteDtoAsync(int matchId)
@@ -349,7 +396,7 @@ namespace Services
                 IsSingle = match.IsSingle,
                 IsCompleted = match.IsCompleted,
                 MatchType = match.MatchType,
-                Players = match.PlayerMatches.Select(pm => new PlayerUpdatetDTO
+                Players = match.PlayerMatches.Select(pm => new PlayerUpdatedDTO
                 {
                     PlayerId = pm.PlayerId,
                     TeamNumber = pm.TeamNumber

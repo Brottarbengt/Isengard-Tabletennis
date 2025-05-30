@@ -4,6 +4,7 @@ using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250526114312_Add prop for match time")]
+    partial class Addpropformatchtime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,21 +90,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MatchesPlayed")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfLosses")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfWins")
-                        .HasColumnType("int");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("PlayerWinRatio")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("PlayerId");
 
@@ -184,6 +175,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("IsPlayer1StartServer")
                         .HasColumnType("bit");
+
+                    b.Property<int>("ServeCounter")
+                        .HasColumnType("int");
 
                     b.Property<int>("SetId")
                         .HasColumnType("int");
