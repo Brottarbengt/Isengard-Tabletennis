@@ -1,5 +1,4 @@
-﻿using DataAccessLayer.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,13 +10,17 @@ namespace DataAccessLayer.DTOs
     {
         public int MatchId { get; set; }
         public DateTime MatchDate { get; set; }
+        public int MatchWinner { get; set; }
         public bool IsSingle { get; set; }
         public bool IsCompleted { get; set; }
-        public int MatchWinner { get; set; }
+        public int MatchType { get; set; }
 
-        public int Player1Id { get; set; }
-        public int Player2Id { get; set; }
-
-        public List<Set> Sets { get; set; } = new(); // Used for count display
+        // Related to PlayerMatches
+        public List<PlayerUpdatetDTO> Players { get; set; } = new();
+    }
+    public class PlayerUpdatetDTO
+    {
+        public int PlayerId { get; set; }
+        public int TeamNumber { get; set; }
     }
 }
