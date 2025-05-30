@@ -1,54 +1,63 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
-<div class="row mt-4">
-    <div class="col-12 mt-3">
-        <table class="table table-bordered text-center">
-            <thead>
-                <tr>
-                    <th scope="col" class="custom-thead">Totalt Antal Vinster</th>
-                    <th scope="col" class="custom-thead">Totalt Antal Förluster</th>
-                    <th scope="col" class="custom-thead">Vinst Ratio</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="">1 st</td>
-                    <td class="">9 st</td>
-                    <td class="">10%</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="col-12 mt-3">
-        <table class="table table-bordered text-center">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col" class="custom-thead">Matchtid</th>
-                    <th scope="col" class="custom-thead">Sets</th>
-                    <th scope="col" class="custom-thead">Vinnare</th>
-                    <th scope="col" class="custom-thead">Mer info</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="custom-thead fw-bold">Längst Match</td>
-                    <td class="">56:09</td>
-                    <td class="">7 st</td>
-                    <td class=""></td>
-                    <td class=""><button class="btn btn-outline-secondary">Detaljer</button></td>
-                </tr>
-                <tr>
-                    <td class="custom-thead fw-bold">Kortast Match</td>
-                    <td class="">10:26</td>
-                    <td class="">3 st</td>
-                    <td class="">Lovisa Jönsson</td>
-                    <td class=""><button class="btn btn-outline-secondary">Detaljer</button></td>
-                </tr>
-            </tbody>
-        </table>
+@model Tabletennis.ViewModels.VsPlayerStatsViewModel
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Head-to-Head Statistik</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">@Model.Player1.FullName</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Vinster: @Model.Player1Wins</p>
+                            <p>Förluster: @Model.Player2Wins</p>
+                            <p>Vinstprocent: @Model.Player1WinRatio.ToString("F1")%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">@Model.Player2.FullName</h6>
+                        </div>
+                        <div class="card-body">
+                            <p>Vinster: @Model.Player2Wins</p>
+                            <p>Förluster: @Model.Player1Wins</p>
+                            <p>Vinstprocent: @Model.Player2WinRatio.ToString("F1")%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <p class="mb-0">Totalt antal matcher: @Model.TotalMatches</p>
+                </div>
+            </div>
+            @if (Model.LongestMatchDuration > TimeSpan.Zero)
+            {
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Matchtider</h6>
+                            </div>
+                            <div class="card-body">
+                                <p>Längsta match: @(Model.LongestMatchDuration.TotalMinutes.ToString("F1")) minuter</p>
+                                <p>Datum: @Model.LongestMatchDate.ToString("yyyy-MM-dd")</p>
+                                <p>Snabbaste match: @(Model.ShortestMatchDuration.TotalMinutes.ToString("F1")) minuter</p>
+                                <p>Datum: @Model.ShortestMatchDate.ToString("yyyy-MM-dd")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>

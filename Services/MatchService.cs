@@ -129,7 +129,8 @@ namespace Services
                 Team1WonSets = team1WonSets,
                 Team2WonSets = team2WonSets,
                 StartTime = match.StartTime,
-
+                DurationSeconds = match.DurationSeconds,
+                IsCompleted = match.IsCompleted
             };
         }
 

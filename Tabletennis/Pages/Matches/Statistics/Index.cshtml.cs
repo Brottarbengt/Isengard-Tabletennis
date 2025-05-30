@@ -11,102 +11,291 @@ namespace Tabletennis.Pages.Matches.Statistics
     [BindProperties]
     public class IndexModel : PageModel
     {
-        private readonly IMatchService _matchService;
-        private readonly ISetService _setService;
         private readonly IPlayerService _playerService;
+        private readonly IMatchService _matchService;
 
-        //TODO: Fixa seedning av players s� att top10 f�r spelare
-        public IndexModel(IMatchService matchService, ISetService setService, IPlayerService playerService)
+        public IndexModel(IPlayerService playerService, IMatchService matchService)
         {
-            _matchService = matchService;
-            _setService = setService;  //TODO: remember to Delete if not needed
             _playerService = playerService;
+            _matchService = matchService;
         }
 
-        
-        public List<PlayerStatisticsViewModel> Top10PlayersVMList { get; set; } = new();
-        public PlayerStatisticsViewModel PlayerStatisticsVM { get; set; } = new();
-        public CreateMatchViewModel MatchVM { get; set; } = new();
-        
+        [BindProperty]
+        public StatisticsViewModel ViewModel { get; set; } = new();
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int? player1Id, int? player2Id, string searchQuery)
         {
-            await LoadPlayersAsync();
-            await ShowTop10PlayersAsync();
-                
+            // Kontrollera om samma spelare är vald två gånger
+            if (player1Id.HasValue && player2Id.HasValue && player1Id.Value == player2Id.Value)
+            {
+                // Om samma spelare är vald, återställ player2Id
+                player2Id = null;
+            }
+
+            ViewModel.SelectedPlayer1Id = player1Id;
+            ViewModel.SelectedPlayer2Id = player2Id;
+            ViewModel.SearchQuery = searchQuery ?? string.Empty;
+
+            // Hämta alla aktiva spelare
+            var allPlayers = await _playerService.GetAllPlayersAsync();
+            ViewModel.AllPlayers = allPlayers;
+
+            // Skapa SelectList för dropdown
+            ViewModel.PlayerSelectList = allPlayers
+                .Select(p => new SelectListItem
+                {
+                    Value = p.PlayerId.ToString(),
+                    Text = p.BirthYear.HasValue ? $"{p.FullName} ({p.BirthYear})" : p.FullName
+                })
+                .ToList();
+
+            // Om båda spelare är valda, visa head-to-head statistik
+            if (player1Id.HasValue && player2Id.HasValue)
+            {
+                var player1 = await _playerService.GetPlayerByIdAsync(player1Id.Value);
+                var player2 = await _playerService.GetPlayerByIdAsync(player2Id.Value);
+
+                // Hämta alla matcher mellan spelarna
+                var matches = await _matchService.GetFilteredMatchesAsync(new Services.Infrastructure.MatchQueryParameters
+                {
+                    PageSize = 1000 // Hämta alla matcher
+                });
+
+                var headToHeadMatches = matches.Results
+                    .Select(m => _matchService.GetMatchByIdAsync(m.MatchId).Result)
+                    .Where(m => m != null && 
+                           ((m.Player1Id == player1Id && m.Player2Id == player2Id) ||
+                            (m.Player1Id == player2Id && m.Player2Id == player1Id)))
+                    .ToList();
+
+                var player1Wins = headToHeadMatches.Count(m => 
+                    (m.Player1Id == player1Id && m.Team1WonSets > m.Team2WonSets) || 
+                    (m.Player2Id == player1Id && m.Team2WonSets > m.Team1WonSets));
+
+                var player2Wins = headToHeadMatches.Count(m => 
+                    (m.Player1Id == player2Id && m.Team1WonSets > m.Team2WonSets) || 
+                    (m.Player2Id == player2Id && m.Team2WonSets > m.Team1WonSets));
+
+                var totalMatches = headToHeadMatches.Count;
+
+                // Beräkna längsta och snabbaste matchen
+                var matchDurations = headToHeadMatches
+                    .Where(m => m.DurationSeconds.HasValue && m.DurationSeconds.Value > 0)
+                    .Select(m => new
+                    {
+                        Duration = TimeSpan.FromSeconds(m.DurationSeconds.Value),
+                        MatchDate = m.MatchDate
+                    })
+                    .ToList();
+
+                var longestMatch = matchDurations.OrderByDescending(m => m.Duration).FirstOrDefault();
+                var shortestMatch = matchDurations.OrderBy(m => m.Duration).FirstOrDefault();
+
+                ViewModel.VsStats = new VsPlayerStatsViewModel
+                {
+                    Player1 = new PlayerStatisticsViewModel
+                    {
+                        PlayerId = player1.PlayerId,
+                        FirstName = player1.FirstName,
+                        LastName = player1.LastName,
+                        NumberOfWins = player1.NumberOfWins,
+                        NumberOfLosses = player1.NumberOfLosses,
+                        PlayerWinRatio = player1.PlayerWinRatio,
+                        MatchesPlayed = player1.MatchesPlayed,
+                        FullName = player1.BirthYear.HasValue ? $"{player1.FullName} ({player1.BirthYear})" : player1.FullName
+                    },
+                    Player2 = new PlayerStatisticsViewModel
+                    {
+                        PlayerId = player2.PlayerId,
+                        FirstName = player2.FirstName,
+                        LastName = player2.LastName,
+                        NumberOfWins = player2.NumberOfWins,
+                        NumberOfLosses = player2.NumberOfLosses,
+                        PlayerWinRatio = player2.PlayerWinRatio,
+                        MatchesPlayed = player2.MatchesPlayed,
+                        FullName = player2.BirthYear.HasValue ? $"{player2.FullName} ({player2.BirthYear})" : player2.FullName
+                    },
+                    Player1Wins = player1Wins,
+                    Player2Wins = player2Wins,
+                    TotalMatches = totalMatches,
+                    Player1WinRatio = totalMatches > 0 ? (decimal)player1Wins / totalMatches * 100 : 0,
+                    Player2WinRatio = totalMatches > 0 ? (decimal)player2Wins / totalMatches * 100 : 0,
+                    LongestMatchDuration = longestMatch?.Duration ?? TimeSpan.Zero,
+                    ShortestMatchDuration = shortestMatch?.Duration ?? TimeSpan.Zero,
+                    LongestMatchDate = longestMatch?.MatchDate ?? DateTime.MinValue,
+                    ShortestMatchDate = shortestMatch?.MatchDate ?? DateTime.MinValue
+                };
+            }
+            // Om ingen spelare är vald, visa Top 10
+            else if (!player1Id.HasValue && !player2Id.HasValue)
+            {
+                // Hämta Top 10 spelare baserat på WinRatio
+                var top10Players = allPlayers
+                    .OrderByDescending(p => p.PlayerWinRatio)
+                    .Take(10)
+                    .Select(p => new Top10PlayersViewModel
+                    {
+                        PlayerId = p.PlayerId,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        PlayerWinRatio = p.PlayerWinRatio,
+                        MatchesPlayed = p.MatchesPlayed,
+                        NumberOfWins = p.NumberOfWins,
+                        FullName = p.BirthYear.HasValue ? $"{p.FullName} ({p.BirthYear})" : p.FullName
+                    })
+                    .ToList();
+
+                ViewModel.Top10Players = top10Players;
+            }
+            // Om bara en spelare är vald, visa deras statistik
+            else
+            {
+                var selectedPlayerId = player1Id ?? player2Id;
+                var selectedPlayer = await _playerService.GetPlayerByIdAsync(selectedPlayerId.Value);
+
+                // Hämta alla matcher för den valda spelaren
+                var matches = await _matchService.GetFilteredMatchesAsync(new Services.Infrastructure.MatchQueryParameters
+                {
+                    PageSize = 1000
+                });
+
+                var playerMatches = matches.Results
+                    .Select(m => _matchService.GetMatchByIdAsync(m.MatchId).Result)
+                    .Where(m => m != null && (m.Player1Id == selectedPlayerId || m.Player2Id == selectedPlayerId))
+                    .ToList();
+
+                // Beräkna längsta och snabbaste matchen
+                var matchDurations = playerMatches
+                    .Where(m => m.DurationSeconds.HasValue && m.DurationSeconds.Value > 0)
+                    .Select(m => new
+                    {
+                        Duration = TimeSpan.FromSeconds(m.DurationSeconds.Value),
+                        Opponent = allPlayers.First(p => p.PlayerId == (m.Player1Id == selectedPlayerId ? m.Player2Id : m.Player1Id))
+                    })
+                    .ToList();
+
+                var longestMatch = matchDurations.OrderByDescending(m => m.Duration).FirstOrDefault();
+                var shortestMatch = matchDurations.OrderBy(m => m.Duration).FirstOrDefault();
+
+                // Beräkna vinstratio mot varje motståndare
+                var opponentStats = new Dictionary<int, (int wins, int total)>();
+                foreach (var match in playerMatches)
+                {
+                    var opponentId = match.Player1Id == selectedPlayerId ? match.Player2Id : match.Player1Id;
+                    if (!opponentStats.ContainsKey(opponentId))
+                    {
+                        opponentStats[opponentId] = (0, 0);
+                    }
+
+                    var stats = opponentStats[opponentId];
+                    stats.total++;
+                    if ((match.Player1Id == selectedPlayerId && match.Team1WonSets > match.Team2WonSets) ||
+                        (match.Player2Id == selectedPlayerId && match.Team2WonSets > match.Team1WonSets))
+                    {
+                        stats.wins++;
+                    }
+                    opponentStats[opponentId] = stats;
+                }
+
+                // Hitta bästa och sämsta motståndare
+                var opponentRatios = opponentStats
+                    .Select(kvp => new
+                    {
+                        PlayerId = kvp.Key,
+                        WinRatio = kvp.Value.total > 0 ? (decimal)kvp.Value.wins / kvp.Value.total * 100 : 0,
+                        TotalMatches = kvp.Value.total
+                    })
+                    .Where(x => x.TotalMatches >= 3) // Minst 3 matcher för att räknas
+                    .OrderByDescending(x => x.WinRatio)
+                    .ToList();
+
+                var bestOpponent = opponentRatios.FirstOrDefault();
+                var worstOpponent = opponentRatios.LastOrDefault();
+
+                if (player1Id.HasValue)
+                {
+                    ViewModel.Player1Stats = new PlayerStatisticsViewModel
+                    {
+                        PlayerId = selectedPlayer.PlayerId,
+                        FirstName = selectedPlayer.FirstName,
+                        LastName = selectedPlayer.LastName,
+                        NumberOfWins = selectedPlayer.NumberOfWins,
+                        NumberOfLosses = selectedPlayer.NumberOfLosses,
+                        PlayerWinRatio = selectedPlayer.PlayerWinRatio,
+                        MatchesPlayed = selectedPlayer.MatchesPlayed,
+                        FullName = selectedPlayer.BirthYear.HasValue ? $"{selectedPlayer.FullName} ({selectedPlayer.BirthYear})" : selectedPlayer.FullName,
+                        LongestMatchDuration = longestMatch?.Duration ?? TimeSpan.Zero,
+                        ShortestMatchDuration = shortestMatch?.Duration ?? TimeSpan.Zero,
+                        LongestMatchOpponent = longestMatch?.Opponent.BirthYear.HasValue == true 
+                            ? $"{longestMatch.Opponent.FullName} ({longestMatch.Opponent.BirthYear})"
+                            : longestMatch?.Opponent.FullName,
+                        ShortestMatchOpponent = shortestMatch?.Opponent.BirthYear.HasValue == true 
+                            ? $"{shortestMatch.Opponent.FullName} ({shortestMatch.Opponent.BirthYear})"
+                            : shortestMatch?.Opponent.FullName,
+                        BestOpponent = bestOpponent != null ? new OpponentStatsViewModel
+                        {
+                            PlayerId = bestOpponent.PlayerId,
+                            FullName = allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).BirthYear.HasValue 
+                                ? $"{allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName} ({allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).BirthYear})"
+                                : allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName,
+                            WinRatio = bestOpponent.WinRatio,
+                            TotalMatches = bestOpponent.TotalMatches
+                        } : null,
+                        WorstOpponent = worstOpponent != null ? new OpponentStatsViewModel
+                        {
+                            PlayerId = worstOpponent.PlayerId,
+                            FullName = allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).BirthYear.HasValue 
+                                ? $"{allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName} ({allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).BirthYear})"
+                                : allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName,
+                            WinRatio = worstOpponent.WinRatio,
+                            TotalMatches = worstOpponent.TotalMatches
+                        } : null
+                    };
+                }
+
+                if (player2Id.HasValue)
+                {
+                    ViewModel.Player2Stats = new PlayerStatisticsViewModel
+                    {
+                        PlayerId = selectedPlayer.PlayerId,
+                        FirstName = selectedPlayer.FirstName,
+                        LastName = selectedPlayer.LastName,
+                        NumberOfWins = selectedPlayer.NumberOfWins,
+                        NumberOfLosses = selectedPlayer.NumberOfLosses,
+                        PlayerWinRatio = selectedPlayer.PlayerWinRatio,
+                        MatchesPlayed = selectedPlayer.MatchesPlayed,
+                        FullName = selectedPlayer.BirthYear.HasValue ? $"{selectedPlayer.FullName} ({selectedPlayer.BirthYear})" : selectedPlayer.FullName,
+                        LongestMatchDuration = longestMatch?.Duration ?? TimeSpan.Zero,
+                        ShortestMatchDuration = shortestMatch?.Duration ?? TimeSpan.Zero,
+                        LongestMatchOpponent = longestMatch?.Opponent.BirthYear.HasValue == true 
+                            ? $"{longestMatch.Opponent.FullName} ({longestMatch.Opponent.BirthYear})"
+                            : longestMatch?.Opponent.FullName,
+                        ShortestMatchOpponent = shortestMatch?.Opponent.BirthYear.HasValue == true 
+                            ? $"{shortestMatch.Opponent.FullName} ({shortestMatch.Opponent.BirthYear})"
+                            : shortestMatch?.Opponent.FullName,
+                        BestOpponent = bestOpponent != null ? new OpponentStatsViewModel
+                        {
+                            PlayerId = bestOpponent.PlayerId,
+                            FullName = allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).BirthYear.HasValue 
+                                ? $"{allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName} ({allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).BirthYear})"
+                                : allPlayers.First(p => p.PlayerId == bestOpponent.PlayerId).FullName,
+                            WinRatio = bestOpponent.WinRatio,
+                            TotalMatches = bestOpponent.TotalMatches
+                        } : null,
+                        WorstOpponent = worstOpponent != null ? new OpponentStatsViewModel
+                        {
+                            PlayerId = worstOpponent.PlayerId,
+                            FullName = allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).BirthYear.HasValue 
+                                ? $"{allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName} ({allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).BirthYear})"
+                                : allPlayers.First(p => p.PlayerId == worstOpponent.PlayerId).FullName,
+                            WinRatio = worstOpponent.WinRatio,
+                            TotalMatches = worstOpponent.TotalMatches
+                        } : null
+                    };
+                }
+            }
 
             return Page();
-        }
-
-        
-
-        private async Task ShowTop10PlayersAsync()
-        {
-            //var allPlayers = await _playerService.GetAllPlayersAsync();
-            Top10PlayersVMList = new List<PlayerStatisticsViewModel>();
-
-            foreach (var player in MatchVM.AllPlayers)
-            {
-                var top10Player = new PlayerStatisticsViewModel
-                {
-                    PlayerId = player.PlayerId,
-                    FirstName = player.FirstName,
-                    LastName = player.LastName,
-                    NumberOfWins = player.NumberOfWins,
-                    MatchesPlayed = player.MatchesPlayed,
-                    PlayerWinRatio = player.PlayerWinRatio
-                };
-                Top10PlayersVMList.Add(top10Player);
-            }
-
-            Top10PlayersVMList = Top10PlayersVMList
-                .Where(p => p.MatchesPlayed >= 10)
-                .OrderByDescending(p => p.PlayerWinRatio)
-                .ThenByDescending(p => p.MatchesPlayed)
-                .Take(10)
-                .ToList();
-        }
-
-        private async Task LoadPlayersAsync()
-        {
-            var players = await _playerService.GetAllPlayersAsync();
-
-            MatchVM.AllPlayers = players.ToList();
-            MatchVM.PlayerList = players
-               .OrderBy(p => p.FullName)
-             .Select(p => new SelectListItem
-             {
-                 Value = p.PlayerId.ToString(),
-                 Text = $"{p.FullName} ({(p.BirthYear?.ToString() ?? "N/A")})"
-             })
-             .ToList();
-        }
-
-        public async Task<JsonResult> OnGetGetPlayer(int id)
-        {
-            var player = await _playerService.GetPlayerByIdAsync(id);
-
-            if (player == null)
-            {
-                return new JsonResult(new { error = "Player not found" });
-            }
-
-            PlayerStatisticsVM = new PlayerStatisticsViewModel
-            {
-                PlayerId = player.PlayerId,                
-                FullName = player.FullName,                
-                NumberOfWins = player.NumberOfWins,
-                MatchesPlayed = player.MatchesPlayed,
-                PlayerWinRatio = player.PlayerWinRatio
-            };
-
-            return new JsonResult(new
-            {
-                player.PlayerId,                
-                player.FullName,                
-                Birthday = player.Birthday?.ToString("yyyy-MM-dd") ?? "N/A", // format safely
-                player.BirthYear
-            });
         }
     }
 }
