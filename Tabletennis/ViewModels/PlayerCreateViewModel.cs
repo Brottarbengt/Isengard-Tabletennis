@@ -27,6 +27,6 @@ namespace Tabletennis.ViewModels
         [Required(ErrorMessage = "Birthday is required.")]
         [DataType(DataType.Date)]
         public DateTime Birthday { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

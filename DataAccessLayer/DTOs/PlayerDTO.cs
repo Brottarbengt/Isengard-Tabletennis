@@ -18,7 +18,10 @@ namespace DataAccessLayer.DTOs
         public Gender Gender { get; set; }
         public DateOnly? Birthday { get; set; }
         public bool IsActive { get; set; }
-        public int TeamNumber { get; set; } // Only in DTO
+        public int NumberOfWins { get; set; }
+        public int NumberOfLosses { get; set; }
+        public decimal PlayerWinRatio { get; set; }
+        public int MatchesPlayed { get; set; }
 
         public string FullName { get; set; } = string.Empty;
         public int? BirthYear => Birthday.HasValue && Birthday != DateOnly.MinValue
