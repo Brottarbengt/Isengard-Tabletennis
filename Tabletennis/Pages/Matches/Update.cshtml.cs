@@ -1,6 +1,8 @@
 using DataAccessLayer.DTOs;
+using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Services.Interfaces;
 
 namespace Tabletennis.Pages.Matches
@@ -14,14 +16,14 @@ namespace Tabletennis.Pages.Matches
             _matchService = matchService;
         }
         [BindProperty]
-        public MatchUpdateDTO Match { get; set; } = new();
+        public MatchUpdateDTO MatchDto { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var matchDto = await _matchService.GetMatchUpdateDtoAsync(id);
-            if (matchDto == null) return NotFound();
+            var dto = await _matchService.GetMatchForUpdateAsync(id);
+            if (dto == null) return NotFound();
 
-            Match = matchDto;
+            MatchDto = dto;
             return Page();
         }
 
@@ -30,11 +32,11 @@ namespace Tabletennis.Pages.Matches
             if (!ModelState.IsValid)
                 return Page();
 
-            var updated = await _matchService.UpdateMatchAsync(Match);
-            if (!updated) return NotFound();
+            var success = await _matchService.UpdateMatchAsync(MatchDto);
+            if (!success) return NotFound();
 
-            TempData["SuccessMessage"] = "Match updated successfully.";
             return RedirectToPage("/Matches/MatchHistory");
         }
     }
 }
+

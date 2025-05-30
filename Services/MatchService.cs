@@ -332,35 +332,60 @@ namespace Services
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<MatchUpdateDTO?> GetMatchUpdateDtoAsync(int matchId)
+        public async Task<MatchUpdateDTO?> GetMatchForUpdateAsync(int matchId)
         {
             var match = await _context.Matches
-                .Include(m => m.Sets)
+                .Include(m => m.PlayerMatches)
                 .FirstOrDefaultAsync(m => m.MatchId == matchId);
 
-            if (match == null) return null;
+            if (match == null)
+                return null;
 
             return new MatchUpdateDTO
             {
                 MatchId = match.MatchId,
                 MatchDate = match.MatchDate,
+                MatchWinner = match.MatchWinner,
+                IsSingle = match.IsSingle,
+                IsCompleted = match.IsCompleted,
                 MatchType = match.MatchType,
-                MatchWinner = match.MatchWinner
+                Players = match.PlayerMatches.Select(pm => new PlayerUpdatetDTO
+                {
+                    PlayerId = pm.PlayerId,
+                    TeamNumber = pm.TeamNumber
+                }).ToList()
             };
         }
-        public async Task<bool> UpdateMatchAsync(MatchUpdateDTO matchDto)
+        public async Task<bool> UpdateMatchAsync(MatchUpdateDTO dto)
         {
-            var match = await _context.Matches.FindAsync(matchDto.MatchId);
-            if (match == null) return false;
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches)
+                .FirstOrDefaultAsync(m => m.MatchId == dto.MatchId);
 
-            match.MatchDate = matchDto.MatchDate;
-            match.MatchType = matchDto.MatchType;
-            match.MatchWinner = matchDto.MatchWinner;
+            if (match == null)
+                return false;
+
+            match.MatchDate = dto.MatchDate;
+            match.MatchWinner = dto.MatchWinner;
+            match.IsSingle = dto.IsSingle;
+            match.IsCompleted = dto.IsCompleted;
+            match.MatchType = dto.MatchType;
+
+            // Remove existing player assignments
+            _context.PlayerMatches.RemoveRange(match.PlayerMatches);
+
+            // Add updated player assignments
+            match.PlayerMatches = dto.Players.Select(p => new PlayerMatch
+            {
+                PlayerId = p.PlayerId,
+                TeamNumber = p.TeamNumber,
+                MatchId = match.MatchId
+            }).ToList();
 
             await _context.SaveChangesAsync();
             return true;
         }
-
     }
 }
+
 
