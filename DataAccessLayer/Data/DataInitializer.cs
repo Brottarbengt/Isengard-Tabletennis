@@ -32,7 +32,7 @@ public class DataInitializer
         //  - Passwords must have at least one uppercase('A' - 'Z').
         //  - The password must be at least 6 characters long
 
-        AddUserIfNotExists("admin@angby.com", "*Admin100", new string[] { "Admin" });
+        AddUserIfNotExists("admin@angby.se", "*Admin100", new string[] { "Admin" });
         //AddUserIfNotExists("richard.chalk@customer.systementor.se", "Hejsan123#", new string[] { "Customer" });
     }
 

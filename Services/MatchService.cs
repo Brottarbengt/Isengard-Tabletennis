@@ -373,7 +373,7 @@ namespace Services
                 IsSingle = match.IsSingle,
                 IsCompleted = match.IsCompleted,
                 MatchType = match.MatchType,
-                Players = match.PlayerMatches.Select(pm => new PlayerDTO
+                Players = match.PlayerMatches.Select(pm => new PlayerUpdatedDTO
                 {
                     PlayerId = pm.PlayerId,
                     TeamNumber = pm.TeamNumber

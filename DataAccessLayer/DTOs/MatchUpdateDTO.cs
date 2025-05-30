@@ -16,9 +16,9 @@ namespace DataAccessLayer.DTOs
         public int MatchType { get; set; }
 
         // Related to PlayerMatches
-        public List<PlayerUpdatetDTO> Players { get; set; } = new();
+        public List<PlayerUpdatedDTO> Players { get; set; } = new();
     }
-    public class PlayerUpdatetDTO
+    public class PlayerUpdatedDTO
     {
         public int PlayerId { get; set; }
         public int TeamNumber { get; set; }
