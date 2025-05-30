@@ -5,6 +5,12 @@
 @{
     ViewData["Title"] = "Match History";
 }
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
 <div class="container mt-4">
     <h2>Match History</h2>
 
@@ -46,7 +52,8 @@
                         <td>
                             @if (match.Sets != null && match.Sets.Any())
                             {
-                                @string.Join(", ", match.Sets.Select(s => $"{s.Team1Score}-{s.Team2Score}"))
+                                <span>@match.Sets.Count </span>
+                               @*  @string.Join(", ", match.Sets.Select(s => $"{s.Team1Score}-{s.Team2Score}")) *@
                             }
                             else
                             {
@@ -55,6 +62,8 @@
                         </td>
                         <td>
                             <a class="btn btn-sm btn-outline-secondary" asp-page="/Matches/MatchDetails" asp-route-id="@match.MatchId">Details</a>
+                            <a class="btn btn-sm btn-outline-primary" asp-page="/Matches/Update" asp-route-id="@match.MatchId" class="btn btn-sm btn-primary">Update</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-page="/Matches/Delete" asp-route-id="@match.MatchId" class="btn btn-sm btn-danger">Delete</a>
                         </td>
                     </tr>
                 }

@@ -217,14 +217,17 @@ namespace Services
                 MatchId = m.MatchId,
                 Sets = m.Sets.ToList(),
                 Player1FullName = m.PlayerMatches
-                    .Where(pm => pm.TeamNumber == 1)
-                    .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
-                    .FirstOrDefault() ?? "Unknown Player 1",
-                Player2FullName = m.PlayerMatches
-                    .Where(pm => pm.TeamNumber == 2)
-                    .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
-                    .FirstOrDefault() ?? "Unknown Player 2",
-                Winner = m.MatchWinner == 1 ? "Player 1" : "Player 2",
+                 .Where(pm => pm.TeamNumber == 1)
+                 .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
+                 .FirstOrDefault() ?? "Unknown Player 1",
+                 Player2FullName = m.PlayerMatches
+                  .Where(pm => pm.TeamNumber == 2)
+                  .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
+                  .FirstOrDefault() ?? "Unknown Player 2",
+                 Winner = m.PlayerMatches
+                  .Where(pm => pm.TeamNumber == m.MatchWinner)
+                  .Select(pm => pm.Player.FirstName + " " + pm.Player.LastName)
+                  .FirstOrDefault() ?? "Unknown Winner",
                 StartDate = m.MatchDate
             });
 
@@ -241,6 +244,7 @@ namespace Services
 
             if (match == null) return null;
 
+            // Convert players to DTOs
             var playerDTOs = match.PlayerMatches.Select(pm => new PlayerDTO
             {
                 PlayerId = pm.Player.PlayerId,
@@ -250,9 +254,11 @@ namespace Services
                 PhoneNumber = pm.Player.PhoneNumber,
                 Gender = pm.Player.Gender,
                 Birthday = pm.Player.Birthday,
-                FullName = $"{pm.Player.FirstName} {pm.Player.LastName}"
+                FullName = $"{pm.Player.FirstName} {pm.Player.LastName}",
+                TeamNumber = pm.TeamNumber // Mapped here
             }).ToList();
 
+            // Convert sets to DTOs
             var setDTOs = match.Sets.Select(s => new SetDTO
             {
                 SetId = s.SetId,
@@ -264,16 +270,25 @@ namespace Services
                 IsSetCompleted = s.IsSetCompleted
             }).ToList();
 
+            // Get full name(s) of the winning team
+            var winningPlayers = match.PlayerMatches
+                .Where(pm => pm.TeamNumber == match.MatchWinner)
+                .Select(pm => pm.Player)
+                .ToList();
+
+            var winnerName = winningPlayers.Any()
+                ? string.Join(" & ", winningPlayers.Select(p => $"{p.FirstName} {p.LastName}"))
+                : "Unknown";
+
             return new MatchDetailsDTO
             {
                 MatchId = match.MatchId,
                 Players = playerDTOs,
                 Sets = setDTOs,
                 MatchDate = match.MatchDate,
-                Winner = match.MatchWinner == 1 ? "Player 1" : "Player 2"
+                Winner = winnerName
             };
         }
-
         public async Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId)
         {
             var match = await _context.Matches
@@ -305,6 +320,96 @@ namespace Services
                 DurationSeconds = match.DurationSeconds
             };
         }
+        public async Task<MatchDeleteDTO?> GetMatchDeleteDtoAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches).ThenInclude(pm => pm.Player)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null) return null;
+
+            var player1 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 1)?.Player;
+            var player2 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 2)?.Player;
+
+            var winner = match.MatchWinner switch
+            {
+                1 => player1 != null ? $"{player1.FirstName} {player1.LastName}" : "Team 1",
+                2 => player2 != null ? $"{player2.FirstName} {player2.LastName}" : "Team 2",
+                _ => "Unknown"
+            };
+
+            return new MatchDeleteDTO
+            {
+                MatchId = match.MatchId,
+                Player1Name = player1 != null ? $"{player1.FirstName} {player1.LastName}" : "Unknown Player 1",
+                Player2Name = player2 != null ? $"{player2.FirstName} {player2.LastName}" : "Unknown Player 2",
+                MatchDate = match.MatchDate,
+                Winner = winner
+            };
+        }
+        public async Task<bool> DeleteMatchAsync(int id)
+        {
+            var match = await _context.Matches.FindAsync(id);
+            if (match == null) return false;
+
+            _context.Matches.Remove(match);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<MatchUpdateDTO?> GetMatchForUpdateAsync(int matchId)
+        {
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches)
+                .FirstOrDefaultAsync(m => m.MatchId == matchId);
+
+            if (match == null)
+                return null;
+
+            return new MatchUpdateDTO
+            {
+                MatchId = match.MatchId,
+                MatchDate = match.MatchDate,
+                MatchWinner = match.MatchWinner,
+                IsSingle = match.IsSingle,
+                IsCompleted = match.IsCompleted,
+                MatchType = match.MatchType,
+                Players = match.PlayerMatches.Select(pm => new PlayerUpdatetDTO
+                {
+                    PlayerId = pm.PlayerId,
+                    TeamNumber = pm.TeamNumber
+                }).ToList()
+            };
+        }
+        public async Task<bool> UpdateMatchAsync(MatchUpdateDTO dto)
+        {
+            var match = await _context.Matches
+                .Include(m => m.PlayerMatches)
+                .FirstOrDefaultAsync(m => m.MatchId == dto.MatchId);
+
+            if (match == null)
+                return false;
+
+            match.MatchDate = dto.MatchDate;
+            match.MatchWinner = dto.MatchWinner;
+            match.IsSingle = dto.IsSingle;
+            match.IsCompleted = dto.IsCompleted;
+            match.MatchType = dto.MatchType;
+
+            // Remove existing player assignments
+            _context.PlayerMatches.RemoveRange(match.PlayerMatches);
+
+            // Add updated player assignments
+            match.PlayerMatches = dto.Players.Select(p => new PlayerMatch
+            {
+                PlayerId = p.PlayerId,
+                TeamNumber = p.TeamNumber,
+                MatchId = match.MatchId
+            }).ToList();
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
+
 

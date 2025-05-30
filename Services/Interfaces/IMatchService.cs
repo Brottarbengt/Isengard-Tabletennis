@@ -16,7 +16,17 @@ namespace Services.Interfaces
         Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId);
         Task UpdateMatchAsync(MatchDTO matchDTO);
         Task<MatchDetailsDTO> GetMatchDetailsAsync(int id);
+        // Match History //
         Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters);
+        Task<MatchDetailsDTO?> GetMatchDetailsAsync(int matchId);
+        // Match  Delete //
+        Task<MatchDeleteDTO?> GetMatchDeleteDtoAsync(int matchId);
+        Task<bool> DeleteMatchAsync(int id);
+
+        // Match Update //
+        Task<MatchUpdateDTO?> GetMatchForUpdateAsync(int matchId);
+        Task<bool> UpdateMatchAsync(MatchUpdateDTO dto);
+
         //ActiveMatchDTO GetMatchById(int matchId);
     }
 }
