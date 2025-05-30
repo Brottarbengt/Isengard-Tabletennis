@@ -22,7 +22,7 @@ namespace DataAccessLayer.DTOs
         public int NumberOfLosses { get; set; }
         public decimal PlayerWinRatio { get; set; }
         public int MatchesPlayed { get; set; }
-
+        public int TeamNumber { get; set; } // Only in DTO
         public string FullName { get; set; } = string.Empty;
         public int? BirthYear => Birthday.HasValue && Birthday != DateOnly.MinValue
         ? Birthday.Value.Year

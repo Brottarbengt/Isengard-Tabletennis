@@ -81,7 +81,7 @@ public class DataInitializer
             for (int j = i + 1; j < playerIds.Count; j++)
             {
                 // Slumpa antal matcher mellan 6 och 23 för varje spelarpar
-                int numberOfMatches = random.Next(6, 23);
+                int numberOfMatches = random.Next(3, 10);
                 
                 for (int m = 0; m < numberOfMatches; m++)
                 {
