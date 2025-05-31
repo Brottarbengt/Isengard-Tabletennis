@@ -12,6 +12,7 @@ namespace Services.Interfaces
         Task<Check> SoftDelete(int playerId);
         Task<List<PlayerDTO>> GetAllPlayersAsync();
         Task<decimal> SetPlayerWinRatioAsync(int playerId);
+        Task<List<PlayerDTO>> GetTop10Players();
 
     }
 }

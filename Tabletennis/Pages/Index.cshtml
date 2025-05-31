@@ -45,4 +45,9 @@
         <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
         <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
     </div>
+
+    <div class="container mt-5">
+        @await Html.PartialAsync("Matches/Statistics/_Top10Players", Model.Top10Players)
+    </div>
+
 </div>

@@ -108,5 +108,24 @@ namespace Services
             return players;
 
         }
+
+        public async Task<List<PlayerDTO>> GetTop10Players()
+        {
+            var top10 = await _dbContext.Players
+                .OrderByDescending(p => p.PlayerWinRatio)
+                .Take(10)
+                .Select(p => new PlayerDTO
+                    {
+                        PlayerId = p.PlayerId,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        PlayerWinRatio = p.PlayerWinRatio,
+                        MatchesPlayed = p.MatchesPlayed,
+                        NumberOfWins = p.NumberOfWins,
+            
+                    }).ToListAsync();
+
+            return top10;
+        }
     }
 }
