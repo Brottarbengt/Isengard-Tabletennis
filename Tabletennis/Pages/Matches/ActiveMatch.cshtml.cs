@@ -85,7 +85,23 @@ namespace Tabletennis.Pages.Matches
                 currentSet.IsSetCompleted = false;
                 await _setService.UpdateSetAsync(currentSet);
             }
-            
+
+            if (ActiveMatchVM.SelectedServerName == ActiveMatchVM.Player1FirstName)
+            {
+                ActiveMatchVM.IsPlayer1Serve = true;
+                ActiveMatchVM.IsPlayer1StartServer = true;
+            }
+            else
+            {
+                ActiveMatchVM.IsPlayer1Serve = false;
+                ActiveMatchVM.IsPlayer1StartServer = false;
+            }
+
+            var setInfo = await _setService.GetSetInfoBySetIdAsync(currentSet.SetId);
+            setInfo.IsPlayer1Serve = ActiveMatchVM.IsPlayer1Serve;
+            setInfo.IsPlayer1StartServer = ActiveMatchVM.IsPlayer1StartServer;
+            await _setService.UpdateSetInfoAsync(setInfo);
+
             return RedirectToPage(new { matchId });
         }
 
