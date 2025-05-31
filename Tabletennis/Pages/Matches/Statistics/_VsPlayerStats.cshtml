@@ -5,14 +5,14 @@
 
 <div class="col-12">
     <div class="card">
-        <div class="card-header">
+        <div class="card-header custom-thead">
             <h5 class="mb-0">Head-to-Head Statistik</h5>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header custom-thead">
                             <h6 class="mb-0">@Model.Player1.FullName</h6>
                         </div>
                         <div class="card-body">
@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header custom-thead">
                             <h6 class="mb-0">@Model.Player2.FullName</h6>
                         </div>
                         <div class="card-body">
@@ -45,13 +45,13 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header custom-thead">
                                 <h6 class="mb-0">Matchtider</h6>
                             </div>
                             <div class="card-body">
-                                <p>Längsta match: @(Model.LongestMatchDuration.TotalMinutes.ToString("F1")) minuter</p>
+                                <p>Längsta match: @(Model.LongestMatchDuration.ToString(@"mm\:ss"))</p>
                                 <p>Datum: @Model.LongestMatchDate.ToString("yyyy-MM-dd")</p>
-                                <p>Snabbaste match: @(Model.ShortestMatchDuration.TotalMinutes.ToString("F1")) minuter</p>
+                                <p>Snabbaste match: @(Model.ShortestMatchDuration.ToString(@"mm\:ss"))</p>
                                 <p>Datum: @Model.ShortestMatchDate.ToString("yyyy-MM-dd")</p>
                             </div>
                         </div>
