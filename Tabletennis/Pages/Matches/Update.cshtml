@@ -53,6 +53,15 @@
                         </select>
                         <span asp-validation-for="MatchDto.Player1Id" class="text-danger"></span>
                     </div>
+                    @* <div class="position-relative"> *@
+                    @*     <input type="text" id="playerSearch" class="form-control" placeholder="Sök efter spelare..." value="@Model.ViewModel.SearchQuery"> *@
+                    @*     <div id="playerDropdown" class="dropdown-menu w-100" style="max-height: 300px; overflow-y: auto;"> *@
+                    @*         @foreach (var player in Model.ViewModel.PlayerSelectList) *@
+                    @*         { *@
+                    @*             <a class="dropdown-item" href="#" data-player-id="@player.Value" data-player-name="@player.Text">@player.Text</a> *@
+                    @*         } *@
+                    @*     </div> *@
+                    @* </div> *@
                     <div class="col-md-6">
                         <label asp-for="MatchDto.Player2Id" class="form-label">Player 2</label>
                         <select asp-for="MatchDto.Player2Id" asp-items="Model.PlayerList" class="form-select">
@@ -60,6 +69,15 @@
                         </select>
                         <span asp-validation-for="MatchDto.Player2Id" class="text-danger"></span>
                     </div>
+                    @* <div class="position-relative"> *@
+                    @*     <input type="text" id="playerSearch" class="form-control" placeholder="Sök efter spelare..." value="@Model.ViewModel.SearchQuery"> *@
+                    @*     <div id="playerDropdown" class="dropdown-menu w-100" style="max-height: 300px; overflow-y: auto;"> *@
+                    @*         @foreach (var player in Model.ViewModel.PlayerSelectList) *@
+                    @*         { *@
+                    @*             <a class="dropdown-item" href="#" data-player-id="@player.Value" data-player-name="@player.Text">@player.Text</a> *@
+                    @*         } *@
+                    @*     </div> *@
+                    @* </div> *@
                 </div>
 
                 <div class="text-end mt-4">

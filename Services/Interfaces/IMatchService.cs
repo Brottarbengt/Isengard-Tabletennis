@@ -14,7 +14,7 @@ namespace Services.Interfaces
         Task<bool> IsMatchWonAsync(int matchId);
         Task CompleteMatchAsync(int matchId);
         Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId);
-        Task UpdateMatchAsync(MatchDTO matchDTO);
+        Task UpdateMatchStartTimeAsync(MatchDTO matchDTO);
         Task<MatchDetailsDTO> GetMatchDetailsAsync(int id);
         // Match History //
         Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters);
