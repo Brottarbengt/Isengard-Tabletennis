@@ -305,3 +305,117 @@ body {
 .page-title{
     font-size: 3rem;
 }
+/* Hide menu button by default (desktop) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #c4553e;
+}
+/* Mobile styles */
+@media (max-width: 768px) {
+    /* Show menu button only on mobile */
+    .menu-toggle {
+        display: block;
+    }
+
+    /* Hide nav by default on mobile */
+   .main-nav {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+   }
+
+   /* Show nav when toggled */
+   .main-nav.show {
+            display: flex;
+   }
+
+    .top-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .logo-section {
+        flex: 1;
+    }
+
+    .social-icons {
+        order: 2;
+        margin-top: 10px;
+    }
+}
+@media (max-width: 430px) {
+    .top-bar {
+        flex-direction: row;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .logo-section {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .logo {
+        width: 60px;
+        height: auto;
+        margin-bottom: 5px;
+    }
+
+    .site-title {
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .social-icons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .social-icons img,
+    .social-icons i {
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+    }
+
+    .main-nav {
+        display: none;
+        flex-direction: column;
+        background-color: #333;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .main-nav a {
+        color: white;
+        padding: 10px;
+        font-size: 16px;
+        display: block;
+        text-decoration: none;
+    }
+
+    .menu-toggle {
+        display: block;
+        cursor: pointer;
+        font-size: 20px;
+        background: none;
+        border: none;
+        color: white;
+        margin-top: 10px;
+        background-color: #c4553e;
+    }
+
+    .main-nav.show {
+        display: flex;
+    }
+}

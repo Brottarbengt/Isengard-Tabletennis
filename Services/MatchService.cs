@@ -2,6 +2,7 @@
 using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using Mapster;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Services.Infrastructure;
 using Services.Interfaces;
@@ -379,14 +380,17 @@ namespace Services
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<MatchUpdateDTO?> GetMatchForUpdateAsync(int matchId)
+        public async Task<MatchUpdateDTO> GetMatchForUpdateAsync(int matchId)
         {
             var match = await _context.Matches
+                .Include(m => m.Sets)
                 .Include(m => m.PlayerMatches)
                 .FirstOrDefaultAsync(m => m.MatchId == matchId);
 
-            if (match == null)
-                return null;
+            if (match == null) return null;
+
+            var player1 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 1);
+            var player2 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 2);
 
             return new MatchUpdateDTO
             {
@@ -395,43 +399,50 @@ namespace Services
                 MatchWinner = match.MatchWinner,
                 IsSingle = match.IsSingle,
                 IsCompleted = match.IsCompleted,
-                MatchType = match.MatchType,
-                Players = match.PlayerMatches.Select(pm => new PlayerUpdatedDTO
-                {
-                    PlayerId = pm.PlayerId,
-                    TeamNumber = pm.TeamNumber
-                }).ToList()
+                Player1Id = player1?.PlayerId ?? 0,
+                Player2Id = player2?.PlayerId ?? 0,
+                SetCount = match.Sets.Count
             };
         }
-        public async Task<bool> UpdateMatchAsync(MatchUpdateDTO dto)
+        public async Task UpdateMatchAsync(MatchUpdateDTO dto)
         {
             var match = await _context.Matches
                 .Include(m => m.PlayerMatches)
                 .FirstOrDefaultAsync(m => m.MatchId == dto.MatchId);
 
-            if (match == null)
-                return false;
+            if (match == null) return;
 
             match.MatchDate = dto.MatchDate;
             match.MatchWinner = dto.MatchWinner;
             match.IsSingle = dto.IsSingle;
             match.IsCompleted = dto.IsCompleted;
-            match.MatchType = dto.MatchType;
 
-            // Remove existing player assignments
-            _context.PlayerMatches.RemoveRange(match.PlayerMatches);
+            // Update PlayerMatches
+            var player1 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 1);
+            if (player1 != null)
+                player1.PlayerId = dto.Player1Id;
+            else
+                _context.PlayerMatches.Add(new PlayerMatch { MatchId = match.MatchId, PlayerId = dto.Player1Id, TeamNumber = 1 });
 
-            // Add updated player assignments
-            match.PlayerMatches = dto.Players.Select(p => new PlayerMatch
-            {
-                PlayerId = p.PlayerId,
-                TeamNumber = p.TeamNumber,
-                MatchId = match.MatchId
-            }).ToList();
+            var player2 = match.PlayerMatches.FirstOrDefault(pm => pm.TeamNumber == 2);
+            if (player2 != null)
+                player2.PlayerId = dto.Player2Id;
+            else
+                _context.PlayerMatches.Add(new PlayerMatch { MatchId = match.MatchId, PlayerId = dto.Player2Id, TeamNumber = 2 });
 
             await _context.SaveChangesAsync();
-            return true;
         }
+        // Optional: For listing matches
+        public async Task<List<SelectListItem>> GetPlayerSelectListItemsAsync()
+        {
+            return await _context.Players
+                .Select(p => new SelectListItem
+                {
+                    Value = p.PlayerId.ToString(),
+                    Text = p.FirstName + " " + p.LastName
+                }).ToListAsync();
+        }
+
     }
 }
 

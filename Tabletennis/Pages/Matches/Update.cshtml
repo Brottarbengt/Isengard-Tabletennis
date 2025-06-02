@@ -13,20 +13,21 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label asp-for="MatchDto.MatchDate" class="form-label"></label>
-                        <input asp-for="MatchDto.MatchDate" class="form-control" type="datetime-local" />
+                        <input asp-for="MatchDto.MatchDate" type="datetime-local" class="form-control" />
                         <span asp-validation-for="MatchDto.MatchDate" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label asp-for="MatchDto.MatchType" class="form-label"></label>
-                        <input asp-for="MatchDto.MatchType" class="form-control" />
-                        <span asp-validation-for="MatchDto.MatchType" class="text-danger"></span>
+                        <label class="form-label">Set Count</label>
+                        <input class="form-control" value="@Model.MatchDto.SetCount" readonly />
                     </div>
                 </div>
 
                 <div class="row mb-3 align-items-end">
                     <div class="col-md-4">
-                        <label asp-for="MatchDto.MatchWinner" class="form-label"></label>
-                        <input asp-for="MatchDto.MatchWinner" class="form-control" />
+                        <label asp-for="MatchDto.MatchWinner" class="form-label">Match Winner</label>
+                        <select asp-for="MatchDto.MatchWinner" asp-items="Model.PlayerList" class="form-select">
+                            <option value="">-- Select Winner --</option>
+                        </select>
                         <span asp-validation-for="MatchDto.MatchWinner" class="text-danger"></span>
                     </div>
                     <div class="col-md-4">
@@ -44,22 +45,21 @@
                 </div>
 
                 <h5 class="mt-4">Players</h5>
-                <div class="row">
-                    @for (int i = 0; i < Model.MatchDto.Players.Count; i++)
-                    {
-                        <div class="col-md-6 mb-3">
-                            <div class="border p-3 rounded bg-light">
-                                <div class="mb-2">
-                                    <label class="form-label">Player @i ID</label>
-                                    <input asp-for="MatchDto.Players[@i].PlayerId" class="form-control" />
-                                </div>
-                                <div>
-                                    <label class="form-label">Team Number</label>
-                                    <input asp-for="MatchDto.Players[@i].TeamNumber" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                    }
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="MatchDto.Player1Id" class="form-label">Player 1</label>
+                        <select asp-for="MatchDto.Player1Id" asp-items="Model.PlayerList" class="form-select">
+                            <option value="">-- Select Player 1 --</option>
+                        </select>
+                        <span asp-validation-for="MatchDto.Player1Id" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="MatchDto.Player2Id" class="form-label">Player 2</label>
+                        <select asp-for="MatchDto.Player2Id" asp-items="Model.PlayerList" class="form-select">
+                            <option value="">-- Select Player 2 --</option>
+                        </select>
+                        <span asp-validation-for="MatchDto.Player2Id" class="text-danger"></span>
+                    </div>
                 </div>
 
                 <div class="text-end mt-4">
