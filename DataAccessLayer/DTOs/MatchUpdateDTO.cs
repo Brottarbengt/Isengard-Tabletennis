@@ -13,14 +13,8 @@ namespace DataAccessLayer.DTOs
         public int MatchWinner { get; set; }
         public bool IsSingle { get; set; }
         public bool IsCompleted { get; set; }
-        public int MatchType { get; set; }
-
-        // Related to PlayerMatches
-        public List<PlayerUpdatedDTO> Players { get; set; } = new();
-    }
-    public class PlayerUpdatedDTO
-    {
-        public int PlayerId { get; set; }
-        public int TeamNumber { get; set; }
+        public int Player1Id { get; set; }
+        public int Player2Id { get; set; }
+        public int SetCount { get; set; } // Calculated from Sets.Count
     }
 }

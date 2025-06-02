@@ -29,7 +29,7 @@ namespace Tabletennis.Pages.Matches
         public int PageNumber { get; set; } = 1;
 
         [BindProperty(SupportsGet = true)]
-        public int PageSize { get; set; } = 3;
+        public int PageSize { get; set; } = 5;
 
         public PagedResult<MatchListDTO> Matches { get; set; } = new();
 
