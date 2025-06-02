@@ -9,6 +9,7 @@ crossorigin="anonymous"
 referrerpolicy="no-referrer" />
 
 <div class="container mt-4">
+    
     @if (@Model.ActiveMatchVM.IsSetCompleted)
     { 
         <partial name="_StartSet" model="Model.ActiveMatchVM" />
@@ -21,10 +22,26 @@ referrerpolicy="no-referrer" />
     {
         <partial name="_EndGame" model="Model.ActiveMatchVM" />
     }
+    
 </div>
 
 @section Scripts {
     <script>
-        
+        const startTimeString = '@Model.ActiveMatchVM.StartTime?.ToString("o")';
+        const startTime = startTimeString ? new Date(startTimeString) : null;
+        function updateTimer() {
+            if (!startTime) return;
+            const now = new Date();
+            const diff = Math.floor((now - startTime) / 1000);
+            const min = Math.floor(diff / 60).toString().padStart(2, '0');
+            const sec = (diff % 60).toString().padStart(2, '0');
+            document.getElementById('match-timer').textContent = `${min}:${sec}`;
+        }
+        if (startTime) {
+            setInterval(updateTimer, 1000);
+            updateTimer();
+        } else {
+            document.getElementById('match-timer').textContent = '--:--';
+        }
     </script>
 }

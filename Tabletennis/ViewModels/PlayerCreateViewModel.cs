@@ -22,11 +22,11 @@ namespace Tabletennis.ViewModels
         public string PhoneNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Must choose a gender!")]
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
 
         [Required(ErrorMessage = "Birthday is required.")]
         [DataType(DataType.Date)]
         public DateTime Birthday { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

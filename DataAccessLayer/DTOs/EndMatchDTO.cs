@@ -10,6 +10,7 @@ namespace DataAccessLayer.DTOs
         public string WinnerName { get; set; }
         public int WinnerId { get; set; }
         public List<SetResultDTO> Sets { get; set; } = new();
+        public int? DurationSeconds { get; set; }
 
         public class SetResultDTO
         {

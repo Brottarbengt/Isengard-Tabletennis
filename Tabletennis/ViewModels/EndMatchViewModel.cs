@@ -9,6 +9,7 @@ namespace Tabletennis.ViewModels
         public string Player2Name { get; set; }
         public string WinnerName { get; set; }
         public int WinnerId { get; set; }
+        public int? DurationSeconds { get; set; }
 
         // Lista med alla set och deras resultat
         public List<SetResult> Sets { get; set; } = new();

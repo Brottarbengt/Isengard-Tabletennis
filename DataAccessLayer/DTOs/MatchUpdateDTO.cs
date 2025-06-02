@@ -4,19 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Models
+namespace DataAccessLayer.DTOs
 {
-    public class Match
+    public class MatchUpdateDTO
     {
         public int MatchId { get; set; }
         public DateTime MatchDate { get; set; }
         public int MatchWinner { get; set; }
         public bool IsSingle { get; set; }
         public bool IsCompleted { get; set; }
-        public int MatchType { get; set; }
-        public DateTime? StartTime { get; set; }
-        public int? DurationSeconds { get; set; }
-        public virtual ICollection<PlayerMatch> PlayerMatches { get; set; }
-        public virtual ICollection<Set> Sets { get; set; }
+        public int Player1Id { get; set; }
+        public int Player2Id { get; set; }
+        public int SetCount { get; set; } // Calculated from Sets.Count
     }
 }

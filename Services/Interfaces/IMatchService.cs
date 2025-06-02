@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Infrastructure;
 
 
@@ -6,16 +8,27 @@ namespace Services.Interfaces
 {
     public interface IMatchService
     {
-        Task<List<PlayerDTO>> GetAllPlayersAsync();
-        Task<PlayerDTO?> GetPlayerByIdAsync(int playerId);
+        //Task<List<PlayerDTO>> GetAllPlayersAsync();
+        //Task<PlayerDTO?> GetPlayerByIdAsync(int playerId);
         Task<int> CreateMatchAsync(MatchDTO match);
         Task<MatchDTO?> GetMatchByIdAsync(int matchId);
         Task<bool> IsMatchWonAsync(int matchId);
         Task CompleteMatchAsync(int matchId);
         Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId);
-        
+        Task UpdateMatchAsync(MatchDTO matchDTO);
+        Task<MatchDetailsDTO> GetMatchDetailsAsync(int id);
+        // Match History //
         Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters);
-        Task<MatchDetailsDTO?> GetMatchDetailsAsync(int matchId);
+        
+        // Match  Delete //
+        Task<MatchDeleteDTO?> GetMatchDeleteDtoAsync(int matchId);
+        Task<bool> DeleteMatchAsync(int id);
+
+        // Match Update //
+        Task<MatchUpdateDTO> GetMatchForUpdateAsync(int matchId);
+        Task UpdateMatchAsync(MatchUpdateDTO matchDto);
+        Task<List<SelectListItem>> GetPlayerSelectListItemsAsync();
+
 
         //ActiveMatchDTO GetMatchById(int matchId);
     }

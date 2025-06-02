@@ -1,0 +1,77 @@
+﻿@page "{id:int}"
+@model Tabletennis.Pages.Matches.UpdateModel
+@{
+    ViewData["Title"] = "Update Match";
+}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header text-white" style="background-color: #c4553e;">
+            <h3 class="mb-0">Update Match # @Model.MatchDto.MatchId</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="MatchDto.MatchDate" class="form-label"></label>
+                        <input asp-for="MatchDto.MatchDate" type="datetime-local" class="form-control" />
+                        <span asp-validation-for="MatchDto.MatchDate" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Set Count</label>
+                        <input class="form-control" value="@Model.MatchDto.SetCount" readonly />
+                    </div>
+                </div>
+
+                <div class="row mb-3 align-items-end">
+                    <div class="col-md-4">
+                        <label asp-for="MatchDto.MatchWinner" class="form-label">Match Winner</label>
+                        <select asp-for="MatchDto.MatchWinner" asp-items="Model.PlayerList" class="form-select">
+                            <option value="">-- Select Winner --</option>
+                        </select>
+                        <span asp-validation-for="MatchDto.MatchWinner" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mt-4">
+                            <input asp-for="MatchDto.IsSingle" style="background-color: #c4553e;" class="form-check-input" />
+                            <label asp-for="MatchDto.IsSingle" class="form-check-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check mt-4">
+                            <input asp-for="MatchDto.IsCompleted" style="background-color: #c4553e;" class="form-check-input" />
+                            <label asp-for="MatchDto.IsCompleted" class="form-check-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mt-4">Players</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="MatchDto.Player1Id" class="form-label">Player 1</label>
+                        <select asp-for="MatchDto.Player1Id" asp-items="Model.PlayerList" class="form-select">
+                            <option value="">-- Select Player 1 --</option>
+                        </select>
+                        <span asp-validation-for="MatchDto.Player1Id" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="MatchDto.Player2Id" class="form-label">Player 2</label>
+                        <select asp-for="MatchDto.Player2Id" asp-items="Model.PlayerList" class="form-select">
+                            <option value="">-- Select Player 2 --</option>
+                        </select>
+                        <span asp-validation-for="MatchDto.Player2Id" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <button type="submit" style="background-color: #c4553e;" class="btn btn-success">Update</button>
+                    <a asp-page="/Matches/MatchHistory" class="btn btn-secondary">Back To Match List</a>
+                </div>
+                <input asp-for="MatchDto.MatchId" type="hidden" name="MatchDto.MatchId"  value="@Model.MatchDto.MatchId" />
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

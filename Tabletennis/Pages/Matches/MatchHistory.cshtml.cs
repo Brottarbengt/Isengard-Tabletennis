@@ -1,4 +1,5 @@
 using DataAccessLayer.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Services.Infrastructure;
@@ -8,6 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tabletennis.Pages.Matches
 {
+    [Authorize(Roles = "Admin")]
     public class MatchHistoryModel : PageModel
     {
         private readonly IMatchService _matchService;
@@ -27,7 +29,7 @@ namespace Tabletennis.Pages.Matches
         public int PageNumber { get; set; } = 1;
 
         [BindProperty(SupportsGet = true)]
-        public int PageSize { get; set; } = 3;
+        public int PageSize { get; set; } = 5;
 
         public PagedResult<MatchListDTO> Matches { get; set; } = new();
 

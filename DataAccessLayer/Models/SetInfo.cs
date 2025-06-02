@@ -12,7 +12,6 @@ namespace DataAccessLayer.Models
         public string InfoMessage { get; set; } = string.Empty;
         public bool IsPlayer1Serve { get; set; }
         public bool IsPlayer1StartServer { get; set; }
-        public int ServeCounter { get; set; }
         public int SetId { get; set; }
         public virtual Set Set { get; set; }
     }

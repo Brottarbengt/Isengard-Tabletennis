@@ -38,7 +38,8 @@ namespace Tabletennis.Pages.Matches
                 return NotFound();
             }
 
-            ActiveMatchVM = match.Adapt<ActiveMatchViewModel>();            
+            ActiveMatchVM = match.Adapt<ActiveMatchViewModel>();
+            ActiveMatchVM.StartTime = match.StartTime;
             
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet != null)
@@ -57,7 +58,7 @@ namespace Tabletennis.Pages.Matches
                 ActiveMatchVM.SetNumber = currentSet.SetNumber;
                 ActiveMatchVM.InfoMessage = currentSetInfo.InfoMessage;
                 ActiveMatchVM.IsPlayer1Serve = currentSetInfo.IsPlayer1Serve;
-                ActiveMatchVM.IsSetCompleted = currentSet.IsSetCompleted;
+                ActiveMatchVM.IsSetCompleted = currentSet.IsSetCompleted;                
 
             }
 
@@ -67,6 +68,13 @@ namespace Tabletennis.Pages.Matches
 
         public async Task<IActionResult> OnPostStartSetAsync(int matchId)
         {
+            var match = await _matchService.GetMatchByIdAsync(matchId);
+            if (match != null && match.StartTime == null)
+            {
+                match.StartTime = DateTime.Now;
+                await _matchService.UpdateMatchAsync(match.Adapt<MatchDTO>());
+            }
+
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
             if (currentSet == null)
             {                
@@ -77,7 +85,23 @@ namespace Tabletennis.Pages.Matches
                 currentSet.IsSetCompleted = false;
                 await _setService.UpdateSetAsync(currentSet);
             }
-            
+
+            if (ActiveMatchVM.SelectedServerName == ActiveMatchVM.Player1FirstName)
+            {
+                ActiveMatchVM.IsPlayer1Serve = true;
+                ActiveMatchVM.IsPlayer1StartServer = true;
+            }
+            else
+            {
+                ActiveMatchVM.IsPlayer1Serve = false;
+                ActiveMatchVM.IsPlayer1StartServer = false;
+            }
+
+            var setInfo = await _setService.GetSetInfoBySetIdAsync(currentSet.SetId);
+            setInfo.IsPlayer1Serve = ActiveMatchVM.IsPlayer1Serve;
+            setInfo.IsPlayer1StartServer = ActiveMatchVM.IsPlayer1StartServer;
+            await _setService.UpdateSetInfoAsync(setInfo);
+
             return RedirectToPage(new { matchId });
         }
 

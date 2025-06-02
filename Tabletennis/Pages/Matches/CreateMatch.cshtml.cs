@@ -11,10 +11,12 @@ namespace Tabletennis.Pages.Matches
     public class MatchModel : PageModel
     {
         private readonly IMatchService _matchService;
+        private readonly IPlayerService _playerService;
 
-        public MatchModel(IMatchService matchService)
+        public MatchModel(IMatchService matchService, IPlayerService playerService)
         {
             _matchService = matchService;
+            _playerService = playerService;
         }
 
         [BindProperty]
@@ -48,25 +50,22 @@ namespace Tabletennis.Pages.Matches
 
         public async Task<JsonResult> OnGetGetPlayer(int id)
         {
-            var player = await _matchService.GetPlayerByIdAsync(id);
+            var player = await _playerService.GetPlayerByIdAsync(id);
 
             if (player == null)
             {
                 return new JsonResult(new { error = "Player not found" });
-            }
-
-            // Optional debug
-            Console.WriteLine($"DEBUG: PlayerId={player.PlayerId}, FullName={player.FullName}, BirthYear={player.BirthYear}");
+            }      
 
             return new JsonResult(new
             {
                 player.PlayerId,
-                player.FirstName,
-                player.LastName,
+                //player.FirstName,
+                //player.LastName,
                 player.FullName,
-                player.Email,
-                player.PhoneNumber,
-                player.Gender,
+                //player.Email,
+                //player.PhoneNumber,
+                //player.Gender,
                 Birthday = player.Birthday?.ToString("yyyy-MM-dd") ?? "N/A", // format safely
                 player.BirthYear
             });
@@ -74,7 +73,7 @@ namespace Tabletennis.Pages.Matches
 
         private async Task LoadPlayersAsync()
         {
-            var players = await _matchService.GetAllPlayersAsync();
+            var players = await _playerService.GetAllPlayersAsync();
 
                MatchVM.AllPlayers = players.ToList();
                MatchVM.PlayerList = players
