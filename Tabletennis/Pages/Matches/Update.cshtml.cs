@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Services;
 using Services.Interfaces;
+using Tabletennis.ViewModels;
 
 namespace Tabletennis.Pages.Matches
 {
@@ -17,8 +18,12 @@ namespace Tabletennis.Pages.Matches
         {
             _matchService = matchService;
         }
+
         [BindProperty]
         public MatchUpdateDTO MatchDto { get; set; }
+
+        [BindProperty]
+        public UpdateMatchViewModel ViewModel { get; set; } = new UpdateMatchViewModel();
 
         public List<SelectListItem> PlayerList { get; set; }
 
@@ -30,8 +35,8 @@ namespace Tabletennis.Pages.Matches
                 return NotFound();
             }
 
-            // Call directly on matchService
             PlayerList = await _matchService.GetPlayerSelectListItemsAsync();
+            ViewModel.PlayerSelectList = PlayerList;
 
             return Page();
         }
@@ -41,6 +46,7 @@ namespace Tabletennis.Pages.Matches
             if (!ModelState.IsValid)
             {
                 PlayerList = await _matchService.GetPlayerSelectListItemsAsync();
+                ViewModel.PlayerSelectList = PlayerList;
                 return Page();
             }
 

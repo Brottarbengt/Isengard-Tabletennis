@@ -353,6 +353,7 @@ namespace Services
             var match = await _context.Matches
                 .Include(m => m.Sets)
                 .Include(m => m.PlayerMatches)
+                    .ThenInclude(pm => pm.Player)
                 .FirstOrDefaultAsync(m => m.MatchId == matchId);
 
             if (match == null) return null;
@@ -369,6 +370,8 @@ namespace Services
                 IsCompleted = match.IsCompleted,
                 Player1Id = player1?.PlayerId ?? 0,
                 Player2Id = player2?.PlayerId ?? 0,
+                Player1Name = player1?.Player != null ? $"{player1.Player.FirstName} {player1.Player.LastName}" : string.Empty,
+                Player2Name = player2?.Player != null ? $"{player2.Player.FirstName} {player2.Player.LastName}" : string.Empty,
                 SetCount = match.Sets.Count
             };
         }
