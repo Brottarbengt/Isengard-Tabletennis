@@ -8,14 +8,13 @@ namespace Services.Interfaces
 {
     public interface IMatchService
     {
-        //Task<List<PlayerDTO>> GetAllPlayersAsync();
-        //Task<PlayerDTO?> GetPlayerByIdAsync(int playerId);
+        
         Task<int> CreateMatchAsync(MatchDTO match);
         Task<MatchDTO?> GetMatchByIdAsync(int matchId);
         Task<bool> IsMatchWonAsync(int matchId);
         Task CompleteMatchAsync(int matchId);
         Task<EndMatchDTO> GetMatchForEndGameByIdAsync(int matchId);
-        Task UpdateMatchAsync(MatchDTO matchDTO);
+        Task UpdateMatchStartTimeAsync(MatchDTO matchDTO);
         Task<MatchDetailsDTO> GetMatchDetailsAsync(int id);
         // Match History //
         Task<PagedResult<MatchListDTO>> GetFilteredMatchesAsync(MatchQueryParameters parameters);
@@ -30,6 +29,6 @@ namespace Services.Interfaces
         Task<List<SelectListItem>> GetPlayerSelectListItemsAsync();
 
 
-        //ActiveMatchDTO GetMatchById(int matchId);
+        
     }
 }

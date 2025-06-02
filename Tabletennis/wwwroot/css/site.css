@@ -256,6 +256,9 @@ body {
     background-color: #c4553e !important;
     color: white !important;
 }
+.custom-thead-light {
+    background-color: #ffff66 !important;
+}
 .custom-pagination .custom-page-button {
     background-color: #6c757d;
     color: white;
@@ -419,7 +422,7 @@ body {
         display: flex;
     }
 }
-}
+
 
 /* Ping Pong Animation Styles */
 .pingpong-container {
