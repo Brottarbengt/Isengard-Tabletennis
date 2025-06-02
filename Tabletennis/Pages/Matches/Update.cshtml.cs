@@ -31,7 +31,7 @@ namespace Tabletennis.Pages.Matches
             }
 
             // Call directly on matchService
-            PlayerList = await ((MatchService)_matchService).GetPlayerSelectListItemsAsync();
+            PlayerList = await _matchService.GetPlayerSelectListItemsAsync();
 
             return Page();
         }
@@ -40,7 +40,7 @@ namespace Tabletennis.Pages.Matches
         {
             if (!ModelState.IsValid)
             {
-                PlayerList = await ((MatchService)_matchService).GetPlayerSelectListItemsAsync();
+                PlayerList = await _matchService.GetPlayerSelectListItemsAsync();
                 return Page();
             }
 

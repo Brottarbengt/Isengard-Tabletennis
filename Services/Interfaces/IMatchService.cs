@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Services.Infrastructure;
 
 
@@ -26,7 +27,8 @@ namespace Services.Interfaces
         // Match Update //
         Task<MatchUpdateDTO> GetMatchForUpdateAsync(int matchId);
         Task UpdateMatchAsync(MatchUpdateDTO matchDto);
-      
+        Task<List<SelectListItem>> GetPlayerSelectListItemsAsync();
+
 
         //ActiveMatchDTO GetMatchById(int matchId);
     }

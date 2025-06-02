@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-header text-white" style="background-color: #c4553e;">
-            <h3 class="mb-0">Update Match</h3>
+            <h3 class="mb-0">Update Match # @Model.MatchDto.MatchId</h3>
         </div>
         <div class="card-body">
             <form method="post">
@@ -66,6 +66,7 @@
                     <button type="submit" style="background-color: #c4553e;" class="btn btn-success">Update</button>
                     <a asp-page="/Matches/MatchHistory" class="btn btn-secondary">Back To Match List</a>
                 </div>
+                <input asp-for="MatchDto.MatchId" type="hidden" name="MatchDto.MatchId"  value="@Model.MatchDto.MatchId" />
             </form>
         </div>
     </div>
