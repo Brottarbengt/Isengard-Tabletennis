@@ -28,5 +28,6 @@ namespace Tabletennis.Pages.Matches
             EndMatchVM.DurationSeconds = matchDTO.DurationSeconds;
             return Page();
         }
+
     }
 }
