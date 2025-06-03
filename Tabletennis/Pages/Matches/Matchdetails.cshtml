@@ -3,19 +3,19 @@
 @{
     ViewData["Title"] = "Match Details";
 }
-<h2>Match Details</h2>
+<h2 class="mt-4">Detaljer</h2>
 
 <div class="card my-4 shadow-sm">
     <div class="card-header text-white" style="background-color: #c4553e;">
-        Match on @Model.Match.MatchDate.ToString("yyyy-MM-dd")
+        Matchdatum @Model.Match.MatchDate.ToString("yyyy-MM-dd")
     </div>
     <div class="card-body">
-        <h5 class="card-title">Players</h5>
+        <h5 class="card-title">Spelare</h5>
         <ul class="list-group list-group-flush mb-3">
             @foreach (var player in Model.Match.Players)
             {
                 <li class="list-group-item">
-                    <strong>@player.FullName</strong> — @player.Email, @player.Gender
+                    <strong>@player.FullName</strong> (@player.BirthYear) — @player.Email
                 </li>
             }
         </ul>
@@ -25,9 +25,13 @@
             <thead class="table-light">
                 <tr>
                     <th>Set #</th>
-                    <th>Team 1 Score</th>
-                    <th>Team 2 Score</th>
-                    <th>Winner</th>
+                    @foreach (var player in Model.Match.Players)
+                    {
+                        <th>
+                            @player.FullName
+                        </th>
+                    }
+                    <th>Vinnare</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,12 +54,12 @@
             </tbody>
         </table>
 
-        <p class="mt-3"><strong>Match Winner:</strong> @Model.Match.Winner</p>
+        <p class="fs-4 mt-3">Matchvinnare: <strong>@Model.Match.Winner</strong></p>
     </div>
 </div>
 
 <div class="d-flex justify-content-center mb-3">
     <a asp-page="/Matches/MatchHistory" class="btn btn-secondary" style="background-color: #c4553e; color: white;">
-        ← Back to Match History
+        ← Tillbaka till Matchhistorik
     </a>
 </div>
