@@ -62,7 +62,7 @@ namespace Tabletennis.Pages.Player
 
         public async Task<IActionResult> OnPostDelete(int playerId)
         {
-            var result = await _playerService.SoftDelete(playerId);
+            var result = await _playerService.DeletePlayer(playerId);
 
             if (result == Check.Failed)
             {

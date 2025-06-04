@@ -45,22 +45,40 @@
                 <div class="row mb-3">
 
                     <div class="col-md-6">
-                        <label class="form-label d-block">Gender</label>
+                        <label class="form-label d-block">Kön</label>
 
-                        <input type="radio" class="btn-check" name="NewPlayer.Gender" id="genderMale" value="Male" autocomplete="off"
-                        @(Model.player?.Gender == DataAccessLayer.Enums.Gender.Male ? "checked" : "") />
+                        <input type="radio" class="btn-check" asp-for="player.Gender" id="genderMale" value="Male" autocomplete="off" />
                         <label class="btn-gender" for="genderMale">
-                            <i class="bi bi-gender-male"></i> Male
+                            <i class="bi bi-gender-male"></i> Man
                         </label>
 
-                        <input type="radio" class="btn-check" name="NewPlayer.Gender" id="genderFemale" value="Female" autocomplete="off"
-                        @(Model.player?.Gender == DataAccessLayer.Enums.Gender.Female ? "checked" : "") />
+                        <input type="radio" class="btn-check" asp-for="player.Gender" id="genderFemale" value="Female" autocomplete="off" />
                         <label class="btn-gender" for="genderFemale">
-                            <i class="bi bi-gender-female"></i> Female
+                            <i class="bi bi-gender-female"></i> Kvinna
                         </label>
 
                         <span asp-validation-for="player.Gender" class="text-danger d-block mt-1"></span>
+
+                        <label class="form-label d-block mt-3">Status</label>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" asp-for="player.IsActive" id="isActiveTrue" value="true" />
+                            <label class="form-check-label" for="isActiveTrue">
+                                Aktiv
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" asp-for="player.IsActive" id="isActiveFalse" value="false" />
+                            <label class="form-check-label" for="isActiveFalse">
+                                Inaktiv
+                            </label>
+                        </div>
+
+                        <span asp-validation-for="player.IsActive" class="text-danger d-block mt-1"></span>
                     </div>
+
+                    
 
                     <div class="col-md-6">
                         <label asp-for="player.Birthday" class="form-label"></label>
@@ -77,7 +95,7 @@
                         Ta bort spelare
                     </button>
                     <a asp-page="../Index" class="btn text-white px-5 py-2 me-2" style="background-color: #c4553e; font-size: 1.25rem;">
-                        Back
+                        Tillbaka
                     </a>
                     <button type="submit" asp-page="player/index" class="btn text-white px-5 py-2" style="background-color: #c4553e; font-size: 1.25rem;">
                         Spara

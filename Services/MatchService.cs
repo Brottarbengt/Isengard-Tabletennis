@@ -192,7 +192,7 @@ namespace Services
                 var query = parameters.Query.ToLower();
                 matches = matches.Where(m =>
                     m.PlayerMatches.Any(pm =>
-                        (pm.Player.FirstName + " " + pm.Player.LastName).ToLower().Contains(query)) ||
+                        (pm.Player.FirstName + " " + pm.Player.LastName).Contains(query, StringComparison.CurrentCultureIgnoreCase)) ||
                     m.MatchId.ToString().Contains(query)
                 );
             }
@@ -268,7 +268,7 @@ namespace Services
                 .Select(pm => pm.Player)
                 .ToList();
 
-            var winnerName = winningPlayers.Any()
+            var winnerName = winningPlayers.Count != 0
                 ? string.Join(" & ", winningPlayers.Select(p => $"{p.FirstName} {p.LastName}"))
                 : "Unknown";
 

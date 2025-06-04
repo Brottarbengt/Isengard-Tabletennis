@@ -15,7 +15,7 @@
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-header text-white" style="background-color: #c4553e;">
-            <h4 class="mb-0">Register New Player</h4>
+            <h4 class="mb-0">Registrera ny spelare</h4>
         </div>
         <div class="card-body">
 
@@ -53,18 +53,18 @@
                 <div class="row mb-3">
                     
                     <div class="col-md-6">
-                        <label class="form-label d-block">Gender</label>
+                        <label class="form-label d-block">Kön</label>
 
                         <input type="radio" class="btn-check" name="NewPlayer.Gender" id="genderMale" value="Male" autocomplete="off"
                         @(Model.NewPlayer?.Gender == DataAccessLayer.Enums.Gender.Male ? "checked" : "") required/>
                         <label class="btn-gender" for="genderMale">
-                            <i class="bi bi-gender-male"></i> Male
+                            <i class="bi bi-gender-male"></i> Man
                         </label>
 
                         <input type="radio" class="btn-check" name="NewPlayer.Gender" id="genderFemale" value="Female" autocomplete="off"
                         @(Model.NewPlayer?.Gender == DataAccessLayer.Enums.Gender.Female ? "checked" : "") />
                         <label class="btn-gender" for="genderFemale">
-                            <i class="bi bi-gender-female"></i> Female
+                            <i class="bi bi-gender-female"></i> Kvinna
                         </label>
 
                         <span asp-validation-for="NewPlayer.Gender" class="text-danger d-block mt-1"></span>
@@ -79,13 +79,13 @@
 
                 <div class="d-flex justify-content-center mt-4">
                     <a asp-page="../Matches/CreateMatch" class="btn text-white px-5 py-2 me-2" style="background-color: #c4553e; font-size: 1.25rem;">
-                        Back To New Match
+                        Tillbaka till ny match
                     </a>
                     <a asp-page="../Index" class="btn text-white px-5 py-2 me-2" style="background-color: #c4553e; font-size: 1.25rem;">
-                        Back
+                        Tillbaka
                     </a>
                     <button type="submit" class="btn text-white px-5 py-2" style="background-color: #c4553e; font-size: 1.25rem;">
-                        Create Player
+                        Registrera spelare
                     </button>
                 </div>
             </form>
