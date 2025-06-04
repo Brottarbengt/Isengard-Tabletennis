@@ -1,6 +1,7 @@
 @page "{matchId:int}"
 @model Tabletennis.Pages.Matches.ActiveMatchModel
 @{
+    Layout = "_LayoutFullWidth";
     ViewData["Title"] = "Active Match";
 
 }
@@ -9,7 +10,7 @@ integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+
 crossorigin="anonymous"
 referrerpolicy="no-referrer" />
 
-<div class="container-fluid px-0 mt-5">
+<div style="width:100%; padding:0; margin:0; background-color:white;">
     
     @if (@Model.ActiveMatchVM.IsSetCompleted)
     { 
