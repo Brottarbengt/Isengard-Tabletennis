@@ -97,8 +97,12 @@
     .match-timer {
         font-size: 1.4rem;
     }
-    .row-sc{
-        min-width: 100vw;
+    .row-sc {
+        min-width: 100%;
+        justify-content: center;
+    }
+    h2{
+        font-size: 12px;
     }
 }
 
@@ -127,6 +131,10 @@
         font-size: 1.2rem;
     }
     .row-sc {
-        min-width: 100vw;
+        min-width: 100%;
+        justify-content: center;
+    }
+    h2 {
+        font-size: 12px;
     }
 }
