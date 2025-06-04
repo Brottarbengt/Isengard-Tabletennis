@@ -32,6 +32,7 @@ namespace Tabletennis.Pages.Matches
        
         public async Task<IActionResult> OnGetAsync(int matchId)
         {
+            ViewData["ShowHeader"] = false;
             var match = await _matchService.GetMatchByIdAsync(matchId);
             if (match == null)
             {
