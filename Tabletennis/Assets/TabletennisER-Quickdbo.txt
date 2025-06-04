@@ -4,11 +4,17 @@ https://app.quickdatabasediagrams.com/#/
 Player
 -----
 PlayerId PK FK >- PlayerMatch.PlayerId
-FirstName
-LastName
-Email
-PhoneNumber 
-Birthday
+FirstName string
+LastName string
+Email string
+PhoneNumber string
+Birthday DateTime
+Gender enum
+NumberOfWins int
+NumberOfLosses int
+PlayerWinRatio decimal
+MatchesPlayed int
+IsActive bool
 
 Match
 -----
@@ -17,21 +23,31 @@ IsSingle bool
 MatchDate DateTime
 MatchWinner int # TeamNumber?
 IsCompleted bool
+MatchType enum
+StartTime DateTime
+DurationSeconds int
 
 Set
 -----
 SetId PK
-SetNumber
-Team1Score
-Team2Score
-MatchId FK >- Match.MatchId
+SetNumber int
+Team1Score int
+Team2Score int
 SetWinner int # TeamNumber?
-IsDecidingSet bool
-
+IsSetCompleted bool
+MatchId FK >- Match.MatchId
 
 PlayerMatch
 -----
 PlayerMatchId PK
+TeamNumber int
 PlayerId FK
 MatchId FK
-TeamNumber 
+
+SetInfo
+-----
+SetInfoId PK
+InfoMessage string
+IsPlayer1Serve  bool
+IsPlayer1StartServer bool
+SetId FK >- Set.SetId
