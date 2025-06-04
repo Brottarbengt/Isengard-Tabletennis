@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-header text-white" style="background-color: #c4553e;">
-            <h3 class="mb-0">Update Match # @Model.MatchDto.MatchId</h3>
+            <h3 class="mb-0">Uppdatera Match # @Model.MatchDto.MatchId</h3>
         </div>
         <div class="card-body">
             <form method="post">
@@ -17,56 +17,51 @@
                         <span asp-validation-for="MatchDto.MatchDate" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Set Count</label>
+                        <label class="form-label">Antal Set</label>
                         <input class="form-control" value="@Model.MatchDto.SetCount" readonly />
                     </div>
                 </div>
 
                 <div class="row mb-3 align-items-end">
                     <div class="col-md-4">
-                        <label asp-for="MatchDto.MatchWinner" class="form-label">Match Winner</label>
-                        <select asp-for="MatchDto.MatchWinner" asp-items="Model.PlayerList" class="form-select">
-                            <option value="">-- Select Winner --</option>
+                        <label asp-for="MatchDto.MatchWinner" class="form-label">Match vinnare</label>
+                        <select asp-for="MatchDto.MatchWinner" class="form-select" id="matchWinnerSelect">
+                            <option value="">-- Välj vinnare --</option>
                         </select>
                         <span asp-validation-for="MatchDto.MatchWinner" class="text-danger"></span>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-check mt-4">
-                            <input asp-for="MatchDto.IsSingle" style="background-color: #c4553e;" class="form-check-input" />
-                            <label asp-for="MatchDto.IsSingle" class="form-check-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-check mt-4">
-                            <input asp-for="MatchDto.IsCompleted" style="background-color: #c4553e;" class="form-check-input" />
-                            <label asp-for="MatchDto.IsCompleted" class="form-check-label"></label>
-                        </div>
-                    </div>
+                    
                 </div>
 
-                <h5 class="mt-4">Players</h5>
+                <h5 class="mt-4">Spelare</h5>
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label asp-for="MatchDto.Player1Id" class="form-label">Player 1</label>
-                        <select asp-for="MatchDto.Player1Id" asp-items="Model.PlayerList" class="form-select">
-                            <option value="">-- Select Player 1 --</option>
-                        </select>
-                        <span asp-validation-for="MatchDto.Player1Id" class="text-danger"></span>
+                        <input type="text" id="player1Search" class="form-control" placeholder="Sök efter spelare..." value="@Model.MatchDto.Player1Name">
+                        <div id="player1Dropdown" class="dropdown-menu w-100" style="max-height: 300px; overflow-y: auto;">
+                            @foreach (var player in Model.ViewModel.PlayerSelectList)
+                            {
+                                <a class="dropdown-item" href="#" data-player-id="@player.Value" data-player-name="@player.Text">@player.Text</a>
+                            }
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <label asp-for="MatchDto.Player2Id" class="form-label">Player 2</label>
-                        <select asp-for="MatchDto.Player2Id" asp-items="Model.PlayerList" class="form-select">
-                            <option value="">-- Select Player 2 --</option>
-                        </select>
-                        <span asp-validation-for="MatchDto.Player2Id" class="text-danger"></span>
+                        <input type="text" id="player2Search" class="form-control" placeholder="Sök efter spelare..." value="@Model.MatchDto.Player2Name">
+                        <div id="player2Dropdown" class="dropdown-menu w-100" style="max-height: 300px; overflow-y: auto;">
+                            @foreach (var player in Model.ViewModel.PlayerSelectList)
+                            {
+                                <a class="dropdown-item" href="#" data-player-id="@player.Value" data-player-name="@player.Text">@player.Text</a>
+                            }
+                        </div>
                     </div>
                 </div>
 
                 <div class="text-end mt-4">
-                    <button type="submit" style="background-color: #c4553e;" class="btn btn-success">Update</button>
-                    <a asp-page="/Matches/MatchHistory" class="btn btn-secondary">Back To Match List</a>
+                    <button type="submit" style="background-color: #c4553e;" class="btn btn-success">Uppdatera</button>
+                    <a asp-page="/Matches/MatchHistory" class="btn btn-secondary">Tillbaka till Matchhistorik</a>
                 </div>
-                <input asp-for="MatchDto.MatchId" type="hidden" name="MatchDto.MatchId"  value="@Model.MatchDto.MatchId" />
+                <input asp-for="MatchDto.MatchId" type="hidden" name="MatchDto.MatchId" value="@Model.MatchDto.MatchId" />
+                <input type="hidden" name="MatchDto.Player1Id" value="@Model.MatchDto.Player1Id" />
+                <input type="hidden" name="MatchDto.Player2Id" value="@Model.MatchDto.Player2Id" />
             </form>
         </div>
     </div>
@@ -74,4 +69,101 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const player1Search = document.getElementById('player1Search');
+            const player1Dropdown = document.getElementById('player1Dropdown');
+            const player2Search = document.getElementById('player2Search');
+            const player2Dropdown = document.getElementById('player2Dropdown');
+            const dropdownItems1 = player1Dropdown.querySelectorAll('.dropdown-item');
+            const dropdownItems2 = player2Dropdown.querySelectorAll('.dropdown-item');
+            const matchWinnerSelect = document.getElementById('matchWinnerSelect');
+
+            function updateMatchWinnerOptions() {
+                const player1Id = document.querySelector('input[name="MatchDto.Player1Id"]').value;
+                const player2Id = document.querySelector('input[name="MatchDto.Player2Id"]').value;
+                const player1Name = player1Search.value;
+                const player2Name = player2Search.value;
+
+                console.log('Player1Id:', player1Id, 'Player1Name:', player1Name);
+                console.log('Player2Id:', player2Id, 'Player2Name:', player2Name);
+
+                // Rensa befintliga alternativ
+                matchWinnerSelect.innerHTML = '<option value="">-- Select Winner --</option>';
+
+                // Lägg till spelare 1 om den är vald
+                if (player1Id && player1Name) {
+                    const option1 = document.createElement('option');
+                    option1.value = '1';
+                    option1.textContent = player1Name;
+                    matchWinnerSelect.appendChild(option1);
+                }
+
+                // Lägg till spelare 2 om den är vald
+                if (player2Id && player2Name) {
+                    const option2 = document.createElement('option');
+                    option2.value = '2';
+                    option2.textContent = player2Name;
+                    matchWinnerSelect.appendChild(option2);
+                }
+
+                // Sätt det ursprungliga värdet om det finns
+                const originalWinner = '@Model.MatchDto.MatchWinner';
+                if (originalWinner) {
+                    matchWinnerSelect.value = originalWinner;
+                }
+            }
+
+            function setupPlayerSearch(searchInput, dropdown, dropdownItems) {
+                searchInput.addEventListener('input', function() {
+                    const searchValue = this.value.toLowerCase();
+                    dropdownItems.forEach(item => {
+                        const playerName = item.textContent.toLowerCase();
+                        if (playerName.includes(searchValue)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                    dropdown.style.display = 'block';
+                });
+
+                dropdownItems.forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const playerName = this.getAttribute('data-player-name');
+                        const playerId = this.getAttribute('data-player-id');
+                        searchInput.value = playerName;
+                        dropdown.style.display = 'none';
+                        
+                        // Uppdatera rätt PlayerId i formuläret
+                        if (searchInput === player1Search) {
+                            document.querySelector('input[name="MatchDto.Player1Id"]').value = playerId;
+                        } else {
+                            document.querySelector('input[name="MatchDto.Player2Id"]').value = playerId;
+                        }
+
+                        // Uppdatera Match Winner dropdown
+                        updateMatchWinnerOptions();
+                    });
+                });
+            }
+
+            setupPlayerSearch(player1Search, player1Dropdown, dropdownItems1);
+            setupPlayerSearch(player2Search, player2Dropdown, dropdownItems2);
+
+            // Stäng dropdown när man klickar utanför
+            document.addEventListener('click', function(e) {
+                if (!player1Search.contains(e.target) && !player1Dropdown.contains(e.target)) {
+                    player1Dropdown.style.display = 'none';
+                }
+                if (!player2Search.contains(e.target) && !player2Dropdown.contains(e.target)) {
+                    player2Dropdown.style.display = 'none';
+                }
+            });
+
+            // Uppdatera Match Winner dropdown när sidan laddas
+            updateMatchWinnerOptions();
+        });
+    </script>
 }

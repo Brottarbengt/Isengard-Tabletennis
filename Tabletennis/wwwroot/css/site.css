@@ -256,6 +256,9 @@ body {
     background-color: #c4553e !important;
     color: white !important;
 }
+.custom-thead-light {
+    background-color: #ffff66 !important;
+}
 .custom-pagination .custom-page-button {
     background-color: #6c757d;
     color: white;
@@ -577,4 +580,115 @@ body {
     background: #ffe5e0;
     color: #c4553e;
     border-color: #c4553e;
+}
+
+#bgVideo {
+    position: fixed;
+    top: 23vh;
+    left: 0;
+    min-width: 100%;
+    height: 77vh;
+    z-index: 0;
+    object-fit: cover;
+}
+
+.content-overlay {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    margin-top: 40vh;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.content-overlay .player-text {
+    font-size: 8rem;
+}
+
+.overlay-btn {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+.secondary-btn-color {
+    background-color: #ffff66 !important;
+}
+
+/* Responsive Video Background */
+
+/* Tablet and below */
+@media (max-width: 900px) {
+    #bgVideo {
+        top: 18vh;
+        height: 82vh;
+        min-width: 100vw;
+        min-height: 0;
+        max-width: 100vw;
+        max-height: 100vh;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    #bgVideo {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        min-width: 100vw;
+        min-height: 100vh;
+        object-fit: cover;
+        z-index: 0;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+    #bgVideo {
+        width: 100vw;
+        height: 100vh;
+        min-width: 100vw;
+        min-height: 100vh;
+        top: 0;
+    }
+}
+
+/* Winner Overlay Responsive Styles */
+/* Tablet */
+@media (max-width: 900px) {
+    .content-overlay {
+        margin-top: 25vh;
+    }
+    .content-overlay .player-text {
+        font-size: 4rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .content-overlay {
+        margin-top: 12vh;
+        padding: 0 1rem;
+    }
+    .content-overlay .player-text {
+        font-size: 2.2rem;
+        word-break: break-word;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+    .content-overlay {
+        margin-top: 6vh;
+        padding: 0 0.5rem;
+    }
+    .content-overlay .player-text {
+        font-size: 1.3rem;
+    }
 }

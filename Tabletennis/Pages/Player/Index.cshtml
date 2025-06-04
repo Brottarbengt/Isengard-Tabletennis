@@ -15,20 +15,17 @@
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-body">
-            @* <h5 class="card-title">Player List</h5> *@
-            <div class="card-header custom-thead">
-                <h5 class="mb-0">Spelare</h5>
-            </div>
+            <h5 class="card-title">Spelarlista</h5>
+
             <input type="text" placeholder="Sök Spelare..." id="playerSearch" class="form-control w-25" />
 
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Spelar ID</th>
-                            <th>Förnamn</th>
-                            <th>Efternamn</th>
-                            <th>Aktiv</th>
+                            <th>Player ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,7 +40,7 @@
                                 </td>
                                 
                                 <td>
-                                    <a class="btn btn-info" asp-page="/Player/Update" asp-route-playerId="@player.PlayerId">Edit</a>
+                                    <a class="btn btn-info" asp-page="/Player/Update" asp-route-playerId="@player.PlayerId">Ändra</a>
                                 </td>
                             </tr>
                         }

@@ -20,39 +20,7 @@ namespace Services
             _playerService = playerService;
         }
 
-        //public async Task<List<PlayerDTO>> GetAllPlayersAsync()
-        //{
-        //    return await _context.Players
-        //      .Select(player => new PlayerDTO
-        //      {
-        //         PlayerId = player.PlayerId,
-        //         FirstName = player.FirstName,
-        //         LastName = player.LastName,
-        //         FullName = $"{player.FirstName} {player.LastName}",
-        //         Birthday = player.Birthday, // 🟢 Required for BirthYear
-        //         Email = player.Email,
-        //         PhoneNumber = player.PhoneNumber,
-        //         Gender = player.Gender
-        //      })
-        //       .ToListAsync();
-        //}
-
-        //public async Task<PlayerDTO?> GetPlayerByIdAsync(int playerId)
-        //{
-        //    var player = await _context.Players.FindAsync(playerId);
-        //    return player == null ? null : new PlayerDTO
-        //    {
-        //        PlayerId = player.PlayerId,
-        //        FirstName = player.FirstName,
-        //        LastName = player.LastName,
-        //        FullName = $"{player.FirstName} {player.LastName}",
-        //        Birthday = player.Birthday,
-        //        Email = player.Email,
-        //        PhoneNumber = player.PhoneNumber,
-        //        Gender = player.Gender
-        //    };
-        //}
-
+        
         public async Task<int> CreateMatchAsync(MatchDTO match)
         {
             var newMatch = new Match
@@ -197,7 +165,7 @@ namespace Services
             }
         }
 
-        public async Task UpdateMatchAsync(MatchDTO matchDTO)
+        public async Task UpdateMatchStartTimeAsync(MatchDTO matchDTO)
         {
             var match = await _context.Matches.FirstOrDefaultAsync(m => m.MatchId == matchDTO.MatchId);
             if (match == null) throw new Exception("Match not found");
@@ -385,6 +353,7 @@ namespace Services
             var match = await _context.Matches
                 .Include(m => m.Sets)
                 .Include(m => m.PlayerMatches)
+                    .ThenInclude(pm => pm.Player)
                 .FirstOrDefaultAsync(m => m.MatchId == matchId);
 
             if (match == null) return null;
@@ -401,6 +370,8 @@ namespace Services
                 IsCompleted = match.IsCompleted,
                 Player1Id = player1?.PlayerId ?? 0,
                 Player2Id = player2?.PlayerId ?? 0,
+                Player1Name = player1?.Player != null ? $"{player1.Player.FirstName} {player1.Player.LastName}" : string.Empty,
+                Player2Name = player2?.Player != null ? $"{player2.Player.FirstName} {player2.Player.LastName}" : string.Empty,
                 SetCount = match.Sets.Count
             };
         }

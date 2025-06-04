@@ -72,7 +72,7 @@ namespace Tabletennis.Pages.Matches
             if (match != null && match.StartTime == null)
             {
                 match.StartTime = DateTime.Now;
-                await _matchService.UpdateMatchAsync(match.Adapt<MatchDTO>());
+                await _matchService.UpdateMatchStartTimeAsync(match.Adapt<MatchDTO>());
             }
 
             var currentSet = await _setService.GetCurrentSetAsync(matchId);
