@@ -45,7 +45,7 @@ namespace Services
 
         public async Task<List<PlayerSmallInfoDTO>> GetAllSmallAsync()
         {
-            var players = await _dbContext.Players.Where(c => c.IsActive == true).ToListAsync();
+            var players = await _dbContext.Players.ToListAsync();
             return players.Adapt<List<PlayerSmallInfoDTO>>();
         }
 
@@ -68,6 +68,7 @@ namespace Services
             playerToUpdate.PhoneNumber = updatePlayer.PhoneNumber;
             playerToUpdate.Gender = updatePlayer.Gender;
             playerToUpdate.Birthday = updatePlayer.Birthday;
+            playerToUpdate.IsActive = updatePlayer.IsActive;
 
             await _dbContext.SaveChangesAsync();
             return Check.Success;
@@ -75,13 +76,13 @@ namespace Services
 
         }
 
-        public async Task<Check> SoftDelete(int playerId)
+        public async Task<Check> DeletePlayer(int playerId)
         {
             var playerToDelete = await _dbContext.Players.FindAsync(playerId);
             if (playerToDelete == null)
             { return Check.Failed; }
 
-            playerToDelete.IsActive = false;
+            _dbContext.Players.Remove(playerToDelete);
 
             await _dbContext.SaveChangesAsync();
             return Check.Success;
@@ -127,5 +128,18 @@ namespace Services
 
             return top10;
         }
+
+
+        public Task<List<PlayerDTO>> GetAllPlayersIncludeInActiveAsync()
+        {
+            var players = _dbContext.Players
+                .Select(p => p.Adapt<PlayerDTO>())
+                .ToListAsync();
+            return players;
+
+        }
+
+
+
     }
 }
