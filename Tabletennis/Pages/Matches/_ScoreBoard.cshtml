@@ -3,8 +3,8 @@
 *@
 @{
 }
-<div class="container mt-5">
-    <div class="row text-center mt-3">
+<div class="container-fluid row-sc px-0 mt-5">
+    @*<div class="row text-center mt-3">
         <div class="col-4">
             <h2 class="player-text">@Model.Player1FirstName</h2>
         </div>
@@ -16,9 +16,25 @@
         <div class ="col-4">
             <h2 class="player-text">@Model.Player2FirstName</h2>
         </div>
+    </div>*@
+
+    <div class="row row-sc text-center mt-3 d-flex flex-row flex-nowrap overflow-auto">
+        <div class="col-4 flex-fill">
+            <h2 class="player-text">@Model.Player1FirstName</h2>
+        </div>
+
+        <div class="col-4 flex-fill">
+            <h4 class="anta-regular match-timer">
+                Match Tid: <span id="match-timer"></span>
+            </h4>
+        </div>
+
+        <div class="col-4 flex-fill">
+            <h2 class="player-text">@Model.Player2FirstName</h2>
+        </div>
     </div>
     
-    <div class="row text-center mt-3">
+    @*<div class="row text-center mt-3">
         <div class="col-4 justify-content-md-center">
             <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true">                
                 <div class="button-wrapper">
@@ -73,6 +89,62 @@
             </form>
         </div>
         
+    </div>*@
+
+    <div class="row row-sc text-center mt-3 d-flex flex-row flex-nowrap overflow-auto">
+        <div class="col-4 flex-fill">
+            <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true">
+                <div class="button-wrapper">
+                    <button type="submit" class="btn text-bg-dark btn-lg full-width">
+                        <h2 class="player-points anta-regular">@Model.Team1Score</h2>
+                    </button>
+
+                    @if (@Model.IsPlayer1Serve)
+                    {
+                        <span class="serve-icon left-serve"><i class="fa-solid fa-table-tennis-paddle-ball"></i></span>
+                    }
+                </div>
+            </form>
+            <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="false">
+                <button type="submit" class="btn btn-danger btn-lg mt-3">
+                    <h2 class="anta-regular">Ta bort poäng</h2>
+                </button>
+            </form>
+        </div>
+
+        <div class="col-4 flex-fill">
+            <div class="row justify-content-around">
+                <div class="col-5 set-bg">
+                    <p class="anta-regular set-points">@Model.Team1WonSets</p>
+                </div>
+                <div class="col-5 set-bg">
+                    <p class="anta-regular set-points">@Model.Team2WonSets</p>
+                </div>
+            </div>
+            <div>
+                <p class="anta-regular point-info">@Model.InfoMessage</p>
+            </div>
+        </div>
+
+        <div class="col-4 flex-fill">
+            <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="true">
+                <div class="button-wrapper">
+                    <button type="submit" class="btn text-bg-dark btn-lg full-width">
+                        <h2 class="player-points anta-regular">@Model.Team2Score</h2>
+                    </button>
+
+                    @if (!@Model.IsPlayer1Serve)
+                    {
+                        <span class="serve-icon right-serve"><i class="fa-solid fa-table-tennis-paddle-ball"></i></span>
+                    }
+                </div>
+            </form>
+            <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="2" asp-route-isIncrement="false">
+                <button type="submit" class="btn btn-danger btn-lg mt-3">
+                    <h2 class="anta-regular">Ta bort poäng</h2>
+                </button>
+            </form>
+        </div>
     </div>
     
 </div>

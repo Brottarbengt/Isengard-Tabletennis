@@ -33,12 +33,13 @@
     background-color: darkred;   
     border-radius: 10px;
 }
-   
+
 
 .button-wrapper {
     display: grid;
     position: relative;
-
+    background-color: rgb(33, 37, 40);
+    color: white;
 }
 .button-wrapper button {
     grid-area: 1 / 1;
@@ -68,4 +69,64 @@
 .match-timer{
     font-size: 2rem;
     font-weight: bold;
+}
+
+/*____________________________________________________*/
+
+@media (max-width: 768px) {
+    .player-text {
+        font-size: 2.2rem;
+    }
+
+    .player-points {
+        font-size: 8rem;
+    }
+
+    .set-points {
+        font-size: 4rem;
+    }
+
+    .point-info {
+        font-size: 2rem;
+    }
+
+    .serve-icon {
+        font-size: 2rem;
+    }
+
+    .match-timer {
+        font-size: 1.4rem;
+    }
+    .row-sc{
+        min-width: 100vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-text {
+        font-size: 1.8rem;
+    }
+
+    .player-points {
+        font-size: 6rem;
+    }
+
+    .set-points {
+        font-size: 3rem;
+    }
+
+    .point-info {
+        font-size: 1.6rem;
+    }
+
+    .serve-icon {
+        font-size: 1.5rem;
+    }
+
+    .match-timer {
+        font-size: 1.2rem;
+    }
+    .row-sc {
+        min-width: 100vw;
+    }
 }
