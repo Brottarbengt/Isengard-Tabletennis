@@ -76,13 +76,13 @@ namespace Services
 
         }
 
-        public async Task<Check> SoftDelete(int playerId)
+        public async Task<Check> DeletePlayer(int playerId)
         {
             var playerToDelete = await _dbContext.Players.FindAsync(playerId);
             if (playerToDelete == null)
             { return Check.Failed; }
 
-            playerToDelete.IsActive = false;
+            _dbContext.Players.Remove(playerToDelete);
 
             await _dbContext.SaveChangesAsync();
             return Check.Success;
