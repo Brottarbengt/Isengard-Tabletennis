@@ -3,28 +3,29 @@
     var player2 = Model.Player2FirstName;
     var selected = Model.SelectedServerName ?? player1;
 }
-<div class="text-center mt-4">
-    @if (Model.IsSetCompleted)
-    {
-        if (Model.PreviousSetWinner == 1)
-        {
-            <p class="anta-regular winner-text">Vinnare av set: @(Model.SetNumber - 1)!</p>
-            <h2 class="player-text">@Model.Player1FirstName</h2>
-        }
-        else if (Model.PreviousSetWinner == 2)
-        {
-            <p class="anta-regular winner-text">Vinnare av set: @(Model.SetNumber - 1)!</p>
-            <h2 class="player-text">@Model.Player2FirstName</h2>
-        }
-    }
-</div>
+<div class="container mt-5">
+    <div class="text-center mt-4">
+       @if (Model.IsSetCompleted)
+       {
+           if (Model.PreviousSetWinner == 1)
+           {
+               <p class="anta-regular winner-text">Vinnare av set: @(Model.SetNumber - 1)!</p>
+               <h2 class="player-text">@Model.Player1FirstName</h2>
+           }
+           else if (Model.PreviousSetWinner == 2)
+           {
+              <p class="anta-regular winner-text">Vinnare av set: @(Model.SetNumber - 1)!</p>
+              <h2 class="player-text">@Model.Player2FirstName</h2>
+           }
+       }
+    </div>
 
-<div class="text-center mt-5">
-    <form method="post" asp-page-handler="StartSet" asp-route-matchId="@Model.MatchId">
-        <input type="hidden" name="Player1FirstName" value="@Model.Player1FirstName" />
-        <input type="hidden" name="Player2FirstName" value="@Model.Player2FirstName" />
-        @if (Model.SetNumber == 1)
-        {
+    <div class="text-center mt-5">
+      <form method="post" asp-page-handler="StartSet" asp-route-matchId="@Model.MatchId">
+         <input type="hidden" name="Player1FirstName" value="@Model.Player1FirstName" />
+         <input type="hidden" name="Player2FirstName" value="@Model.Player2FirstName" />
+         @if (Model.SetNumber == 1)
+         {
 
             <h2 class="anta-regular">Välj vilken spelare som ska börja med serve:</h2>
             <div class="pingpong-controls pingpong-btn-group" style="position: relative;">
@@ -38,9 +39,9 @@
                     <div class="pingpong-name right">@player2</div>
                 </div>
             </div>
-        }
+         }
 
-        <button type="submit" class="btn btn-success start-set-btn btn-lg mt-2">
+         <button type="submit" class="btn btn-success start-set-btn btn-lg mt-2">
             @if (Model.SetNumber == 1)
             {
                 <h2 class="anta-regular start-first-set-btn">Starta första set</h2>
@@ -49,8 +50,9 @@
             {
                 <h2 class="anta-regular start-next-set-btn">Starta nästa set</h2>
             }
-        </button>
-    </form>
+         </button>
+       </form>
+    </div>
 </div>
 
 @* @section Scripts {

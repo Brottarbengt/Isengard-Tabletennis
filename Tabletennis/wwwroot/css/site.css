@@ -314,7 +314,45 @@ body {
     cursor: pointer;
     background-color: #c4553e;
 }
-/* Mobile styles */
+/* Mobile styles  media query */
+@media (max-width: 991.98px) {
+    .player-points {
+        font-size: 10rem; /* Reduce size */
+    }
+
+    .set-points {
+        font-size: 4rem;
+    }
+
+    .player-text {
+        font-size: 2rem;
+    }
+
+    .point-info {
+        font-size: 2rem;
+    }
+
+    .match-timer {
+        font-size: 1.5rem;
+    }
+
+    .serve-icon {
+        font-size: 2.5rem;
+    }
+
+    .col-4 {
+        margin-bottom: 2rem;
+    }
+
+    .row.text-center.mt-3 {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .button-wrapper {
+        justify-content: center;
+    }
+}
 @media (max-width: 768px) {
     /* Show menu button only on mobile */
     .menu-toggle {
@@ -348,75 +386,231 @@ body {
         order: 2;
         margin-top: 10px;
     }
+    .pingpong-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .pingpong-name {
+        font-size: 1rem;
+        top: 125px;
+    }
+
+    .pingpong-name.left,
+    .pingpong-name.right {
+         float: none;
+    }
+
+    .pingpong-ball {
+        width: 20px;
+        height: 20px;
+        top: 90px;
+    }
+
+    .pingpong-btn-group {
+        display: flex;
+        flex-direction:column;
+        align-items: center;
+    }
+    .row.text-center > div {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .player-text {
+        font-size: 1.5rem;
+    }
+
+    .match-timer {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .player-points {
+        font-size: 2rem;
+    }
+
+    .set-points {
+        font-size: 1.2rem;
+    }
+
+    .point-info {
+        font-size: 1rem;
+    }
+
+    .serve-icon {
+        font-size: 1.2rem;
+        top: 5px;
+    }
+
+    .btn-lg {
+        font-size: 1rem;
+    }
+
+    .button-wrapper {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .set-bg {
+        margin-bottom: 10px;
+    }
+
+    /* Fix spacing between player 1, match time, and player 2 */
+    .scoreboard-header .col-4 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
 }
 @media (max-width: 430px) {
     .top-bar {
+        display: flex;
         flex-direction: row;
-        padding: 10px;
-        text-align: center;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 10px;
+        flex-wrap: wrap;
     }
 
     .logo-section {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        gap: 15px;
     }
 
     .logo {
-        width: 60px;
+        width: 50px;
         height: auto;
-        margin-bottom: 5px;
     }
 
     .site-title {
-        font-size: 1rem;
+        font-size: 22px;
         margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        flex-grow: 1;
     }
 
     .social-icons {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 10px;
+        align-items: center;
+        gap: 6px;
     }
 
-    .social-icons img,
-    .social-icons i {
-        width: 20px;
-        height: 20px;
-        font-size: 20px;
+    .social-icons a,
+    .social-icons i,
+    .social-icons img {
+         font-size: 18px;
+         width: 24px;
+         height: 24px;
+        object-fit: contain;
     }
 
-    .main-nav {
-        display: none;
-        flex-direction: column;
-        background-color: #333;
-        width: 100%;
-        text-align: center;
-        padding: 10px 0;
-    }
-
-    .main-nav a {
-        color: white;
-        padding: 10px;
-        font-size: 16px;
-        display: block;
-        text-decoration: none;
+    .social-icons img {
+         max-width: 100%;
+         max-height: 22px;
+         display: inline-block;
     }
 
     .menu-toggle {
-        display: block;
-        cursor: pointer;
         font-size: 20px;
         background: none;
         border: none;
         color: white;
-        margin-top: 10px;
+        cursor: pointer;
         background-color: #c4553e;
     }
 
-    .main-nav.show {
+    .main-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+    .pingpong-container {
+        width: 100%;
+        height: 140px;
+    }
+
+    .pingpong-name {
+        font-size: 1rem;
+        top: 125px;
+    }
+
+    .pingpong-ball {
+        width: 20px;
+        height: 20px;
+        top: 90px;
+    }
+
+    .pingpong-btn-group {
         display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pingpong-btn {
+        width: 90%;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .start-first-set-btn {
+        font-size: 3rem !important;
+    }
+    start-next-set-btn {
+        font-size: 3rem !important;
+    }
+
+    .start-set-btn {
+        padding: 0.2rem 0.5rem; /* optional: adjust button padding */
+    }
+    .row.text-center > div {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .player-text {
+        font-size: 1.2rem;
+    }
+
+    .match-timer {
+        font-size: 1rem;
+    }
+
+    .player-points {
+        font-size: 1.8rem;
+    }
+
+    .set-points {
+        font-size: 1.1rem;
+    }
+
+    .point-info {
+        font-size: 0.9rem;
+    }
+
+    .btn-lg {
+        font-size: 0.9rem;
+    }
+
+    .button-wrapper {
+        width: 100%;
+    }
+
+    .serve-icon {
+        font-size: 1rem;
+        top: 3px;
+    }
+
+    .set-bg {
+        margin-bottom: 10px;
     }
 }
 
@@ -437,8 +631,14 @@ body {
     font-family: 'Arial Black', sans-serif;
     text-transform: uppercase;
 }
-.pingpong-name.left { left: 0; }
-.pingpong-name.right { right: 0; }
+    .pingpong-name.left {
+        left: 0;
+        text-align: left;
+    }
+    .pingpong-name.right {
+        right: 0;
+        text-align: right;
+    }
 .pingpong-ball {
     position: absolute;
     top: 110px; /* was 80px */

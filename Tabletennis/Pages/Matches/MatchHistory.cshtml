@@ -28,6 +28,7 @@
 
     @if (Model.Matches.Results.Any())
     {
+      <div style="overflow-x: auto;">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -69,6 +70,7 @@
                 }
             </tbody>
         </table>
+      </div>
 
         <!-- Pagination -->
         <div class="pagination-container d-flex justify-content-center mt-4">
