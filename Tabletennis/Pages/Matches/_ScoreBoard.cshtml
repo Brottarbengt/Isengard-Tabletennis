@@ -3,7 +3,7 @@
 *@
 @{
 }
-<div>
+<div class="container mt-5">
     <div class="row text-center mt-3">
         <div class="col-4">
             <h2 class="player-text">@Model.Player1FirstName</h2>
@@ -17,6 +17,7 @@
             <h2 class="player-text">@Model.Player2FirstName</h2>
         </div>
     </div>
+    
     <div class="row text-center mt-3">
         <div class="col-4 justify-content-md-center">
             <form method="post" asp-page-handler="UpdateScore" asp-route-matchId="@Model.MatchId" asp-route-teamNumber="1" asp-route-isIncrement="true">                
