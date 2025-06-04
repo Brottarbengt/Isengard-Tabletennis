@@ -40,7 +40,7 @@
             </div>
         }
 
-        <button type="submit" class="btn btn-success start-set-btn btn-lg mt-2">
+        <button type="submit" class="btn secondary-btn-color start-set-btn btn-lg mt-2">
             @if (Model.SetNumber == 1)
             {
                 <h2 class="anta-regular start-first-set-btn">Starta första set</h2>
@@ -52,34 +52,3 @@
         </button>
     </form>
 </div>
-
-@* @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const ball = document.getElementById('ball');
-            const radios = document.querySelectorAll('input[name="SelectedServerName"]');
-            const player1 = "@Model.Player1FirstName";
-            const player2 = "@Model.Player2FirstName";
-
-            function updateBallAnimation() {
-                ball.classList.remove('bounce-left', 'bounce-right');
-                void ball.offsetWidth;
-                const selected = document.querySelector('input[name="SelectedServerName"]:checked').value;
-                // Debug output
-                console.log("Selected:", selected, "Player1:", player1, "Player2:", player2);
-                if (selected === player1) {
-                    ball.classList.add('bounce-left');
-                } else if (selected === player2) {
-                    ball.classList.add('bounce-right');
-                }
-            }
-
-            radios.forEach(radio => {
-                radio.addEventListener('change', updateBallAnimation);
-            });
-
-            // Initial animation
-            updateBallAnimation();
-        });
-    </script>
-} *@

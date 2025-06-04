@@ -101,7 +101,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PlayerWinRatio")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(7, 4)
+                        .HasColumnType("decimal(7,4)");
 
                     b.HasKey("PlayerId");
 

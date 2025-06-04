@@ -27,6 +27,9 @@ public class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Player>()
             .Property(p => p.IsActive)
             .HasDefaultValue(true);
+        modelBuilder.Entity<Player>()
+            .Property(r => r.PlayerWinRatio)
+            .HasPrecision(7, 4);
     }
 
 
