@@ -617,149 +617,260 @@ body {
     }
 }
 
-
-/* Ping Pong Animation Styles */
 .pingpong-container {
     position: relative;
-    width: 600px;
-    height: 200px;
+    width: 90vw;
+    max-width: 600px;
+    height: 33vw;
+    max-height: 200px;
     margin: auto;
     border-top: 2px dashed #ccc;
+    min-width: 250px;
+    min-height: 100px;
 }
+
 .pingpong-name {
     position: absolute;
-    top: 150px;
-    font-size: 2rem;
+    top: 80%;
+    font-size: 1.5rem;
     font-weight: bold;
     font-family: 'Arial Black', sans-serif;
     text-transform: uppercase;
+    white-space: nowrap;
 }
+
     .pingpong-name.left {
         left: 0;
-        text-align: left;
     }
+
     .pingpong-name.right {
         right: 0;
-        text-align: right;
     }
+
 .pingpong-ball {
     position: absolute;
-    top: 110px; /* was 80px */
-    left: 20px;
-    width: 30px;
-    height: 30px;
+    top: 55%;
+    left: 3%;
+    width: 6vw;
+    max-width: 30px;
+    min-width: 18px;
+    height: 6vw;
+    max-height: 30px;
+    min-height: 18px;
     background-color: white;
     border: 2px solid #444;
     border-radius: 50%;
-    /* Animation for bounce effect */
     transition: left 0.7s cubic-bezier(.68,-0.55,.27,1.55);
     box-shadow: 0 8px 24px 0 rgba(0,0,0,0.18);
-    background: radial-gradient(circle at 10px 10px, #fff 70%, #eee 100%);
+    background: radial-gradient(circle at 30% 30%, #fff 70%, #eee 100%);
     animation-timing-function: cubic-bezier(.68,-0.55,.27,1.55);
 }
 
 /* Ball moves right when serve2 is checked */
 #serve2:checked ~ .pingpong-container .pingpong-ball {
-    left: 540px;
+    left: 87%;
     animation: bounce-m-right 1s cubic-bezier(.42,0,.58,1);
 }
 
 /* Ball moves left when serve1 is checked */
 #serve1:checked ~ .pingpong-container .pingpong-ball {
-    left: 20px;
+    left: 3%;
     animation: bounce-m-left 1s cubic-bezier(.42,0,.58,1);
 }
 
-/* Keyframes for a soft, round, M-shaped bounce from left to right */
+/* Responsive M-shaped bounce keyframes (percent-based) */
 @keyframes bounce-m-right {
-    0%   { left: 20px;   top: 110px;   transform: rotate(0deg);}
-    15%  { left: 100px;  top: 70px;    transform: rotate(45deg);}
-    25%  { left: 180px;  top: 90px;    transform: rotate(90deg);}
-    40%  { left: 260px;  top: 140px;   transform: rotate(135deg);}
-    50%  { left: 280px;  top: 160px;   transform: rotate(180deg);}
-    60%  { left: 300px;  top: 140px;   transform: rotate(225deg);}
-    75%  { left: 400px;  top: 90px;    transform: rotate(270deg);}
-    85%  { left: 480px;  top: 70px;    transform: rotate(315deg);}
-    100% { left: 540px;  top: 110px;   transform: rotate(360deg);}
+    0% {
+        left: 3%;
+        top: 55%;
+        transform: rotate(0deg);
+    }
+
+    15% {
+        left: 18%;
+        top: 30%;
+        transform: rotate(45deg);
+    }
+
+    25% {
+        left: 30%;
+        top: 40%;
+        transform: rotate(90deg);
+    }
+
+    40% {
+        left: 45%;
+        top: 70%;
+        transform: rotate(135deg);
+    }
+
+    50% {
+        left: 48%;
+        top: 80%;
+        transform: rotate(180deg);
+    }
+
+    60% {
+        left: 52%;
+        top: 70%;
+        transform: rotate(225deg);
+    }
+
+    75% {
+        left: 70%;
+        top: 40%;
+        transform: rotate(270deg);
+    }
+
+    85% {
+        left: 82%;
+        top: 30%;
+        transform: rotate(315deg);
+    }
+
+    100% {
+        left: 87%;
+        top: 55%;
+        transform: rotate(360deg);
+    }
 }
 
-/* Keyframes for a soft, round, M-shaped bounce from right to left */
 @keyframes bounce-m-left {
-    0%   { left: 540px;  top: 110px;   transform: rotate(0deg);}
-    15%  { left: 480px;  top: 70px;    transform: rotate(-45deg);}
-    25%  { left: 400px;  top: 90px;    transform: rotate(-90deg);}
-    40%  { left: 300px;  top: 140px;   transform: rotate(-135deg);}
-    50%  { left: 280px;  top: 160px;   transform: rotate(-180deg);}
-    60%  { left: 260px;  top: 140px;   transform: rotate(-225deg);}
-    75%  { left: 180px;  top: 90px;    transform: rotate(-270deg);}
-    85%  { left: 100px;  top: 70px;    transform: rotate(-315deg);}
-    100% { left: 20px;   top: 110px;   transform: rotate(-360deg);}
+    0% {
+        left: 87%;
+        top: 55%;
+        transform: rotate(0deg);
+    }
+
+    15% {
+        left: 82%;
+        top: 30%;
+        transform: rotate(-45deg);
+    }
+
+    25% {
+        left: 70%;
+        top: 40%;
+        transform: rotate(-90deg);
+    }
+
+    40% {
+        left: 52%;
+        top: 70%;
+        transform: rotate(-135deg);
+    }
+
+    50% {
+        left: 48%;
+        top: 80%;
+        transform: rotate(-180deg);
+    }
+
+    60% {
+        left: 45%;
+        top: 70%;
+        transform: rotate(-225deg);
+    }
+
+    75% {
+        left: 30%;
+        top: 40%;
+        transform: rotate(-270deg);
+    }
+
+    85% {
+        left: 18%;
+        top: 30%;
+        transform: rotate(-315deg);
+    }
+
+    100% {
+        left: 3%;
+        top: 55%;
+        transform: rotate(-360deg);
+    }
 }
 
 /* Ping Pong Shadow Animation */
 .pingpong-shadow {
     position: absolute;
-    left: 20px;
-    top: 110px;
-    width: 40px;
-    height: 10px;
+    left: 3%;
+    top: 70%;
+    width: 8vw;
+    max-width: 40px;
+    min-width: 16px;
+    height: 2vw;
+    max-height: 10px;
+    min-height: 4px;
     background: rgba(0,0,0,0.18);
     border-radius: 50%;
     z-index: 0;
     transition: left 0.7s cubic-bezier(.68,-0.55,.27,1.55);
 }
 
-/* Ball shadow animation (optional, for density effect) */
 #serve2:checked ~ .pingpong-container .pingpong-shadow {
-    left: 540px;
+    left: 87%;
     animation: shadow-bounce-right 1s cubic-bezier(.42,0,.58,1);
 }
+
 #serve1:checked ~ .pingpong-container .pingpong-shadow {
-    left: 20px;
+    left: 3%;
     animation: shadow-bounce-left 1s cubic-bezier(.42,0,.58,1);
 }
+
 @keyframes shadow-bounce-right {
-    0%   { left: 20px; width: 40px; opacity: 0.5;}
-    50%  { left: 280px; width: 20px; opacity: 0.2;}
-    100% { left: 540px; width: 40px; opacity: 0.5;}
-}
-@keyframes shadow-bounce-left {
-    0%   { left: 540px; width: 40px; opacity: 0.5;}
-    50%  { left: 280px; width: 20px; opacity: 0.2;}
-    100% { left: 20px; width: 40px; opacity: 0.5;}
+    0% {
+        left: 3%;
+        width: 8vw;
+        opacity: 0.5;
+    }
+
+    50% {
+        left: 48%;
+        width: 4vw;
+        opacity: 0.2;
+    }
+
+    100% {
+        left: 87%;
+        width: 8vw;
+        opacity: 0.5;
+    }
 }
 
-/* Ping Pong Server Selection Radio Buttons */
+@keyframes shadow-bounce-left {
+    0% {
+        left: 87%;
+        width: 8vw;
+        opacity: 0.5;
+    }
+
+    50% {
+        left: 48%;
+        width: 4vw;
+        opacity: 0.2;
+    }
+
+    100% {
+        left: 3%;
+        width: 8vw;
+        opacity: 0.5;
+    }
+}
+
+/* Responsive radio button labels */
 .pingpong-controls label {
-    font-size: 1.2rem;
-    margin-right: 2em;
+    font-size: 1.1rem;
+    margin-right: 1em;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
-}
-
-.pingpong-controls input[type="radio"] {
-    display: none;
-}
-
-/* Hide the radio input */
-.pingpong-btn-group input[type="radio"] {
-    display: none;
-}
-
-/* Style the label as a button */
-.pingpong-btn-group .pingpong-btn {
-    display: inline-block;
-    padding: 0.6em 2em;
-    margin: 0 0.5em 1em 0;
-    font-size: 1.2rem;
-    font-family: 'Anta', sans-serif;
+    padding: 0.4em 1.2em;
+    border-radius: 1.5em;
     border: 2px solid #c4553e;
-    border-radius: 2em;
     background: #fff;
     color: #c4553e;
-    cursor: pointer;
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 8px rgba(196,85,62,0.08);
     user-select: none;
@@ -767,20 +878,55 @@ body {
     z-index: 1;
 }
 
-/* Style the selected (checked) button */
-.pingpong-btn-group input[type="radio"]:checked + .pingpong-btn {
+.pingpong-controls input[type="radio"]:checked + label {
     background: #c4553e;
     color: #fff;
     box-shadow: 0 4px 16px rgba(196,85,62,0.18);
     border-color: #c4553e;
 }
 
-/* Optional: Add a hover effect */
-.pingpong-btn-group .pingpong-btn:hover {
+.pingpong-controls label:hover {
     background: #ffe5e0;
     color: #c4553e;
     border-color: #c4553e;
 }
+
+.pingpong-controls input[type="radio"],
+.pingpong-btn-group input[type="radio"] {
+    display: none;
+}
+/* Media queries for smaller screens */
+@media (max-width: 600px) {
+    .pingpong-container {
+        width: 90vw;
+        height: 32vw;
+        min-width: 180px;
+        min-height: 80px;
+    }
+
+    .pingpong-name {
+        font-size: 1rem;
+        top: 80%;
+    }
+
+    .pingpong-ball {
+        width: 8vw;
+        height: 8vw;
+        min-width: 14px;
+        min-height: 14px;
+        max-width: 22px;
+        max-height: 22px;
+    }
+
+    .pingpong-shadow {
+        width: 6vw;
+        height: 1.5vw;
+        min-width: 8px;
+        min-height: 3px;
+        max-width: 20px;
+        max-height: 7px;
+    }
+}}
 
 #bgVideo {
     position: fixed;
