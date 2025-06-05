@@ -20,6 +20,7 @@ namespace Tabletennis.Pages.Matches
 
         public async Task<IActionResult> OnGetAsync(int matchId)
         {
+            ViewData["ShowHeader"] = false;
             var matchDTO = await _matchService.GetMatchForEndGameByIdAsync(matchId);
             if (matchDTO == null)
                 return NotFound();

@@ -941,10 +941,10 @@ body {
 
 #bgVideo {
     position: fixed;
-    top: 23vh;
+    top: 0;
     left: 0;
     min-width: 100%;
-    height: 77vh;
+    height: 100vh;
     z-index: 0;
     object-fit: cover;
 }
@@ -977,20 +977,22 @@ body, html {
 }
 
 /* Responsive Video Background */
-
-/* Tablet and below */
 @media (max-width: 900px) {
     #bgVideo {
-        top: 18vh;
-        height: 82vh;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
         min-width: 100vw;
-        min-height: 0;
-        max-width: 100vw;
-        max-height: 100vh;
+        min-height: 100vh;
+        object-fit: cover;
+    }
+
+    .content-overlay {
+        margin-top: 25vh;
     }
 }
 
-/* Mobile */
 @media (max-width: 600px) {
     #bgVideo {
         position: fixed;
@@ -1001,18 +1003,29 @@ body, html {
         min-width: 100vw;
         min-height: 100vh;
         object-fit: cover;
-        z-index: 0;
+    }
+
+    .content-overlay {
+        margin-top: 12vh;
+        padding: 0 1rem;
     }
 }
 
-/* Extra small devices */
-@media (max-width: 400px) {
+@media (max-width: 600px) and (orientation: landscape) {
     #bgVideo {
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100vw;
         height: 100vh;
         min-width: 100vw;
         min-height: 100vh;
-        top: 0;
+        object-fit: cover;
+    }
+
+    .content-overlay {
+        margin-top: 5vh;
+        padding: 0 1rem;
     }
 }
 
@@ -1129,5 +1142,103 @@ body, html {
         height: 2vw;
         max-width: 25px;
         max-height: 6px;
+    }
+}
+
+/* End Match Responsive Styles */
+@media (max-width: 768px) and (orientation: landscape) {
+    .card {
+        margin: 0;
+        padding: 0;
+    }
+
+    .card-body {
+        padding: 0.5rem;
+    }
+
+    .player-text {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    .vs-text {
+        font-size: 1.2rem;
+    }
+
+    .end-text {
+        font-size: 1rem;
+    }
+
+    .winner-text {
+        font-size: 1.2rem;
+    }
+
+    .table {
+        margin-bottom: 0.5rem;
+    }
+
+    .table th, .table td {
+        padding: 0.3rem;
+    }
+
+    .btn-lg {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .mt-4 {
+        margin-top: 0.5rem !important;
+    }
+
+    .mt-5 {
+        margin-top: 0.5rem !important;
+    }
+
+    .row {
+        margin: 0;
+    }
+
+    .col-md-6 {
+        padding: 0.3rem;
+    }
+
+    .card-header {
+        padding: 0.3rem;
+    }
+
+    .card-header h2 {
+        font-size: 1.2rem;
+        margin: 0;
+    }
+
+    hr {
+        margin: 0.3rem 0;
+    }
+}
+
+@media (max-width: 480px) and (orientation: landscape) {
+    .player-text {
+        font-size: 1.2rem;
+    }
+
+    .vs-text {
+        font-size: 1rem;
+    }
+
+    .end-text {
+        font-size: 0.9rem;
+    }
+
+    .winner-text {
+        font-size: 1rem;
+    }
+
+    .table th, .table td {
+        padding: 0.2rem;
+    }
+
+    .btn-lg {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.8rem;
     }
 }
