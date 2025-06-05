@@ -86,7 +86,7 @@ The system is developed with .NET 9 and follows modern web standards.
 
 ## Trello-board  
 
-[Trello](https://trello.com/b/ZAZXhoa2/angby-pingis-isengard)  
+[Trello](https://trello.com/invite/b/68133273e650052b63ef675d/ATTI4a3fd60004a259d593032d6bf9eacb48029733F3/angby-pingis-isengard)
 
 ## Working agreement and team decision-board  
 
