@@ -1,7 +1,7 @@
 # Welcome to Team Isengards Tabletennis school-project!  
 
 # Project description:
-A modern web application for Ängby Table Tennis Club that provides comprehensive management of the club's activities.  
+A modern web application for a Table Tennis Club that provides comprehensive management of the club's activities.  
 The system is developed with .NET 9 and follows modern web standards.
 
 ---
