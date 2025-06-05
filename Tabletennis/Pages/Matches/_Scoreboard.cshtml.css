@@ -1,6 +1,4 @@
-﻿
-
-.anta-regular {
+﻿.anta-regular {
     font-family: "Anta", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -11,6 +9,7 @@
     font-size: 4rem;
     text-transform: uppercase;
 }
+
 .player-points {
     font-size: 20rem;    
 }
@@ -18,10 +17,21 @@
 .set-points {
     font-size: 8rem;
     color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .point-info{
     font-size: 4rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .full-width {
@@ -33,28 +43,67 @@
     align-items: center;
     justify-content: center;
     border: none;
+    background: none;
+}
+
+.full-width:hover {
+    opacity: 0.9;
 }
 
 .set-bg{
     background-color: darkred;   
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    min-height: 100%;
 }
-
 
 .button-wrapper {
     width: 100%;
     height: 100%;
-/*    display: flex;*/
     position: relative;
     background-color: rgb(33, 37, 40);
     color: white;
     border-radius: 15px;
+    min-height: 100%;
 }
-    .button-wrapper button {
-        flex: 1 1 auto;
-        width: 100%;
-        height: 100%;
-    }
+
+.btn-danger, .btn-secondary {
+    width: 50%;
+    padding: 1rem;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    font-family: 'Anta', sans-serif;
+    display: block;
+}
+
+.btn-danger h2, .btn-secondary h2 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.middle-section-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.sets-row {
+    max-height: 60%;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+}
+
+.info-row {
+    min-height: 40%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
 
 .serve-icon {
     position: absolute; /* Viktig ändring */
@@ -85,17 +134,24 @@
     font-size: 2rem;
     font-weight: bold;
 }
+.row.row-sc{
+    margin-top: 0.75rem;
+}
 
 /*barra för att se diven*/
 .container-fluid {
     background-color: lime;
 }
 
-
-
-/*____________________________________________________*/
-
 @media (max-width: 768px) {
+    .row.row-sc {
+        margin-top: 0rem;
+    }
+
+    .middle-section-content {
+        margin-top: 0rem;
+    }
+
     .player-text {
         font-size: 2.2rem;
     }
@@ -126,6 +182,18 @@
     h2{
         font-size: 12px;
     }
+
+    .set-bg {
+        min-height: 100%;
+    }
+
+    .button-wrapper {
+        min-height: 100%;
+    }
+
+    .btn-danger h2, .btn-secondary h2 {
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -153,10 +221,21 @@
         font-size: 1.2rem;
     }
     .row-sc {
-        min-width: 100%;
         justify-content: center;
     }
     h2 {
         font-size: 12px;
+    }
+
+    .set-bg {
+        min-height: 120px;
+    }
+
+    .button-wrapper {
+        min-height: 120px;
+    }
+
+    .btn-danger h2, .btn-secondary h2 {
+        font-size: 0.9rem;
     }
 }

@@ -22,7 +22,7 @@ namespace Tabletennis.ViewModels
         public int MatchWinner { get; set; }
         public int Team1WonSets { get; set; }
         public int Team2WonSets { get; set; }
-        public string InfoMessage { get; set; } = string.Empty;
+        public string InfoMessage { get; set; } = " ";
         public bool IsPlayer1Serve { get; set; }
         public bool IsPlayer1StartServer { get; set; }
         public string SelectedServerName { get; set; } = string.Empty;
