@@ -4,6 +4,31 @@
 A modern web application for Ängby Table Tennis Club that provides comprehensive management of the club's activities.  
 The system is developed with .NET 9 and follows modern web standards.
 
+---
+
+## Trello-board  
+
+[Trello](https://trello.com/invite/b/68133273e650052b63ef675d/ATTI4a3fd60004a259d593032d6bf9eacb48029733F3/angby-pingis-isengard)
+
+## Working agreement and team decision-board  
+
+[Miro](https://miro.com/app/board/uXjVI7bk488=/)  
+
+## Authors
+
+**Fakhara Imran**   [Github](https://github.com/fakhara)
+**Rut Frisk**       [Github](https://github.com/ArrenCelion)
+**Jan Hamrin**      [Github](https://github.com/jaham88)
+**Karl Westergren** [Github](https://github.com/Brottarbengt)
+
+## Acknowledgements
+
+- [**Unsplash**](https://unsplash.com/): Free to use pictures 
+- [**Fontawesome**](https://fontawesome.com/): Free to use icons
+- [**Googlefonts**](https://fonts.google.com/): Free to use fonts
+
+---
+
 ## Developing Methods
 - **SCRUM Framework**:
   - Weekly sprints with clear sprint goals
@@ -33,6 +58,7 @@ The system is developed with .NET 9 and follows modern web standards.
 - **User Management**: Secure login and role-based access control
 
 ## Technical Stack
+- **Frontend**: Razor Pages and Javascript
 - **Backend**: .NET 9, Entity Framework Core
 - **Database**: SQL Server
 - **Authentication**: ASP.NET Core Identity
@@ -42,11 +68,10 @@ The system is developed with .NET 9 and follows modern web standards.
 ### Architecture Patterns
 - **Clean Architecture**: Separation of concerns with distinct layers (Presentation, Business Logic, Data Access)
 - **Repository Pattern**: Abstract data access layer for database operations
-- **Unit of Work**: Transaction management and data consistency
 - **Dependency Injection**: Loose coupling and testability through IoC container
 
 ### Design Patterns
-- **MVC Pattern**: Separation of Model, View, and Controller responsibilities
+- **Razor Pages Pattern**: Page-based UI framework with built-in separation of concerns
 - **DTO Pattern**: Data Transfer Objects for API communication
 - **Adapter Pattern**: Using Mapster for object mapping
 - **Service Pattern**: Business logic encapsulation in service classes
@@ -84,28 +109,6 @@ The system is developed with .NET 9 and follows modern web standards.
 
 ---
 
-## Trello-board  
-
-[Trello](https://trello.com/invite/b/68133273e650052b63ef675d/ATTI4a3fd60004a259d593032d6bf9eacb48029733F3/angby-pingis-isengard)
-
-## Working agreement and team decision-board  
-
-[Miro](https://miro.com/app/board/uXjVI7bk488=/)  
-
-## Authors
-
-**Fakhara Imran**   [Github](https://github.com/fakhara)
-**Rut Frisk**       [Github](https://github.com/ArrenCelion)
-**Jan Hamrin**      [Github](https://github.com/jaham88)
-**Karl Westergren** [Github](https://github.com/Brottarbengt)
-
-## Acknowledgements
-
-- [**Unsplash**](https://unsplash.com/): Free to use pictures 
-- [**Fontawesome**](https://fontawesome.com/): Free to use icons
-- [**Googlefonts**](https://fonts.google.com/): Free to use fonts
-
----
 
 ## Installation instructions:
 
