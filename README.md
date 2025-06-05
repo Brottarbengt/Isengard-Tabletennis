@@ -16,10 +16,11 @@ The system is developed with .NET 9 and follows modern web standards.
 
 ## Authors
 
-**Fakhara Imran**   [Github](https://github.com/fakhara)
-**Rut Frisk**       [Github](https://github.com/ArrenCelion)
-**Jan Hamrin**      [Github](https://github.com/jaham88)
-**Karl Westergren** [Github](https://github.com/Brottarbengt)
+**Fakhara Imran**   [Github](https://github.com/fakhara)  
+**Rut Frisk**       [Github](https://github.com/ArrenCelion)  
+**Jan Hamrin**      [Github](https://github.com/jaham88)  
+**Karl Westergren** [Github](https://github.com/Brottarbengt)  
+
 
 ## Acknowledgements
 
