@@ -116,7 +116,7 @@ The system is developed with .NET 9 and follows modern web standards.
 - .NET 9.0 SDK or later
 - Visual Studio 2022 or later
 - SQL Server (local or Azure)
-- Git
+- Git (Optional, for cloning the repository)
 
 #### Installation Steps
 
@@ -124,7 +124,8 @@ The system is developed with .NET 9 and follows modern web standards.
 ```bash
 git clone https://github.com/[your-repo]/Isengard-Tabetennis.git
 cd Isengard-Tabetennis
-```
+```  
+OR download the ZIP file from GitHub and extract it.
 
 2. Open the solution file
 - Open `Isengard-Tabletennis.sln` in Visual Studio
