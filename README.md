@@ -106,7 +106,6 @@ The system is developed with .NET 9 and follows modern web standards.
 - **Async/Await**: Asynchronous programming for better performance
 - **Error Handling**: Consistent error handling and logging
 - **Security**: Authentication and authorization using ASP.NET Core Identity
-- **Testing**: Unit tests and integration tests for critical functionality
 
 ---
 
