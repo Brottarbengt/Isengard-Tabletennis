@@ -1,5 +1,4 @@
-﻿
-.player-text {
+﻿.player-text {
     font-family: 'Arial Black', sans-serif;
     font-size: 6rem;
     text-transform: uppercase;
@@ -30,4 +29,56 @@
 }
 .start-set-btn{
     padding: 3rem 6rem;
+}
+
+@media (max-width: 768px) {
+    .player-text {
+        font-size: 3rem;
+    }
+
+    .winner-text {
+        font-size: 2rem;
+    }
+
+    .set-num {
+        font-size: 2.5rem;
+    }
+
+    .start-first-set-btn, .start-next-set-btn {
+        font-size: 2.5rem;
+    }
+
+    .start-set-btn {
+        padding: 1.5rem 3rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-text {
+        font-size: 2rem;
+    }
+
+    .winner-text {
+        font-size: 1.5rem;
+    }
+
+    .set-num {
+        font-size: 2rem;
+    }
+
+    .start-first-set-btn, .start-next-set-btn {
+        font-size: 2rem;
+    }
+
+    .start-set-btn {
+        padding: 1rem 2rem;
+    }
+
+    .container {
+        padding: 0 0.5rem;
+    }
 }

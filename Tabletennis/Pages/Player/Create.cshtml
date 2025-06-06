@@ -24,14 +24,16 @@
 
             <form method="post">
                 
+                
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label asp-for="NewPlayer.FirstName" class="form-label"></label>
+                        <label for="NewPlayer_FirstName" class="form-label">Förnamn</label>
                         <input asp-for="NewPlayer.FirstName" class="form-control" />
                         <span asp-validation-for="NewPlayer.FirstName" class="text-danger"></span>
                     </div>
+
                     <div class="col-md-6">
-                        <label asp-for="NewPlayer.LastName" class="form-label"></label>
+                        <label for="NewPlayer_LastName" class="form-label">Efternamn</label>
                         <input asp-for="NewPlayer.LastName" class="form-control" />
                         <span asp-validation-for="NewPlayer.LastName" class="text-danger"></span>
                     </div>
@@ -39,12 +41,12 @@
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label asp-for="NewPlayer.Email" class="form-label"></label>
+                        <label for="NewPlayer.Email" class="form-label">Email</label>
                         <input asp-for="NewPlayer.Email" class="form-control" />
                         <span asp-validation-for="NewPlayer.Email" class="text-danger"></span>
                     </div>
                     <div class="col-md-6">
-                        <label asp-for="NewPlayer.PhoneNumber" class="form-label"></label>
+                        <label for="NewPlayer.PhoneNumber" class="form-label">Telefonnummer</label>
                         <input asp-for="NewPlayer.PhoneNumber" class="form-control" />
                         <span asp-validation-for="NewPlayer.PhoneNumber" class="text-danger"></span>
                     </div>
@@ -71,7 +73,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label asp-for="NewPlayer.Birthday" class="form-label"></label>
+                        <label for="NewPlayer.Birthday" class="form-label">Födelsedatum</label>
                         <input asp-for="NewPlayer.Birthday" class="form-control" type="date" max="@Model.MaxDate" />
                         <span asp-validation-for="NewPlayer.Birthday" class="text-danger"></span>
                     </div>

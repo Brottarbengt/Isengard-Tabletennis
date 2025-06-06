@@ -9,7 +9,7 @@ namespace Services.Interfaces
         Task<List<PlayerSmallInfoDTO>> GetAllSmallAsync();
         Task<PlayerDTO> GetPlayerByIdAsync(int playerId);
         Task<Check> Update(PlayerDTO updatePlayer);
-        Task<Check> SoftDelete(int playerId);
+        Task<Check> DeletePlayer(int playerId);
         Task<List<PlayerDTO>> GetAllPlayersAsync();
         Task<decimal> SetPlayerWinRatioAsync(int playerId);
         Task<List<PlayerDTO>> GetTop10Players();
