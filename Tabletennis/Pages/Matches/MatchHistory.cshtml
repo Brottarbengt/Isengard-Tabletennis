@@ -21,7 +21,7 @@
         <input type="date" name="SelectedDate" class="form-control"
                value="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))" />
 
-        <button type="submit" class="btn btn-primary" style="background-color: #c4553e;">
+        <button type="submit" class="btn btn-primary" style="background-color: #D4480D;">
             <i class="bi bi-search"></i> <!-- Bootstrap search icon -->
         </button>
     </form>
@@ -76,7 +76,7 @@
             <div class="custom-pagination d-flex align-items-center gap-4">
                 @if (Model.Matches.CurrentPage > 1)
                 {
-                    <a class="custom-page-button" style="background-color: #c4553e;color:white;"
+                    <a class="custom-page-button" style="background-color: #D4480D;color:white;"
                        asp-route-pageNumber="@(Model.Matches.CurrentPage - 1)"
                        asp-route-query="@Model.Query"
                        asp-route-date="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))">
@@ -92,7 +92,7 @@
 
                 @if (Model.Matches.CurrentPage < Model.Matches.PageCount)
                 {
-                    <a class="custom-page-button" style="background-color: #c4553e;color:white;"
+                    <a class="custom-page-button" style="background-color: #D4480D;color:white;"
                        asp-route-pageNumber="@(Model.Matches.CurrentPage + 1)"
                        asp-route-query="@Model.Query"
                        asp-route-date="@(Model.SelectedDate?.ToString("yyyy-MM-dd"))">
