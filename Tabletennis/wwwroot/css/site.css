@@ -16,13 +16,13 @@ select:focus,
 textarea:focus,
 .form-control:focus,
 .form-check-input:focus {
-    border-color: #c4553e !important;
+    border-color: #D4480D !important;
     box-shadow: 0 0 0 0.2rem rgba(196, 85, 62, 0.25) !important;
     outline: none !important;
 }
 /* Custom radio checked color */
 input[type="radio"]:checked {
-    accent-color: #c4553e;
+    accent-color: #D4480D;
 }
 
 html {
@@ -50,7 +50,7 @@ body {
 }
 /* HEADER CONTAINER */
 .top-header {
-    background-color: #45011f;
+    background-color: #390505;
     color: white;
     font-family: 'Arial Black', sans-serif;
     padding: 20px 0;
@@ -70,11 +70,11 @@ body {
 .logo-section {
     display: flex;
     align-items: center;
-    gap: 60px; /* More gap between logo and title */
+    gap: 2rem; /* More gap between logo and title */
 }
 
 .logo {
-    height: 90px;
+    height: 10rem;
 }
 
 .site-title {
@@ -129,20 +129,20 @@ body {
     align-items: center;
     justify-content: center;
     padding: 10px 0;
-    background-color: #45011f;
+    background-color: #390505;
 }
 
 /* First link - no separator before */
-.main-nav > a {
+    .main-nav > a {
         color: white !important;
         text-decoration: none;
         font-weight: 200;
         font-size: 16px;
         padding: 8px 14px;
         transition: background-color 0.3s ease;
-        background-color: #c4553e;
+        background-color: #D4480D;
         margin-right: 0; /* avoid extra gap */
-}
+    }
 
 /* Group for links after "START" */
 .nav-item-group {
@@ -177,7 +177,7 @@ body {
 }
 .header-divider {
     height: 4px;
-    background-color: yellow;
+    background-color: #E3BC4F;
     width: 100%;
 }
 /* Index.cshtml page style */
@@ -196,7 +196,7 @@ body {
     object-fit: cover;
 }
 /*Match.cshtml page style */
-.coming-soon-container {
+/*.coming-soon-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -207,8 +207,8 @@ body {
 .coming-soon-text {
     font-size: 3rem;
     font-weight: bold;
-    color: #45011f; /* Club theme deep red */
-    animation: pulse 2s infinite;
+    color: #45011f;*/ /* Club theme deep red */
+    /*animation: pulse 2s infinite;
     text-shadow: 2px 2px 8px #ffcc00;
 }
 
@@ -227,7 +227,7 @@ body {
         transform: scale(1);
         opacity: 1;
     }
-}
+}*/
 /* Create Match */
 .custom-select {
     appearance: none;
@@ -242,15 +242,15 @@ body {
 
 
 .btn-check:checked + .btn-gender {
-    background-color: #c4553e;
+    background-color: #D4480D;
     color: white;
-    border-color: #c4553e;
+    border-color: #D4480D;
 }
 
 /* Standardlge "inte vald" */
 .btn-gender {
-    border: 2px solid #c4553e;
-    color: #c4553e;
+    border: 2px solid #D4480D;
+    color: #D4480D;
     background-color: transparent;
     font-size: 1rem;
     padding: 0.3rem 1rem;
@@ -259,11 +259,11 @@ body {
 }
 /*Match History */
 .custom-thead {
-    background-color: #c4553e !important;
+    background-color: #D4480D !important;
     color: white !important;
 }
 .custom-thead-light {
-    background-color: #ffff66 !important;
+    background-color: #E3BC4F !important;
 }
 .custom-pagination .custom-page-button {
     background-color: #6c757d;
@@ -291,7 +291,7 @@ body {
 /* End Match */
 
 .winner-text {
-    color: #c4553e;
+    color: #D4480D;
     font-weight: bold;
 }
 
@@ -303,7 +303,7 @@ body {
 
 .vs-text {
     font-size: 2rem;
-    color: #c4553e;
+    color: #D4480D;
 }
 .anta-regular {
     font-family: 'Anta', sans-serif;
@@ -321,7 +321,7 @@ body {
     border: none;
     font-size: 20px;
     cursor: pointer;
-    background-color: #c4553e;
+    background-color: #D4480D;
 }
 /* Mobile styles  media query */
 @media (max-width: 991.98px) {
@@ -540,7 +540,7 @@ body {
         border: none;
         color: white;
         cursor: pointer;
-        background-color: #c4553e;
+        background-color: #D4480D;
     }
 
     .main-nav {
@@ -879,9 +879,9 @@ body {
     gap: 0.5em;
     padding: 0.4em 1.2em;
     border-radius: 1.5em;
-    border: 2px solid #c4553e;
+    border: 2px solid #D4480D;
     background: #fff;
-    color: #c4553e;
+    color: #D4480D;
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 8px rgba(196,85,62,0.08);
     user-select: none;
@@ -890,16 +890,16 @@ body {
 }
 
 .pingpong-controls input[type="radio"]:checked + label {
-    background: #c4553e;
+    background: #D4480D;
     color: #fff;
     box-shadow: 0 4px 16px rgba(196,85,62,0.18);
-    border-color: #c4553e;
+    border-color: #D4480D;
 }
 
 .pingpong-controls label:hover {
     background: #ffe5e0;
-    color: #c4553e;
-    border-color: #c4553e;
+    color: #D4480D;
+    border-color: #D4480D;
 }
 
 .pingpong-controls input[type="radio"],
@@ -973,7 +973,8 @@ body, html {
     text-align: center;
 }
 .secondary-btn-color {
-    background-color: #ffff66 !important;
+    background-color: #E3BC4F !important;
+    border-color: #E3BC4F !important;
 }
 
 /* Responsive Video Background */
